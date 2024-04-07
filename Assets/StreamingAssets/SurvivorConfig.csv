@@ -1,0 +1,16 @@
+Heart,1
+PickupRange,2
+BronzeCoin,1
+BronzeCoinStack,5
+BronzeCoinBag,25
+SilverCoin,2
+SilverCoinStack,10
+SilverCoinBag,50
+GoldCoin,3
+GoldCoinStack,15
+GoldCoinBag,75
+PlayerHealth,3
+PlayerDamage,1
+PlayerMoveSpeed,3
+PlayerSeedSpeed,8
+PlayerShootCooldown,1
