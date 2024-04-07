@@ -34,6 +34,12 @@ public class Buttons : MonoBehaviour
         }
     }
 
+    public void OnResumeClick()
+    {
+        Time.timeScale = 1;
+        paused = false;
+    }
+
     public void OnQuitClick()
     {
         SceneManager.LoadScene("MainMenu");

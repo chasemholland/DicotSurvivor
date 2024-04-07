@@ -20,7 +20,8 @@ public class EndlessSpawner : MonoBehaviour
     [SerializeField]
     List<GameObject> verticalWalls;
     List<float> outerBounds;
-    float innerBounds;
+    float innerBoundsX;
+    float innerBoundsY;
     float xCoord = 0;
     float yCoord = 0;
     GameObject player;
@@ -51,11 +52,17 @@ public class EndlessSpawner : MonoBehaviour
         yCoord = Random.Range(yRangeMin + 0.5f, yRangeMax - 0.5f);
 
         // Check if spawn point is out of the viewport
-        if (xCoord >= player.transform.position.x - innerBounds && xCoord <= player.transform.position.x + innerBounds ||
-            yCoord >= player.transform.position.y - innerBounds && yCoord <= player.transform.position.y + innerBounds)
+        if (xCoord >= player.transform.position.x - innerBoundsX && xCoord <= player.transform.position.x + innerBoundsX)
         {
             // Try again
             SpawnEnemies();
+            return;
+        }
+        else if (yCoord >= player.transform.position.y - innerBoundsY && yCoord <= player.transform.position.y + innerBoundsY)
+        {
+            // Try again
+            SpawnEnemies();
+            return;
         }
         else
         {
@@ -85,7 +92,9 @@ public class EndlessSpawner : MonoBehaviour
     private void SetRanges()
     {
         // Set inner bounds
-        innerBounds = GameObject.FindWithTag("Follower").GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize / 2;
+        float camVeiw = GameObject.FindWithTag("Follower").GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize;
+        innerBoundsX = camVeiw * 2;
+        innerBoundsY = camVeiw;
 
         // Initialize list
         outerBounds = new List<float>();
