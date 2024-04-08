@@ -112,6 +112,14 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Player max health
+    /// </summary>
+    public static float PlayerMaxHealth
+    {
+        get { return configData.PlayerMaxHealth; }
+    }
+
+    /// <summary>
     /// Player damage value
     /// </summary>
     public static float PlayerDamage
@@ -141,6 +149,30 @@ public static class ConfigUtils
     public static float PlayerShootCooldown
     {
         get { return configData.PlayerShootCooldown; }
+    }
+
+    /// <summary>
+    /// Common move speed mod value
+    /// </summary>
+    public static float ComMoveSpeedMod
+    {
+        get { return configData.ComMoveSpeedMod; }
+    }
+
+    /// <summary>
+    /// Common shoot cooldown mod value
+    /// </summary>
+    public static float ComShootCooldownMod
+    {
+        get { return configData.ComShootCooldownMod; }
+    }
+
+    /// <summary>
+    /// Common max health mod value
+    /// </summary>
+    public static float ComMaxHealthMod
+    {
+        get { return configData.ComMaxHealthMod; }
     }
 
     #endregion

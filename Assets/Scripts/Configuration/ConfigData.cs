@@ -119,6 +119,14 @@ public class ConfigData
     }
 
     /// <summary>
+    /// Gets the player max health value
+    /// </summary>
+    public float PlayerMaxHealth
+    {
+        get { return values[ConfigDataName.PlayerMaxHealth]; }
+    }
+
+    /// <summary>
     /// Gets the player damage value
     /// </summary>
     public float PlayerDamage
@@ -148,6 +156,31 @@ public class ConfigData
     public float PlayerShootCooldown
     {
         get { return values[ConfigDataName.PlayerShootCooldown]; }
+    }
+
+    /// <summary>
+    /// Gets the common move speed mod value
+    /// </summary>
+    public float ComMoveSpeedMod
+    {
+        get { return values[ConfigDataName.ComMoveSpeedMod]; }
+    }
+    
+
+    /// <summary>
+    /// Gets the common shoot cooldown mod value
+    /// </summary>
+    public float ComShootCooldownMod
+    {
+        get { return values[ConfigDataName.ComShootCooldownMod]; }
+    }
+
+    /// <summary>
+    /// Gets the common max health mod value
+    /// </summary>
+    public float ComMaxHealthMod
+    {
+        get { return values[ConfigDataName.ComMaxHealthMod]; }
     }
 
     #endregion
@@ -217,10 +250,14 @@ public class ConfigData
         values.Add(ConfigDataName.GoldCoinStack, 15f);
         values.Add(ConfigDataName.GoldCoinBag, 75f);
         values.Add(ConfigDataName.PlayerHealth, 3f);
+        values.Add(ConfigDataName.PlayerMaxHealth, 3f);
         values.Add(ConfigDataName.PlayerDamage, 1f);
         values.Add(ConfigDataName.PlayerMoveSpeed, 3f);
         values.Add(ConfigDataName.PlayerSeedSpeed, 8f);
-        values.Add(ConfigDataName.PlayerShootCooldown, 1);
+        values.Add(ConfigDataName.PlayerShootCooldown, 1f);
+        values.Add(ConfigDataName.ComMoveSpeedMod, 0.1f);
+        values.Add(ConfigDataName.ComShootCooldownMod, 0.025f);
+        values.Add(ConfigDataName.ComMaxHealthMod, 0.1f);
     }
 
     #endregion

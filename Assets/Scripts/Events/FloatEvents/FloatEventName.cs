@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
     /// <summary>
-    /// Event name enumeration
+    /// Float event name enumeration
     /// </summary>
-public enum EventName
+public enum FloatEventName
 {
     TimerFinishedEvent,
     DamageEnemyEvent,
@@ -13,4 +13,7 @@ public enum EventName
     AddHealthEvent,
     LooseHealthEvent,
     PlayerDeathEvent,
+    MaxHealthMod,
+    MoveSpeedMod,
+    ShootCooldownMod,
 }

@@ -19,6 +19,9 @@ TagManager:
   - GoldCoinBag
   - Heart
   - Follower
+  - ShopButton
+  - InfoText
+  - Shop
   layers:
   - Default
   - TransparentFX

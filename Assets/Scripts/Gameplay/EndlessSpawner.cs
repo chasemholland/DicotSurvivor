@@ -15,16 +15,25 @@ public class EndlessSpawner : MonoBehaviour
     Timer spawnTimer;
     [SerializeField]
     List<GameObject> enemies;
+
+    // Walls outer bound variables
     [SerializeField]
     List<GameObject> horizontalWalls;
     [SerializeField]
     List<GameObject> verticalWalls;
     List<float> outerBounds;
-    float innerBoundsX;
-    float innerBoundsY;
     float xCoord = 0;
     float yCoord = 0;
-    GameObject player;
+
+    // Camera inner bound variables
+    Vector3 bottomLeftCam;
+    Vector3 topRightCam;
+    Vector3 bottomLeft;
+    Vector3 topRight;
+    float xMin;
+    float xMax;
+    float yMin;
+    float yMax;
 
     /// <summary>
     /// Start is called before the first frame update
@@ -34,44 +43,54 @@ public class EndlessSpawner : MonoBehaviour
         // Set the spawn ranges
         SetRanges();
 
-        // Get refernce to player
-        player = GameObject.FindWithTag("Player");
-
         spawnTimer = gameObject.AddComponent<Timer>();
         spawnTimer.AddTimerFinishedListener(SpawnEnemies);
         spawnTimer.Duration = 1;
         spawnTimer.Run();
 
         // Add add listener for player death event
-        EventManager.AddListener(EventName.PlayerDeathEvent, StopSpawning);
+        EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, StopSpawning);
+
+        // Set defaults
+        bottomLeftCam = new Vector3(0, 0, 0);
+        topRightCam = new Vector3(1, 1, 0);
     }
     
     private void SpawnEnemies()
     {
-        xCoord = Random.Range(xRangeMin + 0.5f, xRangeMax - 0.5f);
-        yCoord = Random.Range(yRangeMin + 0.5f, yRangeMax - 0.5f);
+        xCoord = Random.Range(xRangeMin + 2f, xRangeMax - 2f);
+        yCoord = Random.Range(yRangeMin + 2f, yRangeMax - 2f);
+        bottomLeft = Camera.main.ViewportToWorldPoint(bottomLeftCam);
+        topRight = Camera.main.ViewportToWorldPoint(topRightCam);
+        xMin = bottomLeft.x;
+        xMax = topRight.x;
+        yMin = bottomLeft.y;
+        yMax = topRight.y;
 
         // Check if spawn point is out of the viewport
-        if (xCoord >= player.transform.position.x - innerBoundsX && xCoord <= player.transform.position.x + innerBoundsX)
+        if (xCoord <= xMin || xCoord >= xMax)
         {
-            // Try again
-            SpawnEnemies();
-            return;
-        }
-        else if (yCoord >= player.transform.position.y - innerBoundsY && yCoord <= player.transform.position.y + innerBoundsY)
-        {
-            // Try again
-            SpawnEnemies();
-            return;
+            if (yCoord <= yMin || yCoord >= yMax)
+            {
+                // Spawn random enemy
+                int type = Random.Range(0, enemies.Count);
+                Instantiate(enemies[type], new Vector3(xCoord, yCoord, 0), Quaternion.identity);
+
+                // Reset timer
+                spawnTimer.Duration = 1;
+                spawnTimer.Run();
+            }
+            else
+            {
+                // Try again
+                spawnTimer.Duration = 0.1f;
+                spawnTimer.Run();
+            }
         }
         else
         {
-            // Spawn random enemy
-            int type = Random.Range(0, enemies.Count);
-            Instantiate(enemies[type], new Vector3(yCoord, xCoord, 0), Quaternion.identity);
-
-            // Reset timer
-            spawnTimer.Duration = 1;
+            // Try again
+            spawnTimer.Duration = 0.1f;
             spawnTimer.Run();
         }
     }
@@ -91,11 +110,6 @@ public class EndlessSpawner : MonoBehaviour
     /// </summary>
     private void SetRanges()
     {
-        // Set inner bounds
-        float camVeiw = GameObject.FindWithTag("Follower").GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize;
-        innerBoundsX = camVeiw * 2;
-        innerBoundsY = camVeiw;
-
         // Initialize list
         outerBounds = new List<float>();
 
@@ -115,5 +129,6 @@ public class EndlessSpawner : MonoBehaviour
         xRangeMax = outerBounds[1];
         yRangeMax = outerBounds[2];
         yRangeMin = outerBounds[3];
+
     }
 }

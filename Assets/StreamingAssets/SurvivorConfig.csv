@@ -10,7 +10,11 @@ GoldCoin,3
 GoldCoinStack,15
 GoldCoinBag,75
 PlayerHealth,3
+PlayerMaxHealth,3
 PlayerDamage,1
 PlayerMoveSpeed,3
 PlayerSeedSpeed,8
 PlayerShootCooldown,1
+ComMoveSpeedMod,0.1
+ComShootCooldownMod,0.025
+ComMaxHealthMod,0.1

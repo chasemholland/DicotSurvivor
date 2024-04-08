@@ -10,8 +10,8 @@ public class FloatEventInvoker : MonoBehaviour
 {
     #region Fields
 
-    protected Dictionary<EventName, UnityEvent<float>> unityEvents =
-        new Dictionary<EventName, UnityEvent<float>>();
+    protected Dictionary<FloatEventName, UnityEvent<float>> unityFloatEvents =
+        new Dictionary<FloatEventName, UnityEvent<float>>();
 
     #endregion
 
@@ -22,12 +22,12 @@ public class FloatEventInvoker : MonoBehaviour
     /// </summary>
     /// <param name="name">EventName</param>
     /// <param name="listener">Listener</param>
-    public void AddListener(EventName name, UnityAction<float> listener)
+    public void AddListener(FloatEventName name, UnityAction<float> listener)
     {
         // add listeners for supported events
-        if (unityEvents.ContainsKey(name))
+        if (unityFloatEvents.ContainsKey(name))
         {
-            unityEvents[name].AddListener(listener);
+            unityFloatEvents[name].AddListener(listener);
         }
     }
 

@@ -11,17 +11,13 @@ using UnityEngine.UI;
 /// </summary>
 public class HUD : MonoBehaviour
 {
-    bool paused = false;
-
     [SerializeField]
     GameObject shopBar;
-    float moneyValue = 0;
+    float moneyValue = 99;
     float upgradeCost;
 
     [SerializeField]
     GameObject healthBar;
-    [SerializeField]
-    TextMeshProUGUI healthText;
     float healthValue;
     float maxHealth;
 
@@ -43,23 +39,26 @@ public class HUD : MonoBehaviour
         // Set initial health
         healthValue = ConfigUtils.PlayerHealth;
 
-        // Set max health (Hard coded 10 for now) -------------------------
-        maxHealth = 10;
+        // Set max health
+        maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
 
-        // Set upgrade cost (hard coded 100 for now) ------------------------------
-        upgradeCost = 100;
+        // Set upgrade cost
+        upgradeCost = Tracker.UpgradeCost;
 
         // Set the text
         SetGUI();
 
         // Add as listener for add health event
-        EventManager.AddListener(EventName.AddHealthEvent, HandleAddHealth);
+        EventManager.AddFloatListener(FloatEventName.AddHealthEvent, HandleAddHealth);
 
         // Add as listener for loose health event
-        EventManager.AddListener(EventName.LooseHealthEvent, HandleLooseHealth);
+        EventManager.AddFloatListener(FloatEventName.LooseHealthEvent, HandleLooseHealth);
 
         // Add as listener for add money event
-        EventManager.AddListener(EventName.AddMoneyEvent, HandleAddMoney);
+        EventManager.AddFloatListener(FloatEventName.AddMoneyEvent, HandleAddMoney);
+
+        // Add as listener for max health mod event
+        EventManager.AddFloatListener(FloatEventName.MaxHealthMod, HandleMaxHealthChanged);
 
     }
 
@@ -74,7 +73,6 @@ public class HUD : MonoBehaviour
     private void SetGUI()
     {
         healthBar.GetComponent<Slider>().value = healthValue / maxHealth;
-        healthText.text = healthValue.ToString();
         shopBar.GetComponent<Slider>().value = moneyValue / upgradeCost;
     }
 
@@ -108,6 +106,32 @@ public class HUD : MonoBehaviour
     {
         moneyValue += value;
         SetGUI();
+        if (moneyValue >= upgradeCost)
+        {
+            moneyValue -= upgradeCost;
+            SetGUI();
+            Time.timeScale = 0;
+            shop.SetActive(true);
+            Tracker.UpgradesUnlocked += 1;
+            upgradeCost = Tracker.UpgradeCost;
+        }
+    }
+
+    /// <summary>
+    /// Updates max health when invoked
+    /// </summary>
+    /// <param name="n">unused</param>
+    private void HandleMaxHealthChanged(float n)
+    {
+        // update max health
+        maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
+        SetGUI();
+    }
+
+    public void OnShopSelection()
+    {
+        Time.timeScale = 1;
+        shop.SetActive(false);
     }
 
 

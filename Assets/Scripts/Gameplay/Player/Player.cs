@@ -11,6 +11,7 @@ public class Player : FloatEventInvoker
 {
 
     float health;
+    float maxHealth;
     bool vulnerable = true;
     Timer damageCooldown;
     float cooldown = 1f;
@@ -23,22 +24,23 @@ public class Player : FloatEventInvoker
     {
         // Set health
         health = ConfigUtils.PlayerHealth;
+        maxHealth = ConfigUtils.PlayerMaxHealth;
 
         // Add as invoker for add money event
-        unityEvents.Add(EventName.AddMoneyEvent, new AddMoneyEvent());
-        EventManager.AddInvoker(EventName.AddMoneyEvent, this);
+        unityFloatEvents.Add(FloatEventName.AddMoneyEvent, new AddMoneyEvent());
+        EventManager.AddFloatInvoker(FloatEventName.AddMoneyEvent, this);
 
         // Add as invoker for add health event
-        unityEvents.Add(EventName.AddHealthEvent, new AddHealthEvent());
-        EventManager.AddInvoker(EventName.AddHealthEvent, this);
+        unityFloatEvents.Add(FloatEventName.AddHealthEvent, new AddHealthEvent());
+        EventManager.AddFloatInvoker(FloatEventName.AddHealthEvent, this);
 
         // Add as invoker for loose health event
-        unityEvents.Add(EventName.LooseHealthEvent, new LooseHealthEvent());
-        EventManager.AddInvoker(EventName.LooseHealthEvent, this);
+        unityFloatEvents.Add(FloatEventName.LooseHealthEvent, new LooseHealthEvent());
+        EventManager.AddFloatInvoker(FloatEventName.LooseHealthEvent, this);
 
         // Add as invoker for player death event
-        unityEvents.Add(EventName.PlayerDeathEvent, new PlayerDeathEvent());
-        EventManager.AddInvoker(EventName.PlayerDeathEvent, this);
+        unityFloatEvents.Add(FloatEventName.PlayerDeathEvent, new PlayerDeathEvent());
+        EventManager.AddFloatInvoker(FloatEventName.PlayerDeathEvent, this);
 
         // Set up damage cooldown timer
         damageCooldown = gameObject.AddComponent<Timer>();
@@ -62,7 +64,7 @@ public class Player : FloatEventInvoker
             {
                 // Reduce health and notify HUD
                 health -= 1f;
-                unityEvents[EventName.LooseHealthEvent].Invoke(1f);
+                unityFloatEvents[FloatEventName.LooseHealthEvent].Invoke(1f);
                 
                 // Go invulnerable for some time
                 vulnerable = false;
@@ -72,7 +74,7 @@ public class Player : FloatEventInvoker
                 if (health <= 0)
                 {
                     // Invoke death event
-                    unityEvents[EventName.PlayerDeathEvent].Invoke(0);
+                    unityFloatEvents[FloatEventName.PlayerDeathEvent].Invoke(0);
 
                     // Make camera follow enemy that killed the player
                     killCam = GameObject.FindGameObjectWithTag("Follower").gameObject.GetComponent<CinemachineVirtualCamera>();
@@ -100,11 +102,11 @@ public class Player : FloatEventInvoker
                 float value = GetValue(t);
 
                 // Keep health clamped
-                float tempHealth = Mathf.Clamp(health + value, 0, 10);
+                float tempHealth = Mathf.Clamp(health + value, 0, maxHealth + Mod.ActiveModifiers["MaxHealthMod"]);
                 health = tempHealth;
 
                 // Trigger add health event
-                unityEvents[EventName.AddHealthEvent].Invoke(value);
+                unityFloatEvents[FloatEventName.AddHealthEvent].Invoke(value);
             }
             // Get money value if not heart
             else
@@ -113,7 +115,7 @@ public class Player : FloatEventInvoker
                 float value = GetValue(t);
 
                 // Trigger add money event
-                unityEvents[EventName.AddMoneyEvent].Invoke(value);
+                unityFloatEvents[FloatEventName.AddMoneyEvent].Invoke(value);
             }
 
             // Destroy game object

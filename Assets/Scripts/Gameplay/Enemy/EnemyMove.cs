@@ -35,7 +35,7 @@ public class EnemyMove : FloatEventInvoker
         player = GameObject.FindWithTag("Player");
 
         // Add as listener for player death event
-        EventManager.AddListener(EventName.PlayerDeathEvent, PlayerDeathBehavior);
+        EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, PlayerDeathBehavior);
 
         // Add random movement timer
         randMove = gameObject.AddComponent<Timer>();

@@ -19,8 +19,12 @@ public enum ConfigDataName
     GoldCoinStack,
     GoldCoinBag,
     PlayerHealth,
+    PlayerMaxHealth,
     PlayerDamage,
     PlayerMoveSpeed,
     PlayerSeedSpeed,
     PlayerShootCooldown,
+    ComMoveSpeedMod,
+    ComShootCooldownMod,
+    ComMaxHealthMod
 }

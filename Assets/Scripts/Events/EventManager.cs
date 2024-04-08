@@ -11,11 +11,17 @@ public static class EventManager
 {
     #region Fields
 
-    static Dictionary<EventName, List<FloatEventInvoker>> invokers =
-        new Dictionary<EventName, List<FloatEventInvoker>>();
+    static Dictionary<FloatEventName, List<FloatEventInvoker>> floatInvokers =
+        new Dictionary<FloatEventName, List<FloatEventInvoker>>();
 
-    static Dictionary<EventName, List<UnityAction<float>>> listeners =
-        new Dictionary<EventName, List<UnityAction<float>>>();
+    static Dictionary<FloatEventName, List<UnityAction<float>>> floatListeners =
+        new Dictionary<FloatEventName, List<UnityAction<float>>>();
+
+    static Dictionary<StringEventName, List<StringEventInvoker>> stringInvokers =
+        new Dictionary<StringEventName, List<StringEventInvoker>>();
+
+    static Dictionary<StringEventName, List<UnityAction<string>>> stringListeners =
+        new Dictionary<StringEventName, List<UnityAction<string>>>();
 
     #endregion
 
@@ -26,61 +32,117 @@ public static class EventManager
     /// </summary>
     public static void Initialize()
     {
-        // create empty list for each name in dictionary
-        foreach (EventName name in Enum.GetValues(typeof(EventName)))
+        // create empty list for each name in float dictionary
+        foreach (FloatEventName name in Enum.GetValues(typeof(FloatEventName)))
         {
-            if (!invokers.ContainsKey(name))
+            if (!floatInvokers.ContainsKey(name))
             {
-                invokers.Add(name, new List<FloatEventInvoker>());
-                listeners.Add(name, new List<UnityAction<float>>());
+                floatInvokers.Add(name, new List<FloatEventInvoker>());
+                floatListeners.Add(name, new List<UnityAction<float>>());
             }
             else
             {
-                invokers[name].Clear();
-                listeners[name].Clear();
+                floatInvokers[name].Clear();
+                floatListeners[name].Clear();
+            }
+        }
+
+        // create empty list for each name in string dictionary
+        foreach (StringEventName name in Enum.GetValues(typeof(StringEventName)))
+        {
+            if (!stringInvokers.ContainsKey(name))
+            {
+                stringInvokers.Add(name, new List<StringEventInvoker>());
+                stringListeners.Add(name, new List<UnityAction<string>>());
+            }
+            else
+            {
+                stringInvokers[name].Clear();
+                stringListeners[name].Clear();
             }
         }
     }
 
     /// <summary>
-    /// Adds invoker for the given event name
+    /// Adds float invoker for the given event name
     /// </summary>
     /// <param name="name">EventName</param>
     /// <param name="invoker">Invoker</param>
-    public static void AddInvoker(EventName name, FloatEventInvoker invoker)
+    public static void AddFloatInvoker(FloatEventName name, FloatEventInvoker invoker)
     {
-        // add listeners to new invoker and add invoker to dictionary
-        foreach (UnityAction<float> listener in listeners[name])
+        // add floatListeners to new invoker and add invoker to dictionary
+        foreach (UnityAction<float> listener in floatListeners[name])
         {
             invoker.AddListener(name, listener);
         }
-        invokers[name].Add(invoker);
+        floatInvokers[name].Add(invoker);
     }
 
     /// <summary>
-    /// Adds listener for the given event name
+    /// Adds string invoker for the given event name
+    /// </summary>
+    /// <param name="name">EventName</param>
+    /// <param name="invoker">Invoker</param>
+    public static void AddStringInvoker(StringEventName name, StringEventInvoker invoker)
+    {
+        // add stringListeners to new invoker and add invoker to dictionary
+        foreach (UnityAction<string> listener in stringListeners[name])
+        {
+            invoker.AddListener(name, listener);
+        }
+        stringInvokers[name].Add(invoker);
+    }
+
+    /// <summary>
+    /// Adds float listener for the given event name
     /// </summary>
     /// <param name="name">EventName/param>
     /// <param name="listener">Listener</param>
-    public static void AddListener(EventName name, UnityAction<float> listener)
+    public static void AddFloatListener(FloatEventName name, UnityAction<float> listener)
     {
-        // add as listener to all invokers and add new listener to dictionary
-        foreach (FloatEventInvoker invoker in invokers[name])
+        // add as listener to all floatInvokers and add new listener to dictionary
+        foreach (FloatEventInvoker invoker in floatInvokers[name])
         {
             invoker.AddListener(name, listener);
         }
-        listeners[name].Add(listener);
+        floatListeners[name].Add(listener);
     }
 
     /// <summary>
-    /// Removes invoker for the given event name
+    /// Adds string listener for the given event name
+    /// </summary>
+    /// <param name="name">EventName/param>
+    /// <param name="listener">Listener</param>
+    public static void AddStringListener(StringEventName name, UnityAction<string> listener)
+    {
+        // add as listener to all stringInvokers and add new listener to dictionary
+        foreach (StringEventInvoker invoker in stringInvokers[name])
+        {
+            invoker.AddListener(name, listener);
+        }
+        stringListeners[name].Add(listener);
+    }
+
+    /// <summary>
+    /// Removes float invoker for the given event name
     /// </summary>
     /// <param name="name"></param>
     /// <param name="invoker"></param>
-    public static void RemoveInvoker(EventName name, FloatEventInvoker invoker)
+    public static void RemoveFloatInvoker(FloatEventName name, FloatEventInvoker invoker)
     {
         // remove invoker from dictionary
-        invokers[name].Remove(invoker);
+        floatInvokers[name].Remove(invoker);
+    }
+
+    /// <summary>
+    /// Removes string invoker for the given event name
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="invoker"></param>
+    public static void RemoveStringInvoker(StringEventName name, StringEventInvoker invoker)
+    {
+        // remove invoker from dictionary
+        stringInvokers[name].Remove(invoker);
     }
 
     #endregion
