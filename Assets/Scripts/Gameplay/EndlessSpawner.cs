@@ -6,15 +6,20 @@ using UnityEngine;
     /// <summary>
     ///
     /// </summary>
-public class EndlessSpawner : MonoBehaviour
+public class EndlessSpawner : FloatEventInvoker
 {
     private float xRangeMin;
     private float xRangeMax;
     private float yRangeMin;
     private float yRangeMax;
     Timer spawnTimer;
+    float spawnTime = 0.1f;
+    float retrySpawnTime = 0.1f;
     [SerializeField]
     List<GameObject> enemies;
+    [SerializeField]
+    List<GameObject> bosses;
+    int bossIndex;
 
     // Walls outer bound variables
     [SerializeField]
@@ -43,10 +48,18 @@ public class EndlessSpawner : MonoBehaviour
         // Set the spawn ranges
         SetRanges();
 
+        // Enemy spawn timer
         spawnTimer = gameObject.AddComponent<Timer>();
         spawnTimer.AddTimerFinishedListener(SpawnEnemies);
-        spawnTimer.Duration = 1;
+        spawnTimer.Duration = spawnTime;
         spawnTimer.Run();
+
+        // Add as invoker for boss spawned event
+        unityFloatEvents.Add(FloatEventName.BossSpawnedEvent, new BossSpawnedEvent());
+        EventManager.AddFloatInvoker(FloatEventName.BossSpawnedEvent, this);
+
+        // Add as listener for boss death event
+        EventManager.AddFloatListener(FloatEventName.BossDeathEvent, RestartSpawning);
 
         // Add add listener for player death event
         EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, StopSpawning);
@@ -58,6 +71,18 @@ public class EndlessSpawner : MonoBehaviour
     
     private void SpawnEnemies()
     {
+        if (Tracker.Kills == 25)
+        {
+            // Stop enemy spawner
+            spawnTimer.Stop();
+
+            // Start boss spawner provided with index
+            bossIndex = 0;
+            SpawnBoss(bossIndex);
+
+            return;
+        }
+
         xCoord = Random.Range(xRangeMin + 2f, xRangeMax - 2f);
         yCoord = Random.Range(yRangeMin + 2f, yRangeMax - 2f);
         bottomLeft = Camera.main.ViewportToWorldPoint(bottomLeftCam);
@@ -76,23 +101,52 @@ public class EndlessSpawner : MonoBehaviour
                 int type = Random.Range(0, enemies.Count);
                 Instantiate(enemies[type], new Vector3(xCoord, yCoord, 0), Quaternion.identity);
 
-                // Reset timer
-                spawnTimer.Duration = 1;
+                // Reset timer             
+                spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.2f, 1);
                 spawnTimer.Run();
             }
             else
             {
                 // Try again
-                spawnTimer.Duration = 0.1f;
+                spawnTimer.Duration = retrySpawnTime;
                 spawnTimer.Run();
             }
         }
         else
         {
             // Try again
-            spawnTimer.Duration = 0.1f;
+            spawnTimer.Duration = retrySpawnTime;
             spawnTimer.Run();
         }
+    }
+
+    private void SpawnBoss(int index)
+    {
+        // Get the camera edges
+        bottomLeft = Camera.main.ViewportToWorldPoint(bottomLeftCam);
+        topRight = Camera.main.ViewportToWorldPoint(topRightCam);
+
+        // Get cam half with and half length
+        float xHalfLength = Vector3.Distance(new Vector3(topRight.x, 0, 0), new Vector3(bottomLeft.x, 0, 0)) / 2;
+        float yHalfLength = Vector3.Distance(new Vector3(0, topRight.y, 0), new Vector3(0, bottomLeft.y, 0)) / 2;
+
+        // Spawn boss in the middle of the camera slightly offset to the top
+        Instantiate(bosses[index], new Vector3(topRight.x - xHalfLength, topRight.y - yHalfLength + 3f, 0), Quaternion.identity);
+
+        // Invoke boss spawned event
+        unityFloatEvents[FloatEventName.BossSpawnedEvent].Invoke(0);
+
+    }
+
+    /// <summary>
+    /// Starts spawning enemies on boss death
+    /// </summary>
+    /// <param name="n">unused</param>
+    private void RestartSpawning(float n)
+    {
+        // Reset spawn timer
+        spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.2f, 1);
+        spawnTimer.Run();
     }
 
     /// <summary>

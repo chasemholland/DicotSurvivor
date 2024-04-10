@@ -135,6 +135,14 @@ public class ConfigData
     }
 
     /// <summary>
+    /// Gets the player crit chance value
+    /// </summary>
+    public float PlayerCritChance
+    {
+        get { return values[ConfigDataName.PlayerCritChance]; }
+    }
+
+    /// <summary>
     /// Get the player move speed value
     /// </summary>
     public float PlayerMoveSpeed
@@ -165,7 +173,15 @@ public class ConfigData
     {
         get { return values[ConfigDataName.ComMoveSpeedMod]; }
     }
-    
+
+
+    /// <summary>
+    /// Gets the uncommon move speed mod value
+    /// </summary>
+    public float UncMoveSpeedMod
+    {
+        get { return values[ConfigDataName.UncMoveSpeedMod]; }
+    }
 
     /// <summary>
     /// Gets the common shoot cooldown mod value
@@ -176,11 +192,75 @@ public class ConfigData
     }
 
     /// <summary>
+    /// Gets the uncommon shoot cooldown mod value
+    /// </summary>
+    public float UncShootCooldownMod
+    {
+        get { return values[ConfigDataName.UncShootCooldownMod]; }
+    }
+
+    /// <summary>
     /// Gets the common max health mod value
     /// </summary>
     public float ComMaxHealthMod
     {
         get { return values[ConfigDataName.ComMaxHealthMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon max health mod value
+    /// </summary>
+    public float UncMaxHealthMod
+    {
+        get { return values[ConfigDataName.UncMaxHealthMod]; }
+    }
+
+    /// <summary>
+    /// Gets the common seed speed mod value
+    /// </summary>
+    public float ComSeedSpeedMod
+    {
+        get { return values[ConfigDataName.ComSeedSpeedMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon seed speed mod value
+    /// </summary>
+    public float UncSeedSpeedMod
+    {
+        get { return values[ConfigDataName.UncSeedSpeedMod]; }
+    }
+
+    /// <summary>
+    /// Gets the common crit chance mod value
+    /// </summary>
+    public float ComCritChanceMod
+    {
+        get { return values[ConfigDataName.ComCritChanceMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon crit chance mod value
+    /// </summary>
+    public float UncCritChanceMod
+    {
+        get { return values[ConfigDataName.UncCritChanceMod]; }
+    }
+
+    /// <summary>
+    /// Gets the common damage mod value
+    /// </summary>
+    public float ComDamageMod
+    {
+        get { return values[ConfigDataName.ComDamageMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon damage mod value
+    /// </summary>
+    public float UncDamageMod
+    {
+        get { return values[ConfigDataName.UncDamageMod]; }
     }
 
     #endregion
@@ -252,12 +332,22 @@ public class ConfigData
         values.Add(ConfigDataName.PlayerHealth, 3f);
         values.Add(ConfigDataName.PlayerMaxHealth, 3f);
         values.Add(ConfigDataName.PlayerDamage, 1f);
+        values.Add(ConfigDataName.PlayerCritChance, 0.05f);
         values.Add(ConfigDataName.PlayerMoveSpeed, 3f);
         values.Add(ConfigDataName.PlayerSeedSpeed, 8f);
         values.Add(ConfigDataName.PlayerShootCooldown, 1f);
         values.Add(ConfigDataName.ComMoveSpeedMod, 0.1f);
+        values.Add(ConfigDataName.UncMoveSpeedMod, 0.2f);
         values.Add(ConfigDataName.ComShootCooldownMod, 0.025f);
+        values.Add(ConfigDataName.UncShootCooldownMod, 0.05f);
         values.Add(ConfigDataName.ComMaxHealthMod, 0.1f);
+        values.Add(ConfigDataName.UncMaxHealthMod, 0.2f);
+        values.Add(ConfigDataName.ComSeedSpeedMod, 0.05f);
+        values.Add(ConfigDataName.UncSeedSpeedMod, 0.1f);
+        values.Add(ConfigDataName.ComCritChanceMod, 0.05f);
+        values.Add(ConfigDataName.UncCritChanceMod, 0.1f);
+        values.Add(ConfigDataName.ComDamageMod, 0.1f);
+        values.Add(ConfigDataName.UncDamageMod, 0.2f);
     }
 
     #endregion

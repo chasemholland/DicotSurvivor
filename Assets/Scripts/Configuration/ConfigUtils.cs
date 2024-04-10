@@ -128,6 +128,14 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Player crit chance value
+    /// </summary>
+    public static float PlayerCritChance
+    {
+        get { return configData.PlayerCritChance; }
+    }
+
+    /// <summary>
     /// Player move speed value
     /// </summary>
     public static float PlayerMoveSpeed
@@ -160,6 +168,14 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Uncommon move speed mod value
+    /// </summary>
+    public static float UncMoveSpeedMod
+    {
+        get { return configData.UncMoveSpeedMod; }
+    }
+
+    /// <summary>
     /// Common shoot cooldown mod value
     /// </summary>
     public static float ComShootCooldownMod
@@ -168,11 +184,75 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Uncommon shoot cooldown mod value
+    /// </summary>
+    public static float UncShootCooldownMod
+    {
+        get { return configData.UncShootCooldownMod; }
+    }
+
+    /// <summary>
     /// Common max health mod value
     /// </summary>
     public static float ComMaxHealthMod
     {
         get { return configData.ComMaxHealthMod; }
+    }
+
+    /// <summary>
+    /// Uncommon max health mod value
+    /// </summary>
+    public static float UncMaxHealthMod
+    {
+        get { return configData.UncMaxHealthMod; }
+    }
+
+    /// <summary>
+    /// Common seed speed mod value
+    /// </summary>
+    public static float ComSeedSpeedMod
+    {
+        get { return configData.ComSeedSpeedMod; }
+    }
+
+    /// <summary>
+    /// Uncommon seed speed mod value
+    /// </summary>
+    public static float UncSeedSpeedMod
+    {
+        get { return configData.UncSeedSpeedMod; }
+    }
+
+    /// <summary>
+    /// Common crit chance mod value
+    /// </summary>
+    public static float ComCritChanceMod
+    {
+        get { return configData.ComCritChanceMod; }
+    }
+
+    /// <summary>
+    /// Uncommon crit chance mod value
+    /// </summary>
+    public static float UncCritChanceMod
+    {
+        get { return configData.UncCritChanceMod; }
+    }
+
+    /// <summary>
+    /// Common damage mod value
+    /// </summary>
+    public static float ComDamageMod
+    {
+        get { return configData.ComDamageMod; }
+    }
+
+    /// <summary>
+    /// Uncommon damage mod value
+    /// </summary>
+    public static float UncDamageMod
+    {
+        get { return configData.UncDamageMod; }
     }
 
     #endregion

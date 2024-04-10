@@ -22,6 +22,7 @@ TagManager:
   - ShopButton
   - InfoText
   - Shop
+  - BossWall
   layers:
   - Default
   - TransparentFX

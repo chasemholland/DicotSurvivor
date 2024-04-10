@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -23,6 +24,9 @@ public class SeedMove : FloatEventInvoker
     {
         // Set defaults
         force = ConfigUtils.PlayerSeedSpeed;
+
+        // Add as listener for seed speed changed
+        EventManager.AddFloatListener(FloatEventName.SeedSpeedMod, HandleSeedSpeedModChanged);
 
         // Get reference to main camera and rigidbody2d
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -52,5 +56,14 @@ public class SeedMove : FloatEventInvoker
 
         // Destroy the game object
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Handles seed speed mod changed
+    /// </summary>
+    /// <param name="n">unused</param>
+    private void HandleSeedSpeedModChanged(float n)
+    {
+        force = ConfigUtils.PlayerSeedSpeed + Mod.ActiveModifiers["SeedSpeedMod"];
     }
 }

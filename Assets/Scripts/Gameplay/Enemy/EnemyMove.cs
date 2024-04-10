@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -22,6 +21,8 @@ public class EnemyMove : FloatEventInvoker
     GameObject player;
     // Bool to change movement on player death
     bool playerDead = false;
+    // Bool to change movement on boos spawn
+    bool bossActive = false;
     // Random movement timer when player dies
     Timer randMove;
 
@@ -37,6 +38,10 @@ public class EnemyMove : FloatEventInvoker
         // Add as listener for player death event
         EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, PlayerDeathBehavior);
 
+        // Add as listener for boss spawned and boss death event
+        EventManager.AddFloatListener(FloatEventName.BossSpawnedEvent, HandleBossSpawned);
+        EventManager.AddFloatListener(FloatEventName.BossDeathEvent, HandleBossDeath);
+
         // Add random movement timer
         randMove = gameObject.AddComponent<Timer>();
         randMove.Duration = 0.5f;
@@ -48,11 +53,16 @@ public class EnemyMove : FloatEventInvoker
     /// </summary>
     void Update()
     {
-        if (!playerDead)
+        if (!playerDead && !bossActive)
         {
             // Move towards player
             MoveToPlayer();          
-        }     
+        }
+        
+        if (bossActive)
+        {
+            MoveAwayFromPlayer();
+        }
     }
 
     private void Awake()
@@ -66,7 +76,7 @@ public class EnemyMove : FloatEventInvoker
     {
         if (direction.x != 0 || direction.y != 0)
         {
-            rb.velocity = direction * (speed * Tracker.EnemyMoveMod);
+            rb.velocity = direction * speed; //(speed * Tracker.EnemyMoveMod);
         }
     }
 
@@ -134,6 +144,31 @@ public class EnemyMove : FloatEventInvoker
     }
 
     /// <summary>
+    /// Move away from the player
+    /// </summary>
+    private void MoveAwayFromPlayer()
+    {
+        Vector3 directionToPlayer = (player.transform.position - gameObject.transform.position).normalized;
+
+        // Set direction negative
+        direction.x = -directionToPlayer.x;
+        direction.y = -directionToPlayer.y;
+
+        // Send values to animator to update corect animation
+        if (direction.x != 0 || direction.y != 0)
+        {
+            animator.SetFloat("X", direction.x);
+            animator.SetFloat("Y", direction.y);
+
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
+    }
+
+    /// <summary>
     /// Change to random movement on player death
     /// </summary>
     /// <param name="n">unused</param>
@@ -141,5 +176,25 @@ public class EnemyMove : FloatEventInvoker
     {
         playerDead = true;
         randMove.Run();
+    }
+
+    /// <summary>
+    /// Handles behavior when boss spawns
+    /// </summary>
+    /// <param name="n"></param>
+    private void HandleBossSpawned(float n)
+    {
+        bossActive = true;
+        speed = 3;
+    }
+
+    /// <summary>
+    /// Handle behavior when boss dies
+    /// </summary>
+    /// <param name="n"></param>
+    private void HandleBossDeath(float n)
+    {
+        bossActive = false;
+        speed  = 1;
     }
 }

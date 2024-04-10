@@ -13,7 +13,13 @@ public enum FloatEventName
     AddHealthEvent,
     LooseHealthEvent,
     PlayerDeathEvent,
+    BossDeathEvent,
+    BossSpawnedEvent,
+    BossSetupFinishedEvent,
     MaxHealthMod,
     MoveSpeedMod,
     ShootCooldownMod,
+    SeedSpeedMod,
+    DamageMod,
+    CritChanceMod,
 }

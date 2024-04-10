@@ -24,7 +24,10 @@ public class Player : FloatEventInvoker
     {
         // Set health
         health = ConfigUtils.PlayerHealth;
-        maxHealth = ConfigUtils.PlayerMaxHealth;
+        maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
+
+        // Add as listener for max health mod changed
+        EventManager.AddFloatListener(FloatEventName.MaxHealthMod, HandleMaxHealthModChanged);
 
         // Add as invoker for add money event
         unityFloatEvents.Add(FloatEventName.AddMoneyEvent, new AddMoneyEvent());
@@ -92,8 +95,8 @@ public class Player : FloatEventInvoker
         // Get name of game object
         string t = collision.gameObject.tag;
 
-        // Stops camera bounds from being a trigger
-        if (t != "CameraBounds")
+        // Stops camera bounds and boss wall from being a trigger
+        if (t != "CameraBounds" && t != "BossWall")
         {
             // Check if heart
             if (t == "Heart")
@@ -102,7 +105,7 @@ public class Player : FloatEventInvoker
                 float value = GetValue(t);
 
                 // Keep health clamped
-                float tempHealth = Mathf.Clamp(health + value, 0, maxHealth + Mod.ActiveModifiers["MaxHealthMod"]);
+                float tempHealth = Mathf.Clamp(health + value, 0, maxHealth);
                 health = tempHealth;
 
                 // Trigger add health event
@@ -165,5 +168,14 @@ public class Player : FloatEventInvoker
     {
         vulnerable = true;
         damageCooldown.Duration = cooldown;
+    }
+
+    /// <summary>
+    /// Updates player max health on change
+    /// </summary>
+    /// <param name="n"></param>
+    private void HandleMaxHealthModChanged(float n)
+    {
+        maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
     }
 }

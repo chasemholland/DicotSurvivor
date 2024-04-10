@@ -8,13 +8,20 @@ using UnityEngine;
     /// </summary>
 public class Enemy : FloatEventInvoker
 {
-    private float health;
-    private float damageAmount;
+    // Enemy health
+    float health;
+
+    // Player damage and crit chance
+    float damageAmount;
+    float critChance;
+
+    // Death effect
     Timer stepDeathEffect;
     float stepDeathDuration;
     Material mat;
     float fade = 1f;
 
+    // Loot
     [SerializeField]
     GameObject heart;
     [SerializeField]
@@ -38,7 +45,14 @@ public class Enemy : FloatEventInvoker
 
         // Set enemy health (hardcoded 2 for now) ----------------------------------
         health = 2;
-        damageAmount = ConfigUtils.PlayerDamage;
+
+        // Set player damage stats
+        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+
+        // Add as listener for damage mod change and crit chance mod change
+        EventManager.AddFloatListener(FloatEventName.DamageMod, HandleDamageModChanged);
+        EventManager.AddFloatListener(FloatEventName.CritChanceMod, HandleCritChanceModChanged);
 
         // Set up death effect timer
         stepDeathDuration = 0.05f;
@@ -59,6 +73,7 @@ public class Enemy : FloatEventInvoker
         {
             if (!stepDeathEffect.Running)
             {
+                gameObject.GetComponent<Collider2D>().enabled = false;
                 stepDeathEffect.Run();
             }    
         }
@@ -88,9 +103,21 @@ public class Enemy : FloatEventInvoker
     /// <param name="coll"></param>
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.tag == "Seed")
+        if (coll.gameObject.CompareTag("Seed"))
         {
-            health -= damageAmount;
+            if (Random.Range(0f, 1f) <= critChance)
+            {
+                health -= damageAmount * 2;
+            }
+            else
+            {
+                health -= damageAmount;
+            } 
+        }
+
+        if (coll.gameObject.CompareTag("BossWall"))
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -134,5 +161,23 @@ public class Enemy : FloatEventInvoker
                 Instantiate(loot[pool][2], transform.position, Quaternion.identity);
             }
         }  
+    }
+
+    /// <summary>
+    /// Updates player crit chance
+    /// </summary>
+    /// <param name="n"></param>
+    private void HandleCritChanceModChanged(float n)
+    {
+        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+    }
+
+    /// <summary>
+    /// Updates player damage
+    /// </summary>
+    /// <param name="n"></param>
+    private void HandleDamageModChanged(float n)
+    {
+        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
     }
 }

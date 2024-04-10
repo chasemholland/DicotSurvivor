@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,15 +20,20 @@ public class PlayerMove : MonoBehaviour
     private Animator animator;
 
 
+
     private void Awake()
     {
         // Set defaults
-        speed = ConfigUtils.PlayerMoveSpeed;
+        speed = ConfigUtils.PlayerMoveSpeed + Mod.ActiveModifiers["MoveSpeedMod"];
+
+        // Add as listener for move speed mod changed
+        EventManager.AddFloatListener(FloatEventName.MoveSpeedMod, HandleMoveSpeedModChanged);
 
         // Get reference to player and player animator
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
+
 
     // Input manager method uses "On" plus Action name "Movement" to reference the action
     private void OnMovement(InputValue value)
@@ -55,10 +61,18 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
         if (direction.x != 0 || direction.y != 0)
         {
             rb.velocity = direction * speed;
         }
+    }
+
+    /// <summary>
+    /// Updates speed on move speed mod change
+    /// </summary>
+    /// <param name="n">unused</param>
+    private void HandleMoveSpeedModChanged(float n)
+    {
+        speed = ConfigUtils.PlayerMoveSpeed + Mod.ActiveModifiers["MoveSpeedMod"];
     }
 }

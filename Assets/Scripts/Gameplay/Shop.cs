@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Xml.Serialization;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 ///
@@ -15,11 +9,14 @@ public class Shop : MonoBehaviour
     [SerializeField]
     GameObject shop;
     [SerializeField]
-    List<GameObject> prefabButtons;
+    List<GameObject> prefabCommonButtons;
+    List<int> usedCommon;
+    [SerializeField]
+    List<GameObject> prefabUncommonButtons;
+    List<int> usedUncommon;
     [SerializeField]
     GameObject buttonParent;
-    [SerializeField]
-    TextMeshProUGUI infoText;
+    float uncChance = 0.1f;
 
     private void OnEnable()
     {
@@ -33,9 +30,32 @@ public class Shop : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < prefabButtons.Count; i++)
+        // Create empty list to ensure no button repeats
+        usedCommon = new List<int>();
+        usedUncommon = new List<int>();
+
+        for (int i = 0; i < 3; i++)
         {
-            Instantiate(prefabButtons[i], buttonParent.transform);
+            if (Random.Range(0f, 1f) <= uncChance)
+            {
+                int index = Random.Range(0, prefabUncommonButtons.Count);
+                while (usedUncommon.Contains(index))
+                {
+                    index = Random.Range(0, prefabUncommonButtons.Count);
+                }
+                usedUncommon.Add(index);
+                Instantiate(prefabUncommonButtons[index], buttonParent.transform);
+            }
+            else
+            {
+                int index = Random.Range(0, prefabCommonButtons.Count);
+                while (usedCommon.Contains(index))
+                {
+                    index = Random.Range(0, prefabCommonButtons.Count);
+                }
+                usedCommon.Add(index);
+                Instantiate(prefabCommonButtons[index], buttonParent.transform);
+            }
         }
     }
 

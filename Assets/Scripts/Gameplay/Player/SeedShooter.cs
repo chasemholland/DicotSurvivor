@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,9 @@ public class SeedShooter : FloatEventInvoker
     {
         // Set defaults
         cooldown = ConfigUtils.PlayerShootCooldown;
+
+        // Add as listener for choot cooldown mod change
+        EventManager.AddFloatListener(FloatEventName.ShootCooldownMod, HandleShootCooldownModChanged);
 
         // Get reference to main camera
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -78,5 +82,14 @@ public class SeedShooter : FloatEventInvoker
         }
         shootTimer.Duration = cooldown;
         shootTimer.Run();
+    }
+
+    /// <summary>
+    /// Handles shoot cooldown mod chnage
+    /// </summary>
+    /// <param name="n">unused</param>
+    private void HandleShootCooldownModChanged(float n)
+    {
+        cooldown = Mathf.Clamp(ConfigUtils.PlayerShootCooldown - Mod.ActiveModifiers["ShootCooldownMod"], 0.1f, ConfigUtils.PlayerShootCooldown);
     }
 }

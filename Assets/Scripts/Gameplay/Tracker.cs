@@ -12,8 +12,9 @@ public static class Tracker
 
     static float kills = 0;
     static float enemyMoveMod = 1;
+    static float enemySpawnRateMod = 0;
     static float upgradesUnlocked = 0;
-    static float upgradeCost = 100;
+    static float upgradeCost = 50;
 
 
     #endregion
@@ -29,6 +30,11 @@ public static class Tracker
     public static float EnemyMoveMod
     {
         get { return enemyMoveMod + (kills / 100); }
+    }
+
+    public static float EnemySpawnRateMod
+    {
+        get { return enemySpawnRateMod + (kills / 1000); }
     }
 
     public static float UpgradesUnlocked

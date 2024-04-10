@@ -9,6 +9,7 @@ public class Boss : FloatEventInvoker
 {
     private float health;
     private float damageAmount;
+    float critChance;
     Timer stepDeathEffect;
     float stepDeathDuration;
     Material mat;
@@ -25,13 +26,22 @@ public class Boss : FloatEventInvoker
 
         // Set enemy health (hardcoded 10 for now) ----------------------------------
         health = 10;
-        damageAmount = ConfigUtils.PlayerDamage;
+        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+
+        // Add as listener for damage mod change and crit chance mod change
+        EventManager.AddFloatListener(FloatEventName.DamageMod, HandleDamageModChanged);
+        EventManager.AddFloatListener(FloatEventName.CritChanceMod, HandleCritChanceModChanged);
 
         // Set up death effect timer
         stepDeathDuration = 0.05f;
         stepDeathEffect = gameObject.AddComponent<Timer>();
         stepDeathEffect.AddTimerFinishedListener(HandleStep);
         stepDeathEffect.Duration = stepDeathDuration;
+
+        // Add as invoker for boss death event
+        unityFloatEvents.Add(FloatEventName.BossDeathEvent, new BossDeathEvent());
+        EventManager.AddFloatInvoker(FloatEventName.BossDeathEvent, this);
 
         // Get refernce to shader effect
         mat = gameObject.GetComponent<SpriteRenderer>().material;
@@ -55,7 +65,10 @@ public class Boss : FloatEventInvoker
     {
         if (fade <= 0)
         {
+            // Update kills
+            Tracker.Kills += 1;
             SpawnRandomPickup();
+            unityFloatEvents[FloatEventName.BossDeathEvent].Invoke(0);
             Destroy(gameObject);
         }
         else
@@ -75,7 +88,14 @@ public class Boss : FloatEventInvoker
     {
         if (coll.gameObject.tag == "Seed")
         {
-            health -= damageAmount;
+            if (Random.Range(0f, 1f) <= critChance)
+            {
+                health -= damageAmount * 2;
+            }
+            else
+            {
+                health -= damageAmount;
+            }
         }
     }
 
@@ -100,5 +120,23 @@ public class Boss : FloatEventInvoker
         {
             Instantiate(chests[3], transform.position, Quaternion.identity);
         }
+    }
+
+    /// <summary>
+    /// Updates player crit chance
+    /// </summary>
+    /// <param name="n"></param>
+    private void HandleCritChanceModChanged(float n)
+    {
+        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+    }
+
+    /// <summary>
+    /// Updates player damage
+    /// </summary>
+    /// <param name="n"></param>
+    private void HandleDamageModChanged(float n)
+    {
+        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
     }
 }
