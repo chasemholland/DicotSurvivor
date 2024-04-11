@@ -6,7 +6,7 @@ using UnityEngine;
     /// <summary>
     /// Enemy attributes other than movement
     /// </summary>
-public class Enemy : FloatEventInvoker
+public class Enemy : MonoBehaviour
 {
     // Enemy health
     float health;
@@ -51,8 +51,8 @@ public class Enemy : FloatEventInvoker
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
 
         // Add as listener for damage mod change and crit chance mod change
-        EventManager.AddFloatListener(FloatEventName.DamageMod, HandleDamageModChanged);
-        EventManager.AddFloatListener(FloatEventName.CritChanceMod, HandleCritChanceModChanged);
+        EventManager.AddListener(EventName.DamageMod, HandleDamageModChanged);
+        EventManager.AddListener(EventName.CritChanceMod, HandleCritChanceModChanged);
 
         // Set up death effect timer
         stepDeathDuration = 0.05f;
@@ -166,8 +166,7 @@ public class Enemy : FloatEventInvoker
     /// <summary>
     /// Updates player crit chance
     /// </summary>
-    /// <param name="n"></param>
-    private void HandleCritChanceModChanged(float n)
+    private void HandleCritChanceModChanged()
     {
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
     }
@@ -175,8 +174,7 @@ public class Enemy : FloatEventInvoker
     /// <summary>
     /// Updates player damage
     /// </summary>
-    /// <param name="n"></param>
-    private void HandleDamageModChanged(float n)
+    private void HandleDamageModChanged()
     {
         damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
     }

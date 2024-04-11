@@ -7,7 +7,7 @@ using UnityEngine;
     /// <summary>
     ///
     /// </summary>
-public class Player : FloatEventInvoker
+public class Player : EventInvoker
 {
 
     float health;
@@ -27,7 +27,7 @@ public class Player : FloatEventInvoker
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
 
         // Add as listener for max health mod changed
-        EventManager.AddFloatListener(FloatEventName.MaxHealthMod, HandleMaxHealthModChanged);
+        EventManager.AddListener(EventName.MaxHealthMod, HandleMaxHealthModChanged);
 
         // Add as invoker for add money event
         unityFloatEvents.Add(FloatEventName.AddMoneyEvent, new AddMoneyEvent());
@@ -42,8 +42,8 @@ public class Player : FloatEventInvoker
         EventManager.AddFloatInvoker(FloatEventName.LooseHealthEvent, this);
 
         // Add as invoker for player death event
-        unityFloatEvents.Add(FloatEventName.PlayerDeathEvent, new PlayerDeathEvent());
-        EventManager.AddFloatInvoker(FloatEventName.PlayerDeathEvent, this);
+        unityEvents.Add(EventName.PlayerDeathEvent, new PlayerDeathEvent());
+        EventManager.AddInvoker(EventName.PlayerDeathEvent, this);
 
         // Set up damage cooldown timer
         damageCooldown = gameObject.AddComponent<Timer>();
@@ -77,7 +77,7 @@ public class Player : FloatEventInvoker
                 if (health <= 0)
                 {
                     // Invoke death event
-                    unityFloatEvents[FloatEventName.PlayerDeathEvent].Invoke(0);
+                    unityEvents[EventName.PlayerDeathEvent].Invoke();
 
                     // Make camera follow enemy that killed the player
                     killCam = GameObject.FindGameObjectWithTag("Follower").gameObject.GetComponent<CinemachineVirtualCamera>();
@@ -173,8 +173,7 @@ public class Player : FloatEventInvoker
     /// <summary>
     /// Updates player max health on change
     /// </summary>
-    /// <param name="n"></param>
-    private void HandleMaxHealthModChanged(float n)
+    private void HandleMaxHealthModChanged()
     {
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
     }

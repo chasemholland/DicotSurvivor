@@ -58,7 +58,7 @@ public class HUD : MonoBehaviour
         EventManager.AddFloatListener(FloatEventName.AddMoneyEvent, HandleAddMoney);
 
         // Add as listener for max health mod event
-        EventManager.AddFloatListener(FloatEventName.MaxHealthMod, HandleMaxHealthChanged);
+        EventManager.AddListener(EventName.MaxHealthMod, HandleMaxHealthChanged);
 
     }
 
@@ -120,8 +120,7 @@ public class HUD : MonoBehaviour
     /// <summary>
     /// Updates max health when invoked
     /// </summary>
-    /// <param name="n">unused</param>
-    private void HandleMaxHealthChanged(float n)
+    private void HandleMaxHealthChanged()
     {
         // update max health
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];

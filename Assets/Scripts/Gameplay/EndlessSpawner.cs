@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
     /// <summary>
-    ///
+    /// Enemy spawner
     /// </summary>
-public class EndlessSpawner : FloatEventInvoker
+public class EndlessSpawner : EventInvoker
 {
     private float xRangeMin;
     private float xRangeMax;
@@ -55,14 +55,14 @@ public class EndlessSpawner : FloatEventInvoker
         spawnTimer.Run();
 
         // Add as invoker for boss spawned event
-        unityFloatEvents.Add(FloatEventName.BossSpawnedEvent, new BossSpawnedEvent());
-        EventManager.AddFloatInvoker(FloatEventName.BossSpawnedEvent, this);
+        unityEvents.Add(EventName.BossSpawnedEvent, new BossSpawnedEvent());
+        EventManager.AddInvoker(EventName.BossSpawnedEvent, this);
 
         // Add as listener for boss death event
-        EventManager.AddFloatListener(FloatEventName.BossDeathEvent, RestartSpawning);
+        EventManager.AddListener(EventName.BossDeathEvent, RestartSpawning);
 
         // Add add listener for player death event
-        EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, StopSpawning);
+        EventManager.AddListener(EventName.PlayerDeathEvent, StopSpawning);
 
         // Set defaults
         bottomLeftCam = new Vector3(0, 0, 0);
@@ -134,15 +134,14 @@ public class EndlessSpawner : FloatEventInvoker
         Instantiate(bosses[index], new Vector3(topRight.x - xHalfLength, topRight.y - yHalfLength + 3f, 0), Quaternion.identity);
 
         // Invoke boss spawned event
-        unityFloatEvents[FloatEventName.BossSpawnedEvent].Invoke(0);
+        unityEvents[EventName.BossSpawnedEvent].Invoke();
 
     }
 
     /// <summary>
     /// Starts spawning enemies on boss death
     /// </summary>
-    /// <param name="n">unused</param>
-    private void RestartSpawning(float n)
+    private void RestartSpawning()
     {
         // Reset spawn timer
         spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.2f, 1);
@@ -152,8 +151,7 @@ public class EndlessSpawner : FloatEventInvoker
     /// <summary>
     /// Stops enemy spawn
     /// </summary>
-    /// <param name="n">unused</param>
-    private void StopSpawning(float n)
+    private void StopSpawning()
     {
         // Destroy spawn timer
         Destroy(GetComponent<Timer>());

@@ -5,7 +5,7 @@ using UnityEngine;
     /// <summary>
     /// Boss attributes other than movement
     /// </summary>
-public class Boss : FloatEventInvoker
+public class Boss : EventInvoker
 {
     private float health;
     private float damageAmount;
@@ -30,8 +30,8 @@ public class Boss : FloatEventInvoker
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
 
         // Add as listener for damage mod change and crit chance mod change
-        EventManager.AddFloatListener(FloatEventName.DamageMod, HandleDamageModChanged);
-        EventManager.AddFloatListener(FloatEventName.CritChanceMod, HandleCritChanceModChanged);
+        EventManager.AddListener(EventName.DamageMod, HandleDamageModChanged);
+        EventManager.AddListener(EventName.CritChanceMod, HandleCritChanceModChanged);
 
         // Set up death effect timer
         stepDeathDuration = 0.05f;
@@ -40,8 +40,8 @@ public class Boss : FloatEventInvoker
         stepDeathEffect.Duration = stepDeathDuration;
 
         // Add as invoker for boss death event
-        unityFloatEvents.Add(FloatEventName.BossDeathEvent, new BossDeathEvent());
-        EventManager.AddFloatInvoker(FloatEventName.BossDeathEvent, this);
+        unityEvents.Add(EventName.BossDeathEvent, new BossDeathEvent());
+        EventManager.AddInvoker(EventName.BossDeathEvent, this);
 
         // Get refernce to shader effect
         mat = gameObject.GetComponent<SpriteRenderer>().material;
@@ -68,7 +68,7 @@ public class Boss : FloatEventInvoker
             // Update kills
             Tracker.Kills += 1;
             SpawnRandomPickup();
-            unityFloatEvents[FloatEventName.BossDeathEvent].Invoke(0);
+            unityEvents[EventName.BossDeathEvent].Invoke();
             Destroy(gameObject);
         }
         else
@@ -125,8 +125,7 @@ public class Boss : FloatEventInvoker
     /// <summary>
     /// Updates player crit chance
     /// </summary>
-    /// <param name="n"></param>
-    private void HandleCritChanceModChanged(float n)
+    private void HandleCritChanceModChanged()
     {
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
     }
@@ -134,8 +133,7 @@ public class Boss : FloatEventInvoker
     /// <summary>
     /// Updates player damage
     /// </summary>
-    /// <param name="n"></param>
-    private void HandleDamageModChanged(float n)
+    private void HandleDamageModChanged()
     {
         damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
     }

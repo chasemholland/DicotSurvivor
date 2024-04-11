@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-    /// <summary>
-    /// Shop button behavior for mouse over event
-    /// </summary>
-public class ShopButton : FloatEventInvoker, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+/// <summary>
+/// Shop button behavior for mouse over event
+/// </summary>
+public class ShopButton : EventInvoker, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     string nam;
-    FloatEventName eventname;
+    EventName eventname;
 
     public void Start()
     {
@@ -19,11 +20,11 @@ public class ShopButton : FloatEventInvoker, IPointerEnterHandler, IPointerExitH
         nam = splitName[0];
 
         // Parse the event name
-        eventname = (FloatEventName)Enum.Parse(typeof(FloatEventName), Mod.MiddleMan[nam]);
+        eventname = (EventName)Enum.Parse(typeof(EventName), Mod.MiddleMan[nam]);
 
         // Add as invoker for loose health event
-        unityFloatEvents.Add(eventname, new ModChangedEvent());
-        EventManager.AddFloatInvoker(eventname, this);
+        unityEvents.Add(eventname, new ModChangedEvent());
+        EventManager.AddInvoker(eventname, this);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -40,7 +41,7 @@ public class ShopButton : FloatEventInvoker, IPointerEnterHandler, IPointerExitH
     public void OnPointerClick(PointerEventData eventData)
     {
         Mod.ActiveModifiers[Mod.MiddleMan[nam]] += Mod.Modifier[nam];
-        unityFloatEvents[eventname].Invoke(0);
+        unityEvents[eventname].Invoke();
         Time.timeScale = 1;
         GameObject.FindGameObjectWithTag("Shop").SetActive(false);
     }

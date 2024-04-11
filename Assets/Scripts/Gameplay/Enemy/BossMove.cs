@@ -5,7 +5,7 @@ using UnityEngine;
     /// <summary>
     /// Boss movement
     /// </summary>
-public class BossMove : FloatEventInvoker
+public class BossMove : MonoBehaviour
 {
     // Direction of moevement
     public Vector2 direction;
@@ -41,7 +41,7 @@ public class BossMove : FloatEventInvoker
         player = GameObject.FindWithTag("Player");
 
         // Add as listener for player death event
-        EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, PlayerDeathBehavior);
+        EventManager.AddListener(EventName.PlayerDeathEvent, PlayerDeathBehavior);
 
         // Add random movement timer
         randMove = gameObject.AddComponent<Timer>();
@@ -140,8 +140,7 @@ public class BossMove : FloatEventInvoker
     /// <summary>
     /// Change to random movement on player death
     /// </summary>
-    /// <param name="n">unused</param>
-    private void PlayerDeathBehavior(float n)
+    private void PlayerDeathBehavior()
     {
         playerDead = true;
         randMove.Run();

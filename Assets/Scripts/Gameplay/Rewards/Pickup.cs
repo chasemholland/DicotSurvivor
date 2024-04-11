@@ -35,7 +35,7 @@ public class Pickup : MonoBehaviour
         }
 
         // Add as listener for player death
-        EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, StopLookingForPlayer);
+        EventManager.AddListener(EventName.PlayerDeathEvent, StopLookingForPlayer);
 
     }
 
@@ -97,8 +97,7 @@ public class Pickup : MonoBehaviour
     /// <summary>
     /// Stops checking if player near when player dies
     /// </summary>
-    /// <param name="n">unused</param>
-    private void StopLookingForPlayer(float n)
+    private void StopLookingForPlayer()
     {
         playerDead = true;
     }

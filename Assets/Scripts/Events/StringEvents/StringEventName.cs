@@ -7,8 +7,5 @@ using UnityEngine;
     /// </summary>
 public enum StringEventName
 {
-    MaxHealthMod,
-    MoveSpeedMod,
-    ShootCooldownMod,
-    ModChangedEvent
+
 }

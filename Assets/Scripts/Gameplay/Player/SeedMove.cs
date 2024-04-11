@@ -7,7 +7,7 @@ using UnityEngine;
     /// <summary>
     /// Seed (bullet) bahavior
     /// </summary>
-public class SeedMove : FloatEventInvoker
+public class SeedMove : EventInvoker
 {
     private Vector3 mousePosition;
     private Camera mainCamera;
@@ -26,7 +26,7 @@ public class SeedMove : FloatEventInvoker
         force = ConfigUtils.PlayerSeedSpeed;
 
         // Add as listener for seed speed changed
-        EventManager.AddFloatListener(FloatEventName.SeedSpeedMod, HandleSeedSpeedModChanged);
+        EventManager.AddListener(EventName.SeedSpeedMod, HandleSeedSpeedModChanged);
 
         // Get reference to main camera and rigidbody2d
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -61,8 +61,7 @@ public class SeedMove : FloatEventInvoker
     /// <summary>
     /// Handles seed speed mod changed
     /// </summary>
-    /// <param name="n">unused</param>
-    private void HandleSeedSpeedModChanged(float n)
+    private void HandleSeedSpeedModChanged()
     {
         force = ConfigUtils.PlayerSeedSpeed + Mod.ActiveModifiers["SeedSpeedMod"];
     }

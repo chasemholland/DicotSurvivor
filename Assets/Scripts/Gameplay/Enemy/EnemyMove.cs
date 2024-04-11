@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Handles enemy movement
 /// </summary>
-public class EnemyMove : FloatEventInvoker
+public class EnemyMove : MonoBehaviour
 {
     // Direction of moevement
     public Vector2 direction;
@@ -36,11 +36,11 @@ public class EnemyMove : FloatEventInvoker
         player = GameObject.FindWithTag("Player");
 
         // Add as listener for player death event
-        EventManager.AddFloatListener(FloatEventName.PlayerDeathEvent, PlayerDeathBehavior);
+        EventManager.AddListener(EventName.PlayerDeathEvent, PlayerDeathBehavior);
 
         // Add as listener for boss spawned and boss death event
-        EventManager.AddFloatListener(FloatEventName.BossSpawnedEvent, HandleBossSpawned);
-        EventManager.AddFloatListener(FloatEventName.BossDeathEvent, HandleBossDeath);
+        EventManager.AddListener(EventName.BossSpawnedEvent, HandleBossSpawned);
+        EventManager.AddListener(EventName.BossDeathEvent, HandleBossDeath);
 
         // Add random movement timer
         randMove = gameObject.AddComponent<Timer>();
@@ -171,8 +171,7 @@ public class EnemyMove : FloatEventInvoker
     /// <summary>
     /// Change to random movement on player death
     /// </summary>
-    /// <param name="n">unused</param>
-    private void PlayerDeathBehavior(float n)
+    private void PlayerDeathBehavior()
     {
         playerDead = true;
         randMove.Run();
@@ -181,8 +180,7 @@ public class EnemyMove : FloatEventInvoker
     /// <summary>
     /// Handles behavior when boss spawns
     /// </summary>
-    /// <param name="n"></param>
-    private void HandleBossSpawned(float n)
+    private void HandleBossSpawned()
     {
         bossActive = true;
         speed = 3;
@@ -191,8 +189,7 @@ public class EnemyMove : FloatEventInvoker
     /// <summary>
     /// Handle behavior when boss dies
     /// </summary>
-    /// <param name="n"></param>
-    private void HandleBossDeath(float n)
+    private void HandleBossDeath()
     {
         bossActive = false;
         speed  = 1;

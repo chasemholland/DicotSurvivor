@@ -7,7 +7,7 @@ using UnityEngine;
     /// <summary>
     /// Virtual cam behavior
     /// </summary>
-public class Follower : FloatEventInvoker
+public class Follower : EventInvoker
 {
     CinemachineVirtualCamera cam;
     CinemachineConfiner confiner;
@@ -52,8 +52,8 @@ public class Follower : FloatEventInvoker
         killTween.Duration = duration;
 
         // Add as lsitener for boss spawned and boss death event
-        EventManager.AddFloatListener(FloatEventName.BossSpawnedEvent, HandleBossSpawned);
-        EventManager.AddFloatListener(FloatEventName.BossDeathEvent, HandleBossDeath);
+        EventManager.AddListener(EventName.BossSpawnedEvent, HandleBossSpawned);
+        EventManager.AddListener(EventName.BossDeathEvent, HandleBossDeath);
     }
 
     /// <summary>
@@ -89,7 +89,7 @@ public class Follower : FloatEventInvoker
     }
 
 
-    private void HandleBossDeath(float n)
+    private void HandleBossDeath()
     {
         // Dissable boss arena walls 
         bossCollider.isTrigger = true;
@@ -101,7 +101,7 @@ public class Follower : FloatEventInvoker
         cam.m_Follow = pTransform;
     }
 
-    private void HandleBossSpawned(float n)
+    private void HandleBossSpawned()
     {
         // Set follower null to confine player in boss arena
         cam.m_Follow = null;

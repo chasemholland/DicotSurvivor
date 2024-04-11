@@ -7,19 +7,7 @@ using UnityEngine;
     /// </summary>
 public enum FloatEventName
 {
-    TimerFinishedEvent,
-    DamageEnemyEvent,
-    AddMoneyEvent,
     AddHealthEvent,
     LooseHealthEvent,
-    PlayerDeathEvent,
-    BossDeathEvent,
-    BossSpawnedEvent,
-    BossSetupFinishedEvent,
-    MaxHealthMod,
-    MoveSpeedMod,
-    ShootCooldownMod,
-    SeedSpeedMod,
-    DamageMod,
-    CritChanceMod,
+    AddMoneyEvent,
 }

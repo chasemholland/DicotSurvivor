@@ -27,7 +27,7 @@ public class PlayerMove : MonoBehaviour
         speed = ConfigUtils.PlayerMoveSpeed + Mod.ActiveModifiers["MoveSpeedMod"];
 
         // Add as listener for move speed mod changed
-        EventManager.AddFloatListener(FloatEventName.MoveSpeedMod, HandleMoveSpeedModChanged);
+        EventManager.AddListener(EventName.MoveSpeedMod, HandleMoveSpeedModChanged);
 
         // Get reference to player and player animator
         rb = GetComponent<Rigidbody2D>();
@@ -59,6 +59,16 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        // Set direction to zero when game paused to
+        // stop player from moving endlessly on unpause
+        if (Time.timeScale == 0)
+        {
+            direction = Vector2.zero;
+        }
+    }
+
     private void FixedUpdate()
     {
         if (direction.x != 0 || direction.y != 0)
@@ -70,8 +80,7 @@ public class PlayerMove : MonoBehaviour
     /// <summary>
     /// Updates speed on move speed mod change
     /// </summary>
-    /// <param name="n">unused</param>
-    private void HandleMoveSpeedModChanged(float n)
+    private void HandleMoveSpeedModChanged()
     {
         speed = ConfigUtils.PlayerMoveSpeed + Mod.ActiveModifiers["MoveSpeedMod"];
     }

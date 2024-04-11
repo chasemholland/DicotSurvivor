@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Controls the flower (seed shooter) behavior
 /// </summary>
-public class SeedShooter : FloatEventInvoker
+public class SeedShooter : EventInvoker
 {
     private Camera mainCamera;
     private Vector3 mousePosition;
@@ -28,7 +28,7 @@ public class SeedShooter : FloatEventInvoker
         cooldown = ConfigUtils.PlayerShootCooldown;
 
         // Add as listener for choot cooldown mod change
-        EventManager.AddFloatListener(FloatEventName.ShootCooldownMod, HandleShootCooldownModChanged);
+        EventManager.AddListener(EventName.ShootCooldownMod, HandleShootCooldownModChanged);
 
         // Get reference to main camera
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -87,8 +87,7 @@ public class SeedShooter : FloatEventInvoker
     /// <summary>
     /// Handles shoot cooldown mod chnage
     /// </summary>
-    /// <param name="n">unused</param>
-    private void HandleShootCooldownModChanged(float n)
+    private void HandleShootCooldownModChanged()
     {
         cooldown = Mathf.Clamp(ConfigUtils.PlayerShootCooldown - Mod.ActiveModifiers["ShootCooldownMod"], 0.1f, ConfigUtils.PlayerShootCooldown);
     }
