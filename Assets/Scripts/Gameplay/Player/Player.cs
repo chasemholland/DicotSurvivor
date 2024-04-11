@@ -63,29 +63,9 @@ public class Player : EventInvoker
     {
         if (vulnerable)
         {
-            if (coll.gameObject.CompareTag("Enemy"))
+            if (coll.gameObject.CompareTag("Enemy") || coll.gameObject.CompareTag("RedBoss"))
             {
-                // Reduce health and notify HUD
-                health -= 1f;
-                unityFloatEvents[FloatEventName.LooseHealthEvent].Invoke(1f);
-                
-                // Go invulnerable for some time
-                vulnerable = false;
-                damageCooldown.Run();
-
-                // Check if dead
-                if (health <= 0)
-                {
-                    // Invoke death event
-                    unityEvents[EventName.PlayerDeathEvent].Invoke();
-
-                    // Make camera follow enemy that killed the player
-                    killCam = GameObject.FindGameObjectWithTag("Follower").gameObject.GetComponent<CinemachineVirtualCamera>();
-                    killCam.Follow = coll.gameObject.transform;
-
-                    // Destroy the player
-                    Destroy(gameObject);
-                }
+                HandleDamage(coll.gameObject);
             }
         } 
     }
@@ -95,8 +75,14 @@ public class Player : EventInvoker
         // Get name of game object
         string t = collision.gameObject.tag;
 
+        if (collision.gameObject.CompareTag("Projectile"))
+        {
+            HandleDamage(collision.gameObject);
+            return;
+        }
+
         // Stops camera bounds and boss wall from being a trigger
-        if (t != "CameraBounds" && t != "BossWall")
+        if (!collision.gameObject.CompareTag("CameraBounds") && !collision.gameObject.CompareTag("BossWall"))
         {
             // Check if heart
             if (t == "Heart")
@@ -123,6 +109,63 @@ public class Player : EventInvoker
 
             // Destroy game object
             Destroy(collision.gameObject);
+        }
+    }
+
+    // Handles taking damage
+    private void HandleDamage(GameObject collision)
+    {
+        // Reduce health and notify HUD
+        health -= 1f;
+        unityFloatEvents[FloatEventName.LooseHealthEvent].Invoke(1f);
+
+        // Go invulnerable for some time
+        vulnerable = false;
+        damageCooldown.Run();
+
+        // Check if dead
+        if (health <= 0)
+        {
+            // Invoke death event
+            unityEvents[EventName.PlayerDeathEvent].Invoke();
+
+            // Make camera follow enemy that killed the player
+            killCam = GameObject.FindGameObjectWithTag("Follower").gameObject.GetComponent<CinemachineVirtualCamera>();
+
+            // Check if player killed by boss projectile
+            if (collision.CompareTag("Projectile"))
+            {
+                // Check if player and boss killed each other
+                if (GameObject.FindGameObjectWithTag("RedBoss") == null)
+                {
+                    // Follow random enemy
+                    killCam.Follow = GameObject.FindGameObjectWithTag("Enemy").transform;
+                }
+                // Follow boss if still alive
+                else
+                {
+                    killCam.Follow = GameObject.FindGameObjectWithTag("RedBoss").transform;
+                }
+
+            }
+            // Follow the enemy that killed the player
+            else
+            {
+                // Check if player and enemy killed each other
+                if (collision.gameObject == null)
+                {
+                    // Folow random enemy
+                    killCam.Follow = GameObject.FindGameObjectWithTag("Enemy").transform;
+                }
+                // Follow killer if still alive
+                else
+                {
+                    killCam.Follow = collision.transform;
+                }
+            }
+
+            // Destroy the player
+            Destroy(gameObject);
         }
     }
 

@@ -23,6 +23,10 @@ public class BossMove : MonoBehaviour
     bool introDone = false;
     // Random movement timer when player dies
     Timer randMove;
+    [SerializeField]
+    GameObject projectile;
+    [SerializeField]
+    Transform projectileTransform;
 
 
     private void Awake()
@@ -58,6 +62,12 @@ public class BossMove : MonoBehaviour
         {
             introDone = animator.GetBool("introDone");
         }
+        
+        if (animator.GetBool("isAttacking"))
+        {
+            direction = Vector2.zero;
+            return;
+        }
 
         if (!playerDead && introDone)
         {
@@ -71,6 +81,10 @@ public class BossMove : MonoBehaviour
         if (direction.x != 0 || direction.y != 0)
         {
             rb.velocity = direction * (speed * Tracker.EnemyMoveMod);
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
         }
     }
 
@@ -135,6 +149,13 @@ public class BossMove : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
         }
+    }
+
+    // Called by boss animator
+    public void AttackPlayer()
+    {
+        // Shoot projectile
+        Instantiate(projectile, projectileTransform.position, Quaternion.identity);
     }
 
     /// <summary>

@@ -56,6 +56,12 @@ public class Boss : EventInvoker
         {
             if (!stepDeathEffect.Running)
             {
+                GameObject shadow = gameObject.transform.GetChild(0).gameObject;
+                if (shadow.name == "Shadow")
+                {
+                    Destroy(shadow);
+                }
+                gameObject.GetComponent<Collider2D>().enabled = false;
                 stepDeathEffect.Run();
             }
         }
