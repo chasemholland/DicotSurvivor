@@ -25,6 +25,16 @@ TagManager:
   - BossWall
   - RedBoss
   - Projectile
+  - SmallOrb
+  - MediumOrb
+  - LargeOrb
+  - XLargeOrb
+  - XXLargeOrb
+  - XXXLargeOrb
+  - CollectionField
+  - MutationShop
+  - MutationInfoText
+  - MutationShopButton
   layers:
   - Default
   - TransparentFX

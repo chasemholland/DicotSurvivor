@@ -13,8 +13,9 @@ public static class Tracker
     static float kills = 0;
     static float enemyMoveMod = 1;
     static float enemySpawnRateMod = 0;
-    static float upgradesUnlocked = 0;
-    static float upgradeCost = 50;
+    static float level = 1;
+    static float levelUpAmount = 50;
+    static float levelUpAmountDifference = 50;
 
 
     #endregion
@@ -29,23 +30,29 @@ public static class Tracker
 
     public static float EnemyMoveMod
     {
-        get { return enemyMoveMod + (kills / 100); }
+        get { return enemyMoveMod + (Kills / 100); }
     }
 
     public static float EnemySpawnRateMod
     {
-        get { return enemySpawnRateMod + (kills / 1000); }
+        get { return enemySpawnRateMod + (Kills / 1000); }
     }
 
-    public static float UpgradesUnlocked
+    public static float Level
     {
-        get { return upgradesUnlocked; }
-        set { upgradesUnlocked = value; }
+        get { return level; }
+        set { level = value; }
     }
 
-    public static float UpgradeCost
+    public static float LevelUpAmount
     {
-        get { return upgradeCost + (upgradesUnlocked * 10); }
+        get { return levelUpAmount + LevelUpAmountDifference; }
+        set { levelUpAmount = value; }
+    }
+
+    public static float LevelUpAmountDifference
+    {
+        get { return levelUpAmountDifference * Level; }
     }
 
 

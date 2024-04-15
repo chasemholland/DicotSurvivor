@@ -32,75 +32,75 @@ public static class ConfigUtils
     }
 
     /// <summary>
-    /// Bronze coin value
+    /// Small xp orb value
     /// </summary>
-    public static float BronzeCoin
+    public static float SmallXpOrb
     {
-        get { return configData.BronzeCoin; }
+        get { return configData.SmallXpOrb; }
     }
 
     /// <summary>
-    /// Bronze coin stack value
+    /// Medium xp orb value
     /// </summary>
-    public static float BronzeCoinStack
+    public static float MediumXpOrb
     {
-        get { return configData.BronzeCoinStack; }
+        get { return configData.MediumXpOrb; }
     }
 
     /// <summary>
-    /// Bronze coin bag value
+    /// Large xp orb value
     /// </summary>
-    public static float BronzeCoinBag
+    public static float LargeXpOrb
     {
-        get { return configData.BronzeCoinBag; }
+        get { return configData.LargeXpOrb; }
     }
 
     /// <summary>
-    /// Silver coin value
+    /// XLarge xp orb value
     /// </summary>
-    public static float SilverCoin
+    public static float XLargeXpOrb
     {
-        get { return configData.SilverCoin; }
+        get { return configData.XLargeXpOrb; }
     }
 
     /// <summary>
-    /// Silver coin stack value
+    /// XXLarge xp orb value
     /// </summary>
-    public static float SilverCoinStack
+    public static float XXLargeXpOrb
     {
-        get { return configData.SilverCoinStack; }
+        get { return configData.XXLargeXpOrb; }
     }
 
     /// <summary>
-    /// Silver coin bag value
+    /// XXXLarge xp orb value
     /// </summary>
-    public static float SilverCoinBag
+    public static float XXXLargeXpOrb
     {
-        get { return configData.SilverCoinBag; }
+        get { return configData.XXXLargeXpOrb; }
     }
 
     /// <summary>
-    /// Gold coin value
+    /// Enemy health value
     /// </summary>
-    public static float GoldCoin
+    public static float EnemyHealth
     {
-        get { return configData.GoldCoin; }
+        get { return configData.EnemyHealth; }
     }
 
     /// <summary>
-    /// Gold coin stack value
+    /// Boss health value
     /// </summary>
-    public static float GoldCoinStack
+    public static float BossHealth
     {
-        get { return configData.GoldCoinStack; }
+        get { return configData.BossHealth; }
     }
 
     /// <summary>
-    /// Gold coin bag value
+    /// King health value
     /// </summary>
-    public static float GoldCoinBag
+    public static float KingHealth
     {
-        get { return configData.GoldCoinBag; }
+        get { return configData.KingHealth; }
     }
 
     /// <summary>
@@ -160,6 +160,46 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Seedling health value
+    /// </summary>
+    public static float SeedlingHealth
+    {
+        get { return configData.SeedlingHealth; }
+    }
+
+    /// <summary>
+    /// Seedling damage value
+    /// </summary>
+    public static float SeedlingDamage
+    {
+        get { return configData.SeedlingDamage; }
+    }
+
+    /// <summary>
+    /// Seedling rate of fire value
+    /// </summary>
+    public static float SeedlingROF
+    {
+        get { return configData.SeedlingROF; }
+    }
+
+    /// <summary>
+    /// Thorn damage value
+    /// </summary>
+    public static float ThronDamage
+    {
+        get { return configData.ThornDamage; }
+    }
+
+    /// <summary>
+    /// Thorn rate of fire value
+    /// </summary>
+    public static float ThornROF
+    {
+        get { return configData.ThornROF; }
+    }
+
+    /// <summary>
     /// Common move speed mod value
     /// </summary>
     public static float ComMoveSpeedMod
@@ -173,6 +213,14 @@ public static class ConfigUtils
     public static float UncMoveSpeedMod
     {
         get { return configData.UncMoveSpeedMod; }
+    }
+
+    /// <summary>
+    /// Rare move speed mod value
+    /// </summary>
+    public static float RarMoveSpeedMod
+    {
+        get { return configData.RarMoveSpeedMod; }
     }
 
     /// <summary>
@@ -192,6 +240,14 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Rare shoot cooldown mod value
+    /// </summary>
+    public static float RarShootCooldownMod
+    {
+        get { return configData.RarShootCooldownMod; }
+    }
+
+    /// <summary>
     /// Common max health mod value
     /// </summary>
     public static float ComMaxHealthMod
@@ -205,6 +261,14 @@ public static class ConfigUtils
     public static float UncMaxHealthMod
     {
         get { return configData.UncMaxHealthMod; }
+    }
+
+    /// <summary>
+    /// Rare max health mod value
+    /// </summary>
+    public static float RarMaxHealthMod
+    {
+        get { return configData.RarMaxHealthMod; }
     }
 
     /// <summary>
@@ -224,6 +288,14 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Rare seed speed mod value
+    /// </summary>
+    public static float RarSeedSpeedMod
+    {
+        get { return configData.RarSeedSpeedMod; }
+    }
+
+    /// <summary>
     /// Common crit chance mod value
     /// </summary>
     public static float ComCritChanceMod
@@ -240,6 +312,14 @@ public static class ConfigUtils
     }
 
     /// <summary>
+    /// Rare crit chance mod value
+    /// </summary>
+    public static float RarCritChanceMod
+    {
+        get { return configData.RarCritChanceMod; }
+    }
+
+    /// <summary>
     /// Common damage mod value
     /// </summary>
     public static float ComDamageMod
@@ -253,6 +333,95 @@ public static class ConfigUtils
     public static float UncDamageMod
     {
         get { return configData.UncDamageMod; }
+    }
+
+    /// <summary>
+    /// Uncommon damage mod value
+    /// </summary>
+    public static float RarDamageMod
+    {
+        get { return configData.RarDamageMod; }
+    }
+
+
+    /// <summary>
+    /// Uncommon thorn damage mod value
+    /// </summary>
+    public static float UncThornDamageMod
+    {
+        get { return configData.UncThornDamageMod; }
+    }
+
+    /// <summary>
+    /// Rare thorn damage mod value
+    /// </summary>
+    public static float RarThornDamageMod
+    {
+        get { return configData.RarThornDamageMod; }
+    }
+
+    /// <summary>
+    /// Uncommon thorn rate of fire mod value
+    /// </summary>
+    public static float UncThornROFMod
+    {
+        get { return configData.UncThornROFMod; }
+    }
+
+    /// <summary>
+    /// Rare thorn rate of fire mod value
+    /// </summary>
+    public static float RarThornROFMod
+    {
+        get { return configData.RarThornROFMod; }
+    }
+
+    /// <summary>
+    /// Uncommon seedling damage mod value
+    /// </summary>
+    public static float UncSeedlingDamageMod
+    {
+        get { return configData.UncSeedlingDamageMod; }
+    }
+
+    /// <summary>
+    /// Rare seedling damage mod value
+    /// </summary>
+    public static float RarSeedlingDamageMod
+    {
+        get { return configData.RarSeedlingDamageMod; }
+    }
+
+    /// <summary>
+    /// Uncommon seedling rate of fire mod value
+    /// </summary>
+    public static float UncSeedlingROFMod
+    {
+        get { return configData.UncSeedlingROFMod; }
+    }
+
+    /// <summary>
+    /// Rare seedling rate of fire mod value
+    /// </summary>
+    public static float RarSeedlingROFMod
+    {
+        get { return configData.RarSeedlingROFMod; }
+    }
+
+    /// <summary>
+    /// Uncommon seedling health mod value
+    /// </summary>
+    public static float UncSeedlingHealthMod
+    {
+        get { return configData.UncSeedlingHealthMod; }
+    }
+
+    /// <summary>
+    /// Rare seedling health mod value
+    /// </summary>
+    public static float RarSeedlingHealthMod
+    {
+        get { return configData.RarSeedlingHealthMod; }
     }
 
     #endregion

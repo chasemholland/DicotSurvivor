@@ -5,27 +5,40 @@ using UnityEngine;
 public class BossAttackState : StateMachineBehaviour
 {
     Timer walkTimer;
-    float transitionTime = 2f;
+    int projectilesShot;
     Timer multiAttack;
-    BossMove boss;
+    float shootDelay = 0.05f;
+    Boss boss;
+    int numProjectiles = 12;
+    int currentProjectile;
+    float radius = 0.5f;
+    float angleStep;
+    int clockWise = -1;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        boss = animator.GetComponent<BossMove>();
+        // Start particle system
+        animator.GetComponentInChildren<ParticleSystem>().Play();
+
+        // Get reference to boss script to handle attacking
+        boss = animator.GetComponent<Boss>();
 
         // Run multi attack timer to shoot more projectiles
         multiAttack = animator.gameObject.AddComponent<Timer>();
-        multiAttack.Duration = transitionTime / 3;
+        multiAttack.Duration = shootDelay;
         multiAttack.Run();
 
-        // Run transition timer
-        walkTimer = animator.gameObject.AddComponent<Timer>();
-        walkTimer.Duration = transitionTime;
-        walkTimer.Run();
+        // Get angle between projectiles and rotation of projectile spawn via clockWise
+        angleStep = 360f / numProjectiles * clockWise;
+        projectilesShot = 0;
+        currentProjectile = 1;
 
         // Fire one projectile
-        boss.AttackPlayer();
+        boss.AttackPlayer(currentProjectile, angleStep, radius);
+        currentProjectile++;
+        projectilesShot++;
+        clockWise *= -1;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -33,15 +46,19 @@ public class BossAttackState : StateMachineBehaviour
     {
         if (multiAttack.Finished)
         {
-            boss.AttackPlayer();
-            multiAttack.Duration = transitionTime / 3;
+            boss.AttackPlayer(currentProjectile, angleStep, radius);
+            currentProjectile++;
+            projectilesShot++;
+            multiAttack.Duration = shootDelay;
             multiAttack.Run();
         }
 
-        if (walkTimer.Finished)
+        // Check if all projectiles have been shot
+        if (projectilesShot == numProjectiles)
         {
+            // Stop particle system
+            animator.GetComponentInChildren<ParticleSystem>().Stop();
             Destroy(multiAttack);
-            Destroy(walkTimer);
             animator.SetBool("isAttacking", false);
         }
         

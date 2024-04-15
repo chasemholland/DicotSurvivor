@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
@@ -15,8 +16,17 @@ public class Boss : EventInvoker
     Material mat;
     float fade = 1f;
 
+    // Loot
     [SerializeField]
     List<GameObject> chests;
+
+    // Projectile object
+    [SerializeField]
+    GameObject projectile;
+    [SerializeField]
+    Transform projectileTransform;
+    // Projectile force
+    float force = 12f;
 
     /// <summary>
     /// Start is called before the first frame update
@@ -24,8 +34,10 @@ public class Boss : EventInvoker
     void Start()
     {
 
-        // Set enemy health (hardcoded 10 for now) ----------------------------------
-        health = 10;
+        // Get enemy health
+        health = ConfigUtils.BossHealth;
+
+        // Get player damage and crit chance
         damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
 
@@ -86,13 +98,37 @@ public class Boss : EventInvoker
         }
     }
 
+    // Called by boss animator
+    public void AttackPlayer(int num, float angleStep, float radius)
+    {
+        // Calculate position based on angle
+        float angle = num * angleStep;
+
+        // Spawn position, offset on the y to account for rotation point being at the bottom of the boss object
+        Transform boss = gameObject.transform;
+        Vector3 spawnPosition = projectileTransform.position + Quaternion.Euler(0, 0, angle) * Vector3.right * radius;
+
+        // Instantiate the projectile
+        GameObject proj = Instantiate(projectile, spawnPosition, Quaternion.identity);
+
+        // Calculate direction to shoot
+        Vector3 shootDirection = (proj.transform.position - projectileTransform.position).normalized;
+        Vector2 direction = new Vector2(shootDirection.x, shootDirection.y);
+
+        proj.GetComponent<Rigidbody2D>().velocity = direction * force;
+    }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+    }
+
     /// <summary>
     /// Handles damage when seed collides
     /// </summary>
-    /// <param name="coll"></param>
-    private void OnCollisionEnter2D(Collision2D coll)
+    /// <param name="collision"></param>
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (coll.gameObject.tag == "Seed")
+        if (collision.gameObject.tag == "Seed")
         {
             if (Random.Range(0f, 1f) <= critChance)
             {

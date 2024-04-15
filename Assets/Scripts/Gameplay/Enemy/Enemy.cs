@@ -21,16 +21,14 @@ public class Enemy : MonoBehaviour
     Material mat;
     float fade = 1f;
 
-    // Loot
+    // Experience
+    [SerializeField]
+    List<GameObject> expOrbs;
     [SerializeField]
     GameObject heart;
-    [SerializeField]
-    List<GameObject> commonLoot;
-    [SerializeField]
-    List<GameObject> uncommonLoot;
-    [SerializeField]
-    List<GameObject> rareLoot;
-    List<List<GameObject>> loot = new List<List<GameObject>>();
+
+    // Orb impulse force
+    Vector2 force;
 
 
     /// <summary>
@@ -38,15 +36,10 @@ public class Enemy : MonoBehaviour
     /// </summary>
     void Start()
     {
-        // Fill loot list
-        loot.Add(commonLoot);
-        loot.Add(uncommonLoot);
-        loot.Add(rareLoot);
+        // Get enemy health
+        health = ConfigUtils.EnemyHealth;
 
-        // Set enemy health (hardcoded 2 for now) ----------------------------------
-        health = 2;
-
-        // Set player damage stats
+        // Get player damage stats
         damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
 
@@ -103,12 +96,24 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles damage when seed collides
+    /// Destroys enemy when they hit the boss wall
     /// </summary>
     /// <param name="coll"></param>
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.CompareTag("Seed"))
+        if (coll.gameObject.CompareTag("BossWall"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Handles damage when seed collides
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Seed"))
         {
             if (Random.Range(0f, 1f) <= critChance)
             {
@@ -117,55 +122,95 @@ public class Enemy : MonoBehaviour
             else
             {
                 health -= damageAmount;
-            } 
-        }
-
-        if (coll.gameObject.CompareTag("BossWall"))
-        {
-            Destroy(gameObject);
+            }
         }
     }
 
     private void SpawnRandomPickup()
     {
-        // Get loot or heart
+        // Chance to drop a heart
         if (Random.Range(0f, 1f) >= 0.95f)
         {
             Instantiate(heart, transform.position, Quaternion.identity);
         }
-        else
-        {
-            int pool = 0;
-            // Get loot pool
-            float poolChance = Random.Range(0f, 1f);
-            if (poolChance <= 0.75)
-            {
-                pool = 0;
-            }
-            else if (poolChance <= 0.95)
-            {
-                pool = 1;
-            }
-            else if (poolChance <= 1.0)
-            {
-                pool = 2;
-            }
 
-            // Get loot object
-            float typeChance = Random.Range(0f, 1f);
-            if (typeChance <= 0.75)
+
+        // Get number or experience orbs
+        int num = 0;
+        // Get loot pool
+        float numChance = Random.Range(0f, 1f);
+        // 50% chance for one orb
+        if (numChance <= 0.50)
+        {
+            num = 1;
+        }
+        // 26% chance for two orbs
+        else if (numChance <= 0.76)
+        {
+            num = 2;
+        }
+        // 16% chance for three orbs
+        else if (numChance <= 0.92)
+        {
+            num = 3;
+        }
+        // 6% chance for four orbs
+        else if (numChance <= 0.98)
+        {
+            num = 4;
+        }
+        // 2% chance for 5 orbs
+        else if (numChance <= 1.0)
+        {
+            num = 5;
+        }
+
+        // Spawn num amount of orbs with chance for different sizes
+        for (int i = 1; i <= num; i++)
+        {
+            // Get random force for movement
+            force = new Vector2(Random.Range(-2f, 4f), Random.Range(-2f, 2f));
+
+            float sizeChance = Random.Range(0f, 1f);
             {
-                Instantiate(loot[pool][0], transform.position, Quaternion.identity);
+                // 40% chance for small orb
+                if (sizeChance <= 0.40)
+                {
+                    GameObject orb = Instantiate(expOrbs[0], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+                }
+                // 28% chance for medium orb
+                else if (sizeChance <= 0.68)
+                {
+                    GameObject orb = Instantiate(expOrbs[1], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+                }
+                // 18% chance for large orb
+                else if (sizeChance <= 0.86)
+                {
+                    GameObject orb = Instantiate(expOrbs[2], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+                }
+                // 10% chance for xlarge orb
+                else if (sizeChance <= 0.96)
+                {
+                    GameObject orb = Instantiate(expOrbs[3], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+                }
+                // 4% chance for xxlarge orb
+                else if (sizeChance <= 0.98)
+                {
+                    GameObject orb = Instantiate(expOrbs[4], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+                }
+                // 2% chance for xxxlargeorb
+                else if (sizeChance <= 1.0)
+                {
+                    GameObject orb = Instantiate(expOrbs[5], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+                }
             }
-            else if (typeChance <= 0.95)
-            {
-                Instantiate(loot[pool][1], transform.position, Quaternion.identity);
-            }
-            else if (typeChance <= 1.0)
-            {
-                Instantiate(loot[pool][2], transform.position, Quaternion.identity);
-            }
-        }  
+        }
     }
 
     /// <summary>

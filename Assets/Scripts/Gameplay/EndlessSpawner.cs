@@ -20,6 +20,8 @@ public class EndlessSpawner : EventInvoker
     [SerializeField]
     List<GameObject> bosses;
     int bossIndex;
+    float middleOffset = 6f;
+    bool bossSpawned = false;
 
     // Walls outer bound variables
     [SerializeField]
@@ -68,11 +70,14 @@ public class EndlessSpawner : EventInvoker
         bottomLeftCam = new Vector3(0, 0, 0);
         topRightCam = new Vector3(1, 1, 0);
     }
-    
+
     private void SpawnEnemies()
     {
-        if (Tracker.Kills == 25)
+        if (Tracker.Kills >= 25 && !bossSpawned)
         {
+            // stop from being called again
+            bossSpawned = true;
+
             // Stop enemy spawner
             spawnTimer.Stop();
 
@@ -131,7 +136,7 @@ public class EndlessSpawner : EventInvoker
         float yHalfLength = Vector3.Distance(new Vector3(0, topRight.y, 0), new Vector3(0, bottomLeft.y, 0)) / 2;
 
         // Spawn boss in the middle of the camera slightly offset to the top
-        Instantiate(bosses[index], new Vector3(topRight.x - xHalfLength, topRight.y - yHalfLength + 3f, 0), Quaternion.identity);
+        Instantiate(bosses[index], new Vector3(topRight.x - xHalfLength, topRight.y - yHalfLength + middleOffset, 0), Quaternion.identity);
 
         // Invoke boss spawned event
         unityEvents[EventName.BossSpawnedEvent].Invoke();

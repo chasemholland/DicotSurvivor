@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using UnityEngine;
+using System.Runtime.InteropServices.WindowsRuntime;
 
-    /// <summary>
-    /// Configuration data retrieved from csv or set to default values
-    /// </summary>
+/// <summary>
+/// Configuration data retrieved from csv or set to default values
+/// </summary>
 public class ConfigData
 {
     #region Fields
@@ -39,75 +40,75 @@ public class ConfigData
     }
 
     /// <summary>
-    /// Gets the bronze coin value
+    /// Gets the small xp orb value
     /// </summary>
-    public float BronzeCoin
+    public float SmallXpOrb
     {
-        get { return values[ConfigDataName.BronzeCoin]; }
+        get { return values[ConfigDataName.SmallXpOrb]; }
     }
 
     /// <summary>
-    /// Gets the bronze coin stack value
+    /// Gets the medium xp orb value
     /// </summary>
-    public float BronzeCoinStack
+    public float MediumXpOrb
     {
-        get { return values[ConfigDataName.BronzeCoinStack]; }
+        get { return values[ConfigDataName.MediumXpOrb]; }
     }
 
     /// <summary>
-    /// Gets the broze coin bag value
+    /// Gets the large xp orb value
     /// </summary>
-    public float BronzeCoinBag
+    public float LargeXpOrb
     {
-        get { return values[ConfigDataName.BronzeCoinBag]; }
+        get { return values[ConfigDataName.LargeXpOrb]; }
     }
 
     /// <summary>
-    /// Gets the silver coin value
+    /// Gets the xlarge xp orb value
     /// </summary>
-    public float SilverCoin
+    public float XLargeXpOrb
     {
-        get { return values[ConfigDataName.SilverCoin]; }
+        get { return values[ConfigDataName.XLargeXpOrb]; }
     }
 
     /// <summary>
-    /// Gets the silver coin stack value
+    /// Gets the xxlarge xp orb value
     /// </summary>
-    public float SilverCoinStack
+    public float XXLargeXpOrb
     {
-        get { return values[ConfigDataName.SilverCoinStack]; }
+        get { return values[ConfigDataName.XXLargeXpOrb]; }
     }
 
     /// <summary>
-    /// Gets the silver coin bag value
+    /// Gets the xxxlarge xp orb value
     /// </summary>
-    public float SilverCoinBag
+    public float XXXLargeXpOrb
     {
-        get { return values[ConfigDataName.SilverCoinBag]; }
+        get { return values[ConfigDataName.XXXLargeXpOrb]; }
     }
 
     /// <summary>
-    /// Gets the gold coin value
+    /// Gets the enemy health value
     /// </summary>
-    public float GoldCoin
+    public float EnemyHealth
     {
-        get { return values[ConfigDataName.GoldCoin]; }
+        get { return values[ConfigDataName.EnemyHealth]; }
     }
 
     /// <summary>
-    /// Gets the gold coin stack value
+    /// Gets the boss health value
     /// </summary>
-    public float GoldCoinStack
+    public float BossHealth
     {
-        get { return values[ConfigDataName.GoldCoinStack]; }
+        get { return values[ConfigDataName.BossHealth]; }
     }
 
     /// <summary>
-    /// Gets the gold coin bag value
+    /// Gets the king health value
     /// </summary>
-    public float GoldCoinBag
+    public float KingHealth
     {
-        get { return values[ConfigDataName.GoldCoinBag]; }
+        get { return values[ConfigDataName.KingHealth]; }
     }
 
     /// <summary>
@@ -167,6 +168,46 @@ public class ConfigData
     }
 
     /// <summary>
+    /// Gets the seedling health value
+    /// </summary>
+    public float SeedlingHealth
+    {
+        get { return values[ConfigDataName.SeedlingHealth]; }
+    }
+
+    /// <summary>
+    /// Gets the seedling rate of fire mod
+    /// </summary>
+    public float SeedlingROF
+    {
+        get { return values[ConfigDataName.SeedlingROF]; }
+    }
+
+    /// <summary>
+    /// Gets the seedling damage value
+    /// </summary>
+    public float SeedlingDamage
+    {
+        get { return values[ConfigDataName.SeedlingDamage]; }
+    }
+
+    /// <summary>
+    /// Gets the thorn damage value
+    /// </summary>
+    public float ThornDamage
+    {
+        get { return values[ConfigDataName.ThornDamage]; }
+    }
+
+    /// <summary>
+    /// Gets the thorn rate of fire value
+    /// </summary>
+    public float ThornROF
+    {
+        get { return values[ConfigDataName.ThornROF]; }
+    }
+
+    /// <summary>
     /// Gets the common move speed mod value
     /// </summary>
     public float ComMoveSpeedMod
@@ -181,6 +222,14 @@ public class ConfigData
     public float UncMoveSpeedMod
     {
         get { return values[ConfigDataName.UncMoveSpeedMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare move speed mod value
+    /// </summary>
+    public float RarMoveSpeedMod
+    {
+        get { return values[ConfigDataName.RarMoveSpeedMod]; }
     }
 
     /// <summary>
@@ -200,6 +249,14 @@ public class ConfigData
     }
 
     /// <summary>
+    /// Gets the rare shoot cooldown mod value
+    /// </summary>
+    public float RarShootCooldownMod
+    {
+        get { return values[ConfigDataName.RarShootCooldownMod]; }
+    }
+
+    /// <summary>
     /// Gets the common max health mod value
     /// </summary>
     public float ComMaxHealthMod
@@ -213,6 +270,14 @@ public class ConfigData
     public float UncMaxHealthMod
     {
         get { return values[ConfigDataName.UncMaxHealthMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare max health mod value
+    /// </summary>
+    public float RarMaxHealthMod
+    {
+        get { return values[ConfigDataName.RarMaxHealthMod]; }
     }
 
     /// <summary>
@@ -232,6 +297,14 @@ public class ConfigData
     }
 
     /// <summary>
+    /// Gets the rare seed speed mod value
+    /// </summary>
+    public float RarSeedSpeedMod
+    {
+        get { return values[ConfigDataName.RarSeedSpeedMod]; }
+    }
+
+    /// <summary>
     /// Gets the common crit chance mod value
     /// </summary>
     public float ComCritChanceMod
@@ -248,6 +321,14 @@ public class ConfigData
     }
 
     /// <summary>
+    /// Gets the rare crit chance mod value
+    /// </summary>
+    public float RarCritChanceMod
+    {
+        get { return values[ConfigDataName.RarCritChanceMod]; }
+    }
+
+    /// <summary>
     /// Gets the common damage mod value
     /// </summary>
     public float ComDamageMod
@@ -261,6 +342,94 @@ public class ConfigData
     public float UncDamageMod
     {
         get { return values[ConfigDataName.UncDamageMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare damage mod value
+    /// </summary>
+    public float RarDamageMod
+    {
+        get { return values[ConfigDataName.RarDamageMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon thorn damage mod value
+    /// </summary>
+    public float UncThornDamageMod
+    {
+        get { return values[ConfigDataName.UncThornDamageMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare thorn damage mod value
+    /// </summary>
+    public float RarThornDamageMod
+    {
+        get { return values[ConfigDataName.RarThornDamageMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon thorn rate of fire mod value
+    /// </summary>
+    public float UncThornROFMod
+    {
+        get { return values[ConfigDataName.UncThornROFMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare thorn rate of fire mod value
+    /// </summary>
+    public float RarThornROFMod
+    {
+        get { return values[ConfigDataName.RarThornROFMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon seedling damage mod value
+    /// </summary>
+    public float UncSeedlingDamageMod
+    {
+        get { return values[ConfigDataName.UncSeedlingDamageMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare seedling damage mod value
+    /// </summary>
+    public float RarSeedlingDamageMod
+    {
+        get { return values[ConfigDataName.RarSeedlingDamageMod]; }
+    }
+
+    /// <summary>
+    /// Get sthe uncommon seedling rate of fire mod value
+    /// </summary>
+    public float UncSeedlingROFMod
+    {
+        get { return values[ConfigDataName.UncSeedlingROFMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare seedling rate of fire mod value
+    /// </summary>
+    public float RarSeedlingROFMod
+    {
+        get { return values[ConfigDataName.RarSeedlingROFMod]; }
+    }
+
+    /// <summary>
+    /// Gets the uncommon seedling health mod value
+    /// </summary>
+    public float UncSeedlingHealthMod
+    {
+        get { return values[ConfigDataName.UncSeedlingHealthMod]; }
+    }
+
+    /// <summary>
+    /// Gets the rare seedling health mod value
+    /// </summary>
+    public float RarSeedlingHealthMod
+    {
+        get { return values[ConfigDataName.RarSeedlingHealthMod]; }
     }
 
     #endregion
@@ -320,15 +489,15 @@ public class ConfigData
         // Set default values
         values.Add(ConfigDataName.Heart, 1f);
         values.Add(ConfigDataName.PickupRange, 1f);
-        values.Add(ConfigDataName.BronzeCoin, 1f);
-        values.Add(ConfigDataName.BronzeCoinStack, 5f);
-        values.Add(ConfigDataName.BronzeCoinBag, 25f);
-        values.Add(ConfigDataName.SilverCoin, 2f);
-        values.Add(ConfigDataName.SilverCoinStack, 10f);
-        values.Add(ConfigDataName.SilverCoinBag, 50f);
-        values.Add(ConfigDataName.GoldCoin, 3f);
-        values.Add(ConfigDataName.GoldCoinStack, 15f);
-        values.Add(ConfigDataName.GoldCoinBag, 75f);
+        values.Add(ConfigDataName.SmallXpOrb, 1f);
+        values.Add(ConfigDataName.MediumXpOrb, 3f);
+        values.Add(ConfigDataName.LargeXpOrb, 9f);
+        values.Add(ConfigDataName.XLargeXpOrb, 27f);
+        values.Add(ConfigDataName.XXLargeXpOrb, 81f);
+        values.Add(ConfigDataName.XXXLargeXpOrb, 243f);
+        values.Add(ConfigDataName.EnemyHealth, 2f);
+        values.Add(ConfigDataName.BossHealth, 20f);
+        values.Add(ConfigDataName.KingHealth, 100f);
         values.Add(ConfigDataName.PlayerHealth, 3f);
         values.Add(ConfigDataName.PlayerMaxHealth, 3f);
         values.Add(ConfigDataName.PlayerDamage, 1f);
@@ -336,18 +505,40 @@ public class ConfigData
         values.Add(ConfigDataName.PlayerMoveSpeed, 3f);
         values.Add(ConfigDataName.PlayerSeedSpeed, 8f);
         values.Add(ConfigDataName.PlayerShootCooldown, 1f);
+        values.Add(ConfigDataName.SeedlingHealth, 1f);
+        values.Add(ConfigDataName.SeedlingDamage, 0.5f);
+        values.Add(ConfigDataName.SeedlingROF, 0.5f);
+        values.Add(ConfigDataName.ThornDamage, 0.5f);
+        values.Add(ConfigDataName.ThornROF, 0.5f);
         values.Add(ConfigDataName.ComMoveSpeedMod, 0.1f);
         values.Add(ConfigDataName.UncMoveSpeedMod, 0.2f);
+        values.Add(ConfigDataName.RarMoveSpeedMod, 0.4f);
         values.Add(ConfigDataName.ComShootCooldownMod, 0.025f);
         values.Add(ConfigDataName.UncShootCooldownMod, 0.05f);
+        values.Add(ConfigDataName.RarShootCooldownMod, 0.1f);
         values.Add(ConfigDataName.ComMaxHealthMod, 0.1f);
         values.Add(ConfigDataName.UncMaxHealthMod, 0.2f);
+        values.Add(ConfigDataName.RarMaxHealthMod, 0.4f);
         values.Add(ConfigDataName.ComSeedSpeedMod, 0.05f);
         values.Add(ConfigDataName.UncSeedSpeedMod, 0.1f);
+        values.Add(ConfigDataName.RarSeedSpeedMod, 0.2f);
         values.Add(ConfigDataName.ComCritChanceMod, 0.05f);
         values.Add(ConfigDataName.UncCritChanceMod, 0.1f);
+        values.Add(ConfigDataName.RarCritChanceMod, 0.2f);
         values.Add(ConfigDataName.ComDamageMod, 0.1f);
         values.Add(ConfigDataName.UncDamageMod, 0.2f);
+        values.Add(ConfigDataName.RarDamageMod, 0.2f);
+        values.Add(ConfigDataName.UncThornDamageMod, 0.2f);
+        values.Add(ConfigDataName.RarThornDamageMod, 0.4f);
+        values.Add(ConfigDataName.UncThornROFMod, 0.05f);
+        values.Add(ConfigDataName.RarThornDamageMod, 0.1f);
+        values.Add(ConfigDataName.UncSeedlingDamageMod, 0.2f);
+        values.Add(ConfigDataName.RarSeedlingDamageMod, 0.4f);
+        values.Add(ConfigDataName.UncSeedlingROFMod, 0.05f);
+        values.Add(ConfigDataName.RarSeedlingROFMod, 0.1f);
+        values.Add(ConfigDataName.UncSeedlingHealthMod, 0.2f);
+        values.Add(ConfigDataName.RarSeedlingHealthMod, 0.4f);
+
     }
 
     #endregion

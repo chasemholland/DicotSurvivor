@@ -10,4 +10,5 @@ public enum FloatEventName
     AddHealthEvent,
     LooseHealthEvent,
     AddMoneyEvent,
+    AddExperienceEvent,
 }

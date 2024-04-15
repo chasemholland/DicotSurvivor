@@ -16,6 +16,7 @@ public class ShopButton : EventInvoker, IPointerEnterHandler, IPointerExitHandle
 
     public void Start()
     {
+        // Remove "(Clone)" from the name
         string[] splitName = gameObject.name.Split("(");
         nam = splitName[0];
 
@@ -29,7 +30,10 @@ public class ShopButton : EventInvoker, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // Get the information text
         string text = Mod.Info[nam] + Mod.Stat[nam];
+
+        // Display the information text
         GameObject.FindGameObjectWithTag("InfoText").gameObject.GetComponent<TextMeshProUGUI>().text = text;
     }
 
@@ -40,9 +44,19 @@ public class ShopButton : EventInvoker, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // Updat the modifier value
         Mod.ActiveModifiers[Mod.MiddleMan[nam]] += Mod.Modifier[nam];
+
+        // Invoke the evennt to notify all listeners
         unityEvents[eventname].Invoke();
+
+        // Remove button from invokers
+        EventManager.RemoveInvoker(eventname, this);
+
+        // Unpause game
         Time.timeScale = 1;
+
+        // Set shop innactive
         GameObject.FindGameObjectWithTag("Shop").SetActive(false);
     }
 }

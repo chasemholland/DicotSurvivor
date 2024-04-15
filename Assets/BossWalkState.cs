@@ -11,7 +11,7 @@ public class BossWalkState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         attackTimer = animator.gameObject.AddComponent<Timer>();
-        attackTimer.Duration = Random.Range(0.5f, 2f);
+        attackTimer.Duration = Random.Range(1.5f, 2.5f);
         attackTimer.Run();
 
         // Get refence to player

@@ -155,7 +155,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1
+  m_PointLightOuterRadius: 2
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -198,7 +198,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.5555149, y: -4.2870355, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1579955997802932348}
@@ -344,7 +344,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43df10854c0777f4b8b453c9a8ef27a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heart: {fileID: 1248200133298189014, guid: 6f55a95465a5993459da16268c8e8531, type: 3}
   commonLoot:
   - {fileID: 2063125263291265484, guid: 4cb32fd4095322540bab7bc13580d733, type: 3}
   - {fileID: 7736947929981671945, guid: 446422e6225802c4bbe7c5d29fe84adb, type: 3}
@@ -357,6 +356,14 @@ MonoBehaviour:
   - {fileID: 2722968054411115283, guid: 2cf18ca2bd153fe4da9b35a4cf661574, type: 3}
   - {fileID: 9170344346928561648, guid: ffab72185cffe7245853afb88e3d6761, type: 3}
   - {fileID: 3357354570712004722, guid: 41a46147f4affdf46b1c0991de53438e, type: 3}
+  expOrbs:
+  - {fileID: 1713302319239857348, guid: 21e2f9c0b39bbc54f83cc6259cc0ea2e, type: 3}
+  - {fileID: 6033499062945825463, guid: 1db4c3837fa288e498498d48c21063fd, type: 3}
+  - {fileID: 5534169074881195743, guid: d0cbb97c323405148b715cefb98e0ae7, type: 3}
+  - {fileID: 5405116364446328779, guid: d7295e366a8b84448a6699b7967039be, type: 3}
+  - {fileID: 664013520627685705, guid: f6775edf222e48d4eaedc03516badfad, type: 3}
+  - {fileID: 1494953423929586092, guid: d5889bd0bd991f84a834262fa155fcc1, type: 3}
+  heart: {fileID: 1248200133298189014, guid: 6f55a95465a5993459da16268c8e8531, type: 3}
 --- !u!95 &7970740546438663470
 Animator:
   serializedVersion: 5

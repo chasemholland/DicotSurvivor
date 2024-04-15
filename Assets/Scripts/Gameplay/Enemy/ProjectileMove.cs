@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
     /// <summary>
-    ///
+    /// Boss projectile behaviour
     /// </summary>
 public class ProjectileMove : MonoBehaviour
 {
@@ -32,10 +32,12 @@ public class ProjectileMove : MonoBehaviour
         }
         else
         {
+            /*
             // Get direction of movement
             Vector3 direction = player.transform.position - transform.position;
             direction = new Vector3(Random.Range(direction.x - 2f, direction.x + 2f), Random.Range(direction.y - 2f, direction.y + 2f), 0);
             rb.velocity = new Vector2(direction.x, direction.y).normalized * force;
+            */
         }
     }
 

@@ -13,8 +13,11 @@ public class HUD : MonoBehaviour
 {
     [SerializeField]
     GameObject shopBar;
-    float moneyValue = 99;
-    float upgradeCost;
+    float xpValue = 30;
+    float levelUpAmount;
+
+    [SerializeField]
+    TextMeshProUGUI xpText;
 
     [SerializeField]
     GameObject healthBar;
@@ -23,6 +26,9 @@ public class HUD : MonoBehaviour
 
     [SerializeField]
     GameObject shop;
+
+    [SerializeField]
+    GameObject mutationShop;
 
     [SerializeField]
     GameObject pauseMenu;
@@ -34,6 +40,7 @@ public class HUD : MonoBehaviour
     {
         // Set pannels innactive
         shop.SetActive(false);
+        mutationShop.SetActive(false);
         pauseMenu.SetActive(false);
 
         // Set initial health
@@ -43,7 +50,7 @@ public class HUD : MonoBehaviour
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
 
         // Set upgrade cost
-        upgradeCost = Tracker.UpgradeCost;
+        levelUpAmount = Tracker.LevelUpAmount;
 
         // Set the text
         SetGUI();
@@ -54,11 +61,14 @@ public class HUD : MonoBehaviour
         // Add as listener for loose health event
         EventManager.AddFloatListener(FloatEventName.LooseHealthEvent, HandleLooseHealth);
 
-        // Add as listener for add money event
-        EventManager.AddFloatListener(FloatEventName.AddMoneyEvent, HandleAddMoney);
+        // Add as listener for add experience event
+        EventManager.AddFloatListener(FloatEventName.AddExperienceEvent, HandleAddExperience);
 
         // Add as listener for max health mod event
         EventManager.AddListener(EventName.MaxHealthMod, HandleMaxHealthChanged);
+
+        // Add as listener for boss death event
+        EventManager.AddListener(EventName.BossDeathEvent, HandleBossDeath);
 
     }
 
@@ -73,7 +83,8 @@ public class HUD : MonoBehaviour
     private void SetGUI()
     {
         healthBar.GetComponent<Slider>().value = healthValue / maxHealth;
-        shopBar.GetComponent<Slider>().value = moneyValue / upgradeCost;
+        shopBar.GetComponent<Slider>().value = xpValue / levelUpAmount;
+        xpText.text = xpValue.ToString() + " / " + levelUpAmount.ToString();
     }
 
     /// <summary>
@@ -97,23 +108,40 @@ public class HUD : MonoBehaviour
         healthValue = Mathf.Clamp(healthValue, 0, maxHealth);
         SetGUI();
     }
-
-    /// <summary>
-    /// Handles player gaining money
-    /// </summary>
-    /// <param name="value"></param>
-    private void HandleAddMoney(float value)
+    
+    private void HandleAddExperience(float value)
     {
-        moneyValue += value;
+        xpValue += value;
         SetGUI();
-        if (moneyValue >= upgradeCost)
+        if (xpValue >= levelUpAmount)
         {
-            moneyValue -= upgradeCost;
+            xpValue -= levelUpAmount;
+            // Update level up amount with previous amount
+            Tracker.LevelUpAmount = levelUpAmount;
+            // Update level
+            Tracker.Level += 1;
+            // Get new level up amount
+            levelUpAmount = Tracker.LevelUpAmount;
             SetGUI();
             Time.timeScale = 0;
             shop.SetActive(true);
-            Tracker.UpgradesUnlocked += 1;
-            upgradeCost = Tracker.UpgradeCost;
+        }
+    }
+
+    /// <summary>
+    /// Enables the mutation shop when invoked
+    /// </summary>
+    private void HandleBossDeath()
+    {
+        // Check that there are still mutations to be unlocked
+        foreach (float value in Mod.ActiveMutations.Values)
+        {
+            if (value != 3) 
+            {
+                Time.timeScale = 0;
+                mutationShop.SetActive(true);
+                break;
+            }
         }
     }
 
@@ -126,13 +154,6 @@ public class HUD : MonoBehaviour
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
         SetGUI();
     }
-
-    public void OnShopSelection()
-    {
-        Time.timeScale = 1;
-        shop.SetActive(false);
-    }
-
 
     public void OnPauseClick()
     {

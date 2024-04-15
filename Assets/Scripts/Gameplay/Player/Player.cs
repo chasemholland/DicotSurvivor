@@ -30,8 +30,12 @@ public class Player : EventInvoker
         EventManager.AddListener(EventName.MaxHealthMod, HandleMaxHealthModChanged);
 
         // Add as invoker for add money event
-        unityFloatEvents.Add(FloatEventName.AddMoneyEvent, new AddMoneyEvent());
-        EventManager.AddFloatInvoker(FloatEventName.AddMoneyEvent, this);
+        //unityFloatEvents.Add(FloatEventName.AddMoneyEvent, new AddMoneyEvent());
+        //EventManager.AddFloatInvoker(FloatEventName.AddMoneyEvent, this);
+
+        // Add as invoker for add experience event
+        unityFloatEvents.Add(FloatEventName.AddExperienceEvent, new AddExperienceEvent());
+        EventManager.AddFloatInvoker(FloatEventName.AddExperienceEvent, this);
 
         // Add as invoker for add health event
         unityFloatEvents.Add(FloatEventName.AddHealthEvent, new AddHealthEvent());
@@ -65,7 +69,8 @@ public class Player : EventInvoker
         {
             if (coll.gameObject.CompareTag("Enemy") || coll.gameObject.CompareTag("RedBoss"))
             {
-                HandleDamage(coll.gameObject);
+                //HandleDamage(coll.gameObject);
+                return;
             }
         } 
     }
@@ -75,9 +80,20 @@ public class Player : EventInvoker
         // Get name of game object
         string t = collision.gameObject.tag;
 
+        // This only gets triggered once on game start becuase colliders overlap
+        if (collision.gameObject.CompareTag("CollectionField"))
+        {
+            return;
+        }
+
         if (collision.gameObject.CompareTag("Projectile"))
         {
-            HandleDamage(collision.gameObject);
+            //HandleDamage(collision.gameObject);
+            return;
+        }
+
+        if (collision.gameObject.CompareTag("Seed"))
+        {
             return;
         }
 
@@ -96,19 +112,21 @@ public class Player : EventInvoker
 
                 // Trigger add health event
                 unityFloatEvents[FloatEventName.AddHealthEvent].Invoke(value);
+
+                // Destroy game object
+                Destroy(collision.gameObject);
             }
-            // Get money value if not heart
             else
             {
                 // Get the value
                 float value = GetValue(t);
 
                 // Trigger add money event
-                unityFloatEvents[FloatEventName.AddMoneyEvent].Invoke(value);
-            }
+                unityFloatEvents[FloatEventName.AddExperienceEvent].Invoke(value);
 
-            // Destroy game object
-            Destroy(collision.gameObject);
+                // Destroy game object
+                Destroy(collision.gameObject);
+            }
         }
     }
 
@@ -172,32 +190,26 @@ public class Player : EventInvoker
     /// <summary>
     /// Gets the value of the pickup
     /// </summary>
-    /// <param name="name">pickup name</param>
+    /// <param name="tag">pickup tag</param>
     /// <returns></returns>
-    private float GetValue(string name)
+    private float GetValue(string tag)
     {
-        switch (name)
+        switch (tag)
         {
             case "Heart":
                 return ConfigUtils.Heart;
-            case "BronzeCoin":
-                return ConfigUtils.BronzeCoin;
-            case "BronzeCoinStack":
-                return ConfigUtils.BronzeCoinStack;
-            case "BronzeCoinBag":
-                return ConfigUtils.BronzeCoinBag;
-            case "SilverCoin":
-                return ConfigUtils.SilverCoin;
-            case "SilverCoinStack":
-                return ConfigUtils.SilverCoinStack;
-            case "SilverCoinBag":
-                return ConfigUtils.SilverCoinBag;
-            case "GoldCoin":
-                return ConfigUtils.GoldCoin;
-            case "GoldCoinStack":
-                return ConfigUtils.GoldCoinStack;
-            case "GoldCoinBag":
-                return ConfigUtils.GoldCoinBag;
+            case "SmallOrb":
+                return ConfigUtils.SmallXpOrb;
+            case "MediumOrb":
+                return ConfigUtils.MediumXpOrb;
+            case "LargeOrb":
+                return ConfigUtils.LargeXpOrb;
+            case "XLargeOrb":
+                return ConfigUtils.XLargeXpOrb;
+            case "XXLargeOrb":
+                return ConfigUtils.XXLargeXpOrb;
+            case "XXXLargeOrb":
+                return ConfigUtils.XXXLargeXpOrb;
             default:
                 return 0;
         }

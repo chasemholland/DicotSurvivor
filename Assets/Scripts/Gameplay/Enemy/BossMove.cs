@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-    /// <summary>
-    /// Boss movement
-    /// </summary>
+/// <summary>
+/// Boss movement
+/// </summary>
 public class BossMove : MonoBehaviour
 {
     // Direction of moevement
@@ -23,10 +25,6 @@ public class BossMove : MonoBehaviour
     bool introDone = false;
     // Random movement timer when player dies
     Timer randMove;
-    [SerializeField]
-    GameObject projectile;
-    [SerializeField]
-    Transform projectileTransform;
 
 
     private void Awake()
@@ -149,13 +147,6 @@ public class BossMove : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
         }
-    }
-
-    // Called by boss animator
-    public void AttackPlayer()
-    {
-        // Shoot projectile
-        Instantiate(projectile, projectileTransform.position, Quaternion.identity);
     }
 
     /// <summary>

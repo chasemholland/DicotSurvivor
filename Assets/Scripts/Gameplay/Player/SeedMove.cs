@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
     /// <summary>
@@ -23,7 +24,7 @@ public class SeedMove : EventInvoker
     void Start()
     {
         // Set defaults
-        force = ConfigUtils.PlayerSeedSpeed;
+        force = ConfigUtils.PlayerSeedSpeed * 10;
 
         // Add as listener for seed speed changed
         EventManager.AddListener(EventName.SeedSpeedMod, HandleSeedSpeedModChanged);
@@ -44,18 +45,22 @@ public class SeedMove : EventInvoker
         float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
     }
-
+    
     /// <summary>
-    /// Handles collision with any colliders
+    /// Handles collision with any enemys
     /// </summary>
     /// <param name="collision"></param>
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Spawn seed explosion animation
-        Instantiate(explosion, transform.position, Quaternion.identity);
+        GameObject coll = collision.gameObject;
+        if (coll.CompareTag("Enemy") || coll.CompareTag("RedBoss") || coll.CompareTag("Wall") || coll.CompareTag("BossWall") || coll.CompareTag("Player"))
+        {
+            // Spawn seed explosion animation
+            Instantiate(explosion, transform.position, Quaternion.identity);
 
-        // Destroy the game object
-        Destroy(gameObject);
+            // Destroy the game object
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

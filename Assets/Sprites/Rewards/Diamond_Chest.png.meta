@@ -126,9 +126,9 @@ TextureImporter:
       name: Diamond_Chest_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2
         y: 0
-        width: 38
+        width: 36
         height: 35
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -275,7 +275,7 @@ TextureImporter:
         serializedVersion: 2
         x: 254
         y: 0
-        width: 38
+        width: 36
         height: 35
       alignment: 7
       pivot: {x: 0.5, y: 0}
