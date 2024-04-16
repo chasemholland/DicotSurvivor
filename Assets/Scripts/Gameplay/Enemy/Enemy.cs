@@ -27,6 +27,14 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     GameObject heart;
 
+    // Feilds used for enemies that attack (Only Cyan for now)
+    GameObject player;
+    [SerializeField]
+    GameObject projectile;
+    [SerializeField]
+    Transform projectileTransform;
+    float projForce = 8f;
+
     // Orb impulse force
     Vector2 force;
 
@@ -37,7 +45,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         // Get enemy health
-        health = ConfigUtils.EnemyHealth;
+        health = ConfigUtils.EnemyHealth + Tracker.EnemyHealthMod;
 
         // Get player damage stats
         damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
@@ -93,6 +101,18 @@ public class Enemy : MonoBehaviour
             mat.SetColor("_Color", Color.red);
             stepDeathEffect.Stop();
         }
+    }
+
+    // Attacks player when called by animator
+    public void AttackPlayer()
+    {
+        // Get direction to player
+        player = GameObject.FindGameObjectWithTag("Player");
+        Vector3 directionToPlayer = (player.transform.position - projectileTransform.position).normalized;
+        Vector2 direction = new Vector2(directionToPlayer.x, directionToPlayer.y);
+
+        GameObject proj = Instantiate(projectile, projectileTransform.position, Quaternion.identity);
+        proj.GetComponent<Rigidbody2D>().velocity = direction * projForce;      
     }
 
     /// <summary>
@@ -218,7 +238,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void HandleCritChanceModChanged()
     {
-        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+        critChance = Mathf.Clamp(ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"], 0, 1);
     }
 
     /// <summary>

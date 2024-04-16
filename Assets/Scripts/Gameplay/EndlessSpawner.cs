@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
@@ -13,7 +14,7 @@ public class EndlessSpawner : EventInvoker
     private float yRangeMin;
     private float yRangeMax;
     Timer spawnTimer;
-    float spawnTime = 0.1f;
+    float spawnTime = 1;
     float retrySpawnTime = 0.1f;
     [SerializeField]
     List<GameObject> enemies;
@@ -21,7 +22,7 @@ public class EndlessSpawner : EventInvoker
     List<GameObject> bosses;
     int bossIndex;
     float middleOffset = 6f;
-    bool bossSpawned = false;
+    int currentBoss = 1;
 
     // Walls outer bound variables
     [SerializeField]
@@ -73,10 +74,11 @@ public class EndlessSpawner : EventInvoker
 
     private void SpawnEnemies()
     {
-        if (Tracker.Kills >= 25 && !bossSpawned)
+        // Spawn boss every 50 kills
+        if (Tracker.Kills >= 50 * currentBoss)
         {
-            // stop from being called again
-            bossSpawned = true;
+            // Set current boss
+            currentBoss++;
 
             // Stop enemy spawner
             spawnTimer.Stop();
@@ -88,6 +90,7 @@ public class EndlessSpawner : EventInvoker
             return;
         }
 
+        /*
         xCoord = Random.Range(xRangeMin + 2f, xRangeMax - 2f);
         yCoord = Random.Range(yRangeMin + 2f, yRangeMax - 2f);
         bottomLeft = Camera.main.ViewportToWorldPoint(bottomLeftCam);
@@ -96,18 +99,57 @@ public class EndlessSpawner : EventInvoker
         xMax = topRight.x;
         yMin = bottomLeft.y;
         yMax = topRight.y;
+        */
 
-        // Check if spawn point is out of the viewport
-        if (xCoord <= xMin || xCoord >= xMax)
+        bottomLeft = Camera.main.ViewportToWorldPoint(bottomLeftCam);
+        topRight = Camera.main.ViewportToWorldPoint(topRightCam);
+        xMin = bottomLeft.x;
+        xMax = topRight.x;
+        yMin = bottomLeft.y;
+        yMax = topRight.y;
+
+        // Pick a side to spawn on and set ranges
+        int side = Random.Range(1, 5);
+        switch (side)
         {
-            if (yCoord <= yMin || yCoord >= yMax)
+            case 1:
+                // Left spawn
+                xCoord = Random.Range(xMin - 4f, xMin - 2f);
+                yCoord = Random.Range(yMin, yMax);
+                break;
+            case 2:
+                // Right spawn
+                xCoord = Random.Range(xMax + 2f, xMax + 4f);
+                yCoord = Random.Range(yMin, yMax);
+                break;
+            case 3:
+                // Top spawn
+                xCoord = Random.Range(xMin, xMin);
+                yCoord = Random.Range(yMax + 2f, yMax + 4f);
+                break;
+            case 4:
+                // Bottom spawn
+                xCoord = Random.Range(xMin, xMin);
+                yCoord = Random.Range(yMin - 2f, yMin - 4f);
+                break;
+            default:
+                // Top spawn
+                xCoord = Random.Range(xMin, xMin);
+                yCoord = Random.Range(yMax + 2f, yMax + 4f);
+                break;
+        }
+
+        // Check if spawn point is in map bounds
+        if (xCoord >= xRangeMin + 2f && xCoord <= xRangeMax - 2f)
+        {
+            if (yCoord >= yRangeMin + 2f && yCoord <= yRangeMax - 2f)
             {
                 // Spawn random enemy
                 int type = Random.Range(0, enemies.Count);
                 Instantiate(enemies[type], new Vector3(xCoord, yCoord, 0), Quaternion.identity);
 
                 // Reset timer             
-                spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.2f, 1);
+                spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.1f, 1);
                 spawnTimer.Run();
             }
             else
@@ -123,6 +165,36 @@ public class EndlessSpawner : EventInvoker
             spawnTimer.Duration = retrySpawnTime;
             spawnTimer.Run();
         }
+
+
+        /*
+        // Check if spawn point is out of the viewport
+        if (xCoord <= xMin || xCoord >= xMax)
+        {
+            if (yCoord <= yMin || yCoord >= yMax)
+            {
+                // Spawn random enemy
+                int type = Random.Range(0, enemies.Count);
+                Instantiate(enemies[type], new Vector3(xCoord, yCoord, 0), Quaternion.identity);
+
+                // Reset timer             
+                spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.1f, 1);
+                spawnTimer.Run();
+            }
+            else
+            {
+                // Try again
+                spawnTimer.Duration = retrySpawnTime;
+                spawnTimer.Run();
+            }
+        }
+        else
+        {
+            // Try again
+            spawnTimer.Duration = retrySpawnTime;
+            spawnTimer.Run();
+        }
+        */
     }
 
     private void SpawnBoss(int index)
@@ -149,7 +221,7 @@ public class EndlessSpawner : EventInvoker
     private void RestartSpawning()
     {
         // Reset spawn timer
-        spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.2f, 1);
+        spawnTimer.Duration = Mathf.Clamp(spawnTime - Tracker.EnemySpawnRateMod, 0.1f, 1);
         spawnTimer.Run();
     }
 

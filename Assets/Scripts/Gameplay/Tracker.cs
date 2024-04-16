@@ -10,8 +10,9 @@ public static class Tracker
 {
     #region Feilds
 
+    static int currentResolution = -1;
     static float kills = 0;
-    static float enemyMoveMod = 1;
+    static float enemyHealthMod = 0;
     static float enemySpawnRateMod = 0;
     static float level = 1;
     static float levelUpAmount = 50;
@@ -22,20 +23,26 @@ public static class Tracker
 
     #region Properties
 
+    public static int CurrentResolution
+    {
+        get { return currentResolution; }
+        set { currentResolution = value; }
+    }
+
     public static float Kills
     {
         get { return kills; }
         set { kills = value; }
     }
 
-    public static float EnemyMoveMod
+    public static float EnemyHealthMod
     {
-        get { return enemyMoveMod + (Kills / 100); }
+        get { return enemyHealthMod + (Kills / 100); }
     }
 
     public static float EnemySpawnRateMod
     {
-        get { return enemySpawnRateMod + (Kills / 1000); }
+        get { return (enemySpawnRateMod + (Kills / 30)) / 100; }
     }
 
     public static float Level

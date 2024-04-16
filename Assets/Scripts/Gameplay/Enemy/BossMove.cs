@@ -78,7 +78,7 @@ public class BossMove : MonoBehaviour
     {
         if (direction.x != 0 || direction.y != 0)
         {
-            rb.velocity = direction * (speed * Tracker.EnemyMoveMod);
+            rb.velocity = direction * speed;
         }
         else
         {

@@ -35,7 +35,7 @@ public class Boss : EventInvoker
     {
 
         // Get enemy health
-        health = ConfigUtils.BossHealth;
+        health = ConfigUtils.BossHealth + Tracker.EnemyHealthMod;
 
         // Get player damage and crit chance
         damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
@@ -169,7 +169,7 @@ public class Boss : EventInvoker
     /// </summary>
     private void HandleCritChanceModChanged()
     {
-        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+        critChance = Mathf.Clamp(ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"], 0, 1);
     }
 
     /// <summary>

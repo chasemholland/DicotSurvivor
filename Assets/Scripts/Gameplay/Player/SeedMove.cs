@@ -24,7 +24,7 @@ public class SeedMove : EventInvoker
     void Start()
     {
         // Set defaults
-        force = ConfigUtils.PlayerSeedSpeed * 10;
+        force = ConfigUtils.PlayerSeedSpeed;
 
         // Add as listener for seed speed changed
         EventManager.AddListener(EventName.SeedSpeedMod, HandleSeedSpeedModChanged);

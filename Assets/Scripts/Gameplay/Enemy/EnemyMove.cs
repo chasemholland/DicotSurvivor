@@ -53,6 +53,12 @@ public class EnemyMove : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (gameObject.name.StartsWith("Cyan") && animator.GetBool("isAttacking"))
+        {
+            direction = Vector2.zero;
+            return;
+        }
+
         if (!playerDead && !bossActive)
         {
             // Move towards player
@@ -76,7 +82,11 @@ public class EnemyMove : MonoBehaviour
     {
         if (direction.x != 0 || direction.y != 0)
         {
-            rb.velocity = direction * speed; //(speed * Tracker.EnemyMoveMod);
+            rb.velocity = direction * speed;
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
         }
     }
 
@@ -183,7 +193,7 @@ public class EnemyMove : MonoBehaviour
     private void HandleBossSpawned()
     {
         bossActive = true;
-        speed = 3;
+        speed = 6;
     }
 
     /// <summary>

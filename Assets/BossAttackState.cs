@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BossAttackState : StateMachineBehaviour
 {
-    Timer walkTimer;
     int projectilesShot;
     Timer multiAttack;
     float shootDelay = 0.05f;

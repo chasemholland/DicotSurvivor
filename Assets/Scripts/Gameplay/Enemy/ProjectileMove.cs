@@ -8,7 +8,6 @@ using UnityEngine;
 public class ProjectileMove : MonoBehaviour
 {
     private GameObject player;
-    private Rigidbody2D rb;
     public float force;
     [SerializeField]
     GameObject explosion;
@@ -21,23 +20,11 @@ public class ProjectileMove : MonoBehaviour
         // Set defaults
         force = ConfigUtils.PlayerSeedSpeed;
 
-        // Get reference to main camera and rigidbody2d
-        rb = GetComponent<Rigidbody2D>();
-
         // Get refence to player
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
             Destroy(gameObject);
-        }
-        else
-        {
-            /*
-            // Get direction of movement
-            Vector3 direction = player.transform.position - transform.position;
-            direction = new Vector3(Random.Range(direction.x - 2f, direction.x + 2f), Random.Range(direction.y - 2f, direction.y + 2f), 0);
-            rb.velocity = new Vector2(direction.x, direction.y).normalized * force;
-            */
         }
     }
 

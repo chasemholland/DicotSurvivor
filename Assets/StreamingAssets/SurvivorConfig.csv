@@ -6,7 +6,7 @@ LargeXpOrb,9
 XLargeXpOrb,27
 XXLargeXpOrb,81
 XXXLargeXpOrb,243
-EnemyHealth,2
+EnemyHealth,1
 BossHealth,20
 KingHealth,100
 PlayerHealth,3
@@ -15,7 +15,7 @@ PlayerDamage,1
 PlayerCritChance,0.05
 PlayerMoveSpeed,3
 PlayerSeedSpeed,8
-PlayerShootCooldown,0.1
+PlayerShootCooldown,0.8
 SeedlingHealth,1
 SeedlingROF,0.5
 SeedlingDamage,0.5
@@ -30,9 +30,9 @@ RarShootCooldownMod,0.1
 ComMaxHealthMod,0.1
 UncMaxHealthMod,0.2
 RarMaxHealthMod,0.4
-ComSeedSpeedMod,0.05
-UncSeedSpeedMod,0.1
-RarSeedSpeedMod,0.2
+ComSeedSpeedMod,0.5
+UncSeedSpeedMod,1
+RarSeedSpeedMod,2
 ComCritChanceMod,0.05
 UncCritChanceMod,0.1
 RarCritChanceMod,0.2
