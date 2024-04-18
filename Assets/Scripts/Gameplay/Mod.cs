@@ -80,17 +80,17 @@ public static class Mod
     /// <summary>
     /// Player active modifier values
     /// </summary>
-    public static Dictionary<string, float> ActiveModifiers = new Dictionary<string, float>();
+    public static Dictionary<string, float> ActiveModifiers;
 
     /// <summary>
     /// Modifier value in string form
     /// </summary>
-    public static Dictionary<string, string> Stat = new Dictionary<string, string>();
+    public static Dictionary<string, string> Stat;
 
     /// <summary>
     /// Modifier value
     /// </summary>
-    public static Dictionary<string, float> Modifier = new Dictionary<string, float>();
+    public static Dictionary<string, float> Modifier;
 
 
     /// <summary>
@@ -112,12 +112,19 @@ public static class Mod
     /// <summary>
     /// Player active mutation values
     /// </summary>
-    public static Dictionary<string, float> ActiveMutations = new Dictionary<string, float>();
+    public static Dictionary<string, float> ActiveMutations;
 
 
 
     public static void Initialize()
     {
+        // Start with empty dictionaries
+        ActiveModifiers = new Dictionary<string, float>();
+        ActiveMutations = new Dictionary<string, float>();
+        Stat = new Dictionary<string, string>();
+        Modifier = new Dictionary<string, float>();
+
+
         // Set up dictionary after utils has been initialized
         Stat.Add("CommonNitrogen", (ConfigUtils.ComMoveSpeedMod * 100).ToString());
         Stat.Add("CommonPhosphorus", (ConfigUtils.ComShootCooldownMod * 100).ToString());

@@ -291,6 +291,9 @@ MonoBehaviour:
   - {fileID: 664013520627685705, guid: f6775edf222e48d4eaedc03516badfad, type: 3}
   - {fileID: 1494953423929586092, guid: d5889bd0bd991f84a834262fa155fcc1, type: 3}
   heart: {fileID: 1248200133298189014, guid: 6f55a95465a5993459da16268c8e8531, type: 3}
+  projectile: {fileID: 0}
+  projectileTransform: {fileID: 0}
+  seedling: {fileID: 8115925727613451623, guid: 53bf3c223e0e7354b8554cb6252fc93c, type: 3}
 --- !u!1 &8818667459821252323
 GameObject:
   m_ObjectHideFlags: 0

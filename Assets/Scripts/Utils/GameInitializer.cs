@@ -12,5 +12,6 @@ public class GameInitializer : MonoBehaviour
         EventManager.Initialize();
         ConfigUtils.Initialize();
         Mod.Initialize();
+        Tracker.Initialize();
     }
 }

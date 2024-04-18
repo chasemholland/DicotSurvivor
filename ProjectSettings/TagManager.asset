@@ -35,6 +35,9 @@ TagManager:
   - MutationShop
   - MutationInfoText
   - MutationShopButton
+  - DetectionField
+  - Seedling
+  - SeedlingSeed
   layers:
   - Default
   - TransparentFX

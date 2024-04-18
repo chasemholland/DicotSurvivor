@@ -12,7 +12,8 @@ public class Enemy : MonoBehaviour
     float health;
 
     // Player damage and crit chance
-    float damageAmount;
+    float seedDamageAmount;
+    float seedlingSeedDamageAmount;
     float critChance;
 
     // Death effect
@@ -38,17 +39,26 @@ public class Enemy : MonoBehaviour
     // Orb impulse force
     Vector2 force;
 
+    // Camera coords
+    Vector3 bottomLeftCam;
+    Vector3 topRightCam;
 
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
+        // Set seedling damage amount
+        seedlingSeedDamageAmount = ConfigUtils.SeedlingDamage + Mod.ActiveModifiers["SeedlingDamageMod"];
+
+        // Add as listener for seedling seed damage mod change
+        EventManager.AddListener(EventName.SeedlingDamageMod, HandleSeedlingDamageModChanged);
+
         // Get enemy health
         health = ConfigUtils.EnemyHealth + Tracker.EnemyHealthMod;
 
         // Get player damage stats
-        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+        seedDamageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
 
         // Add as listener for damage mod change and crit chance mod change
@@ -63,6 +73,10 @@ public class Enemy : MonoBehaviour
 
         // Get refernce to shader effect
         mat = gameObject.GetComponent<SpriteRenderer>().material;
+
+        // Set camera points
+        bottomLeftCam = new Vector3(0, 0, 0);
+        topRightCam = new Vector3(1, 1, 0);
     }
 
     /// <summary>
@@ -106,13 +120,24 @@ public class Enemy : MonoBehaviour
     // Attacks player when called by animator
     public void AttackPlayer()
     {
-        // Get direction to player
-        player = GameObject.FindGameObjectWithTag("Player");
-        Vector3 directionToPlayer = (player.transform.position - projectileTransform.position).normalized;
-        Vector2 direction = new Vector2(directionToPlayer.x, directionToPlayer.y);
+        // Get camera bounds
+        Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(bottomLeftCam);
+        Vector3 topRight = Camera.main.ViewportToWorldPoint(topRightCam);
 
-        GameObject proj = Instantiate(projectile, projectileTransform.position, Quaternion.identity);
-        proj.GetComponent<Rigidbody2D>().velocity = direction * projForce;      
+        // Check if enemy is in view before shooting
+        if (gameObject.transform.position.y > bottomLeft.y && gameObject.transform.position.y < topRight.y)
+        {
+            if (gameObject.transform.position.x > bottomLeft.x && gameObject.transform.position.x < topRight.x)
+            {
+                // Get direction to player
+                player = GameObject.FindGameObjectWithTag("Player");
+                Vector3 directionToPlayer = (player.transform.position - projectileTransform.position).normalized;
+                Vector2 direction = new Vector2(directionToPlayer.x, directionToPlayer.y);
+
+                GameObject proj = Instantiate(projectile, projectileTransform.position, Quaternion.identity);
+                proj.GetComponent<Rigidbody2D>().velocity = direction * projForce;
+            }
+        }     
     }
 
     /// <summary>
@@ -137,12 +162,17 @@ public class Enemy : MonoBehaviour
         {
             if (Random.Range(0f, 1f) <= critChance)
             {
-                health -= damageAmount * 2;
+                health -= seedDamageAmount * 2;
             }
             else
             {
-                health -= damageAmount;
+                health -= seedDamageAmount;
             }
+        }
+
+        if (collision.gameObject.CompareTag("SeedlingSeed"))
+        {
+            health -= seedlingSeedDamageAmount;
         }
     }
 
@@ -246,6 +276,14 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void HandleDamageModChanged()
     {
-        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+        seedDamageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+    }
+
+    /// <summary>
+    /// Updates seedling damage
+    /// </summary>
+    private void HandleSeedlingDamageModChanged()
+    {
+        seedlingSeedDamageAmount = ConfigUtils.SeedlingDamage + Mod.ActiveModifiers["SeedlingDamageMod"];
     }
 }

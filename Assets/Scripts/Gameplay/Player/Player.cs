@@ -1,5 +1,4 @@
 using Cinemachine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +16,16 @@ public class Player : EventInvoker
     float cooldown = 1f;
     CinemachineVirtualCamera killCam;
 
+    // Seedling variables
+    bool reproductionUnlocked = false;
+    Timer spawnTimer;
+    float trySpawn = 2f;
+    float reproductionChance = 0.2f;
+    float seedlingNum;
+    GameObject[] seedlingsActive;
+    [SerializeField]
+    GameObject seedling;
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
@@ -26,13 +35,23 @@ public class Player : EventInvoker
         health = ConfigUtils.PlayerHealth;
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
 
+        // Get max number of seedlings
+        seedlingNum = Mod.ActiveMutations["Reproduction"];
+
+        // Set seedling spawn timer
+        spawnTimer = gameObject.AddComponent<Timer>();
+        spawnTimer.Duration = trySpawn;
+        spawnTimer.AddTimerFinishedListener(ChanceToSpawnSeedling);
+
         // Add as listener for max health mod changed
         EventManager.AddListener(EventName.MaxHealthMod, HandleMaxHealthModChanged);
 
-        // Add as invoker for add money event
-        //unityFloatEvents.Add(FloatEventName.AddMoneyEvent, new AddMoneyEvent());
-        //EventManager.AddFloatInvoker(FloatEventName.AddMoneyEvent, this);
+        // Add as listener for thorns unlocked event
+        EventManager.AddListener(EventName.Thorns, HandleThornsUnlocked);
 
+        // Add as listener for reproduction unlocked event
+        EventManager.AddListener(EventName.Reproduction, HandleReproductionUnlocked);
+        
         // Add as invoker for add experience event
         unityFloatEvents.Add(FloatEventName.AddExperienceEvent, new AddExperienceEvent());
         EventManager.AddFloatInvoker(FloatEventName.AddExperienceEvent, this);
@@ -80,8 +99,9 @@ public class Player : EventInvoker
         // Get name of game object
         string t = collision.gameObject.tag;
 
-        // This only gets triggered once on game start becuase colliders overlap
-        if (collision.gameObject.CompareTag("CollectionField"))
+        // Ignor triggers
+        if (collision.gameObject.CompareTag("CollectionField") || collision.gameObject.CompareTag("DetectionField") ||
+            collision.gameObject.CompareTag("Seed") || collision.gameObject.CompareTag("SeedlingSeed"))
         {
             return;
         }
@@ -89,11 +109,6 @@ public class Player : EventInvoker
         if (collision.gameObject.CompareTag("Projectile"))
         {
             //HandleDamage(collision.gameObject);
-            return;
-        }
-
-        if (collision.gameObject.CompareTag("Seed"))
-        {
             return;
         }
 
@@ -216,6 +231,20 @@ public class Player : EventInvoker
 
     }
 
+    private void ChanceToSpawnSeedling()
+    {
+        // Check how many seedling are active
+        seedlingsActive = GameObject.FindGameObjectsWithTag("Seedling");
+
+        if (seedlingsActive.Length < seedlingNum && Random.Range(0f, 1f) < reproductionChance)
+        {
+            Instantiate(seedling, transform.position, Quaternion.identity);
+        }
+
+        spawnTimer.Duration = trySpawn;
+        spawnTimer.Run();
+    }
+
     /// <summary>
     /// Makes player vulnerable after cooldown
     /// </summary>
@@ -231,5 +260,28 @@ public class Player : EventInvoker
     private void HandleMaxHealthModChanged()
     {
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
+    }
+
+    /// <summary>
+    /// Unlocks reproduction if not unlocked
+    /// </summary>
+    private void HandleReproductionUnlocked()
+    {
+        // Update max seedling value
+        seedlingNum = Mod.ActiveMutations["Reproduction"];
+
+        if (!reproductionUnlocked)
+        {
+            spawnTimer.Run();
+            reproductionUnlocked = true;
+        }
+    }
+
+    /// <summary>
+    /// Unlocks thorns if not unlocked
+    /// </summary>
+    private void HandleThornsUnlocked()
+    {
+        
     }
 }

@@ -10,7 +10,10 @@ public static class Tracker
 {
     #region Feilds
 
+    // Only set here to keep track of resolution
     static int currentResolution = -1;
+
+    // In game variables - reset on quit
     static float kills = 0;
     static float enemyHealthMod = 0;
     static float enemySpawnRateMod = 0;
@@ -62,6 +65,22 @@ public static class Tracker
         get { return levelUpAmountDifference * Level; }
     }
 
+
+    #endregion
+
+
+    #region Methods
+
+    public static void Initialize()
+    {
+        // Set defaults on game quit
+        kills = 49;
+        enemyHealthMod = 0;
+        enemySpawnRateMod = 0;
+        level = 1;
+        levelUpAmount = 50;
+        levelUpAmountDifference = 50;
+    }
 
     #endregion
 

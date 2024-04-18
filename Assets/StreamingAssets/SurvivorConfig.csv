@@ -17,7 +17,7 @@ PlayerMoveSpeed,3
 PlayerSeedSpeed,8
 PlayerShootCooldown,0.8
 SeedlingHealth,1
-SeedlingROF,0.5
+SeedlingROF,1
 SeedlingDamage,0.5
 ThornDamage,0.5
 ThornROF,0.5

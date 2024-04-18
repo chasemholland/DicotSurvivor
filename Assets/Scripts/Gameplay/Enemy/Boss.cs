@@ -9,7 +9,8 @@ using UnityEngine;
 public class Boss : EventInvoker
 {
     private float health;
-    private float damageAmount;
+    private float seedDamageAmount;
+    float seedlingSeedDamageAmount;
     float critChance;
     Timer stepDeathEffect;
     float stepDeathDuration;
@@ -38,8 +39,14 @@ public class Boss : EventInvoker
         health = ConfigUtils.BossHealth + Tracker.EnemyHealthMod;
 
         // Get player damage and crit chance
-        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+        seedDamageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
         critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+
+        // Get seedling damage amount
+        seedlingSeedDamageAmount = ConfigUtils.SeedlingDamage + Mod.ActiveModifiers["SeedlingDamageMod"];
+
+        // Add as listener for seedling damage mod changed
+        EventManager.AddListener(EventName.SeedlingDamageMod, HandleSeedlingDamageModChanged);
 
         // Add as listener for damage mod change and crit chance mod change
         EventManager.AddListener(EventName.DamageMod, HandleDamageModChanged);
@@ -132,12 +139,17 @@ public class Boss : EventInvoker
         {
             if (Random.Range(0f, 1f) <= critChance)
             {
-                health -= damageAmount * 2;
+                health -= seedDamageAmount * 2;
             }
             else
             {
-                health -= damageAmount;
+                health -= seedDamageAmount;
             }
+        }
+
+        if (collision.gameObject.CompareTag("SeedlingSeed"))
+        {
+            health -= seedlingSeedDamageAmount;
         }
     }
 
@@ -177,6 +189,14 @@ public class Boss : EventInvoker
     /// </summary>
     private void HandleDamageModChanged()
     {
-        damageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+        seedDamageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
+    }
+
+    /// <summary>
+    /// Updates seedling damage
+    /// </summary>
+    private void HandleSeedlingDamageModChanged()
+    {
+        seedlingSeedDamageAmount = ConfigUtils.SeedlingDamage + Mod.ActiveModifiers["SeedlingDamageMod"];
     }
 }

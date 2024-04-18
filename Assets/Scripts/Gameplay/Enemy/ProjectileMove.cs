@@ -30,7 +30,8 @@ public class ProjectileMove : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("BossWall"))
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Wall") || 
+            collision.gameObject.CompareTag("BossWall") || collision.gameObject.CompareTag("Seedling"))
         {
             // Spawn projectile explosion animation
             Instantiate(explosion, transform.position, Quaternion.identity);

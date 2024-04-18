@@ -11,6 +11,7 @@ using UnityEngine.EventSystems;
 public class MutationShopButton : EventInvoker, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     string nam;
+    string key;
     EventName eventname;
 
     public void Start()
@@ -18,9 +19,13 @@ public class MutationShopButton : EventInvoker, IPointerEnterHandler, IPointerEx
         // Remove "(Clone)" from the name
         string[] splitName = gameObject.name.Split("(");
         nam = splitName[0];
+        
+        // Get root name: Thorns, Reproduction, Multiseed
+        string[] splitNam = nam.Split("I");
+        key = splitNam[0];
 
         // Parse the float event name
-        eventname = (EventName)Enum.Parse(typeof(EventName), nam);
+        eventname = (EventName)Enum.Parse(typeof(EventName), key);
 
         // Add as float invoker mutation unlocked event
         unityEvents.Add(eventname, new MutationUnlockedEvent());
@@ -43,9 +48,6 @@ public class MutationShopButton : EventInvoker, IPointerEnterHandler, IPointerEx
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        string[] splitKey = nam.Split("I");
-        string key = splitKey[0];
-
         // Update the modifier value
         Mod.ActiveMutations[key]++;
 

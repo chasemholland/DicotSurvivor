@@ -13,7 +13,7 @@ public class HUD : MonoBehaviour
 {
     [SerializeField]
     GameObject shopBar;
-    float xpValue = 30;
+    float xpValue = 0;
     float levelUpAmount;
 
     [SerializeField]
