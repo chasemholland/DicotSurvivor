@@ -62,7 +62,7 @@ public static class Tracker
 
     public static float LevelUpAmountDifference
     {
-        get { return levelUpAmountDifference * Level; }
+        get { return Mathf.Floor(levelUpAmountDifference * Mathf.Sqrt(Level)); }
     }
 
 
@@ -74,7 +74,7 @@ public static class Tracker
     public static void Initialize()
     {
         // Set defaults on game quit
-        kills = 49;
+        kills = 0;
         enemyHealthMod = 0;
         enemySpawnRateMod = 0;
         level = 1;

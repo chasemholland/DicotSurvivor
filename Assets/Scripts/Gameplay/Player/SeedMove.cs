@@ -9,11 +9,6 @@ using UnityEngine;
     /// </summary>
 public class SeedMove : EventInvoker
 {
-    private Vector3 mousePosition;
-    private Camera mainCamera;
-    private Rigidbody2D rb;
-    float force;
-
     [SerializeField]
     GameObject explosion;
     

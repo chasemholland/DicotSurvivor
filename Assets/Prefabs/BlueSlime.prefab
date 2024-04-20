@@ -97,8 +97,8 @@ GameObject:
   - component: {fileID: 3370482343487743531}
   - component: {fileID: 2143586998228528754}
   - component: {fileID: 9092058170783201836}
-  - component: {fileID: 3899652661036187014}
-  - component: {fileID: -7941883182311707392}
+  - component: {fileID: 3571862999234482690}
+  - component: {fileID: 6490626978810363883}
   m_Layer: 0
   m_Name: BlueSlime
   m_TagString: Enemy
@@ -258,7 +258,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &3899652661036187014
+--- !u!114 &3571862999234482690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,20 +267,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7268611822779090543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 366435fefd742f04291cb6a0bee5c3db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0}
---- !u!114 &-7941883182311707392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7268611822779090543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43df10854c0777f4b8b453c9a8ef27a9, type: 3}
+  m_Script: {fileID: 11500000, guid: 617901e041f92f8479b89592adebd082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   expOrbs:
@@ -293,7 +280,18 @@ MonoBehaviour:
   heart: {fileID: 1248200133298189014, guid: 6f55a95465a5993459da16268c8e8531, type: 3}
   projectile: {fileID: 0}
   projectileTransform: {fileID: 0}
-  seedling: {fileID: 8115925727613451623, guid: 53bf3c223e0e7354b8554cb6252fc93c, type: 3}
+--- !u!114 &6490626978810363883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7268611822779090543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08207cdf34cb22409e9557e4509029a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8818667459821252323
 GameObject:
   m_ObjectHideFlags: 0

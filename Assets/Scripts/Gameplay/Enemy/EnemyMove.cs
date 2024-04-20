@@ -10,27 +10,34 @@ using UnityEngine.InputSystem;
 public class EnemyMove : MonoBehaviour
 {
     // Direction of moevement
-    public Vector2 direction;
+    protected Vector2 direction;
     // Player rigid body
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
     // Movement speed
-    private int speed = 1;
+    protected float speed = 1;
     // Player animator
-    private Animator animator;
+    protected Animator animator;
     // Player reference
-    GameObject player;
+    protected GameObject player;
     // Bool to change movement on player death
-    bool playerDead = false;
-    // Bool to change movement on boos spawn
-    bool bossActive = false;
+    protected bool playerDead = false;
+    // Bool to change movement on boss spawn
+    protected bool bossActive = false;
     // Random movement timer when player dies
-    Timer randMove;
+    protected Timer randMove;
 
+
+    protected virtual void Awake()
+    {
+        // Get reference to player and player animator
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+    }
 
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
-    void Start()
+    protected virtual void Start()
     {
         // Get player reference
         player = GameObject.FindWithTag("Player");
@@ -51,11 +58,11 @@ public class EnemyMove : MonoBehaviour
     /// <summary>
     /// Update is called once per frame
     /// </summary>
-    void Update()
+    protected virtual void Update()
     {
-        if (gameObject.name.StartsWith("Cyan") && animator.GetBool("isAttacking"))
+        if (playerDead)
         {
-            direction = Vector2.zero;
+            // Dont update movement on player death -- Random movement is on a timer
             return;
         }
 
@@ -64,21 +71,14 @@ public class EnemyMove : MonoBehaviour
             // Move towards player
             MoveToPlayer();          
         }
-        
+ 
         if (bossActive)
         {
             MoveAwayFromPlayer();
         }
     }
 
-    private void Awake()
-    {
-        // Get reference to player and player animator
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-    }
-
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (direction.x != 0 || direction.y != 0)
         {
@@ -93,7 +93,7 @@ public class EnemyMove : MonoBehaviour
     /// <summary>
     /// Move in a random direction
     /// </summary>
-    private void RandomMovement()
+    protected virtual void RandomMovement()
     {
         float x;
         float y;
@@ -132,56 +132,76 @@ public class EnemyMove : MonoBehaviour
     /// <summary>
     /// Move towards the player
     /// </summary>
-    private void MoveToPlayer()
+    protected virtual void MoveToPlayer()
     {
-        Vector3 directionToPlayer = (player.transform.position - gameObject.transform.position).normalized;
-
-        direction.x = directionToPlayer.x;
-        direction.y = directionToPlayer.y;
-
-        // Send values to animator to update corect animation
-        if (direction.x != 0 || direction.y != 0)
+        // If try fails, player is dead -> force random movement
+        try
         {
-            animator.SetFloat("X", direction.x);
-            animator.SetFloat("Y", direction.y);
+            Vector3 directionToPlayer = (player.transform.position - gameObject.transform.position).normalized;
 
-            animator.SetBool("isWalking", true);
+            direction.x = directionToPlayer.x;
+            direction.y = directionToPlayer.y;
+
+            // Send values to animator to update corect animation
+            if (direction.x != 0 || direction.y != 0)
+            {
+                animator.SetFloat("X", direction.x);
+                animator.SetFloat("Y", direction.y);
+
+                animator.SetBool("isWalking", true);
+            }
+            else
+            {
+                animator.SetBool("isWalking", false);
+            }
         }
-        else
+        catch (System.Exception)
         {
-            animator.SetBool("isWalking", false);
+            playerDead = true;
+            randMove.Run();
         }
+        
     }
 
     /// <summary>
     /// Move away from the player
     /// </summary>
-    private void MoveAwayFromPlayer()
+    protected virtual void MoveAwayFromPlayer()
     {
-        Vector3 directionToPlayer = (player.transform.position - gameObject.transform.position).normalized;
-
-        // Set direction negative
-        direction.x = -directionToPlayer.x;
-        direction.y = -directionToPlayer.y;
-
-        // Send values to animator to update corect animation
-        if (direction.x != 0 || direction.y != 0)
+        // If try fails, player is dead -> force random movement
+        try
         {
-            animator.SetFloat("X", direction.x);
-            animator.SetFloat("Y", direction.y);
+            Vector3 directionToPlayer = (player.transform.position - gameObject.transform.position).normalized;
 
-            animator.SetBool("isWalking", true);
+            // Set direction negative
+            direction.x = -directionToPlayer.x;
+            direction.y = -directionToPlayer.y;
+
+            // Send values to animator to update corect animation
+            if (direction.x != 0 || direction.y != 0)
+            {
+                animator.SetFloat("X", direction.x);
+                animator.SetFloat("Y", direction.y);
+
+                animator.SetBool("isWalking", true);
+            }
+            else
+            {
+                animator.SetBool("isWalking", false);
+            }
         }
-        else
+        catch (System.Exception)
         {
-            animator.SetBool("isWalking", false);
+            playerDead = true;
+            randMove.Run();
         }
+        
     }
 
     /// <summary>
     /// Change to random movement on player death
     /// </summary>
-    private void PlayerDeathBehavior()
+    protected virtual void PlayerDeathBehavior()
     {
         playerDead = true;
         randMove.Run();
@@ -190,7 +210,7 @@ public class EnemyMove : MonoBehaviour
     /// <summary>
     /// Handles behavior when boss spawns
     /// </summary>
-    private void HandleBossSpawned()
+    protected virtual void HandleBossSpawned()
     {
         bossActive = true;
         speed = 6;
@@ -199,7 +219,7 @@ public class EnemyMove : MonoBehaviour
     /// <summary>
     /// Handle behavior when boss dies
     /// </summary>
-    private void HandleBossDeath()
+    protected virtual void HandleBossDeath()
     {
         bossActive = false;
         speed  = 1;

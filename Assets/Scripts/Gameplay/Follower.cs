@@ -75,7 +75,7 @@ public class Follower : EventInvoker
     /// </summary>
     private void HandleTween()
     {
-        if (cam.m_Lens.OrthographicSize > 4)
+        if (cam.m_Lens.OrthographicSize > 6)
         {
             cam.m_Lens.OrthographicSize -= 0.05f;
             killTween.Duration = duration;

@@ -47,7 +47,7 @@ public class Seedling : MonoBehaviour
 
         // Ignor triggers
         if (collision.gameObject.CompareTag("CollectionField") || collision.gameObject.CompareTag("DetectionField") ||
-            collision.gameObject.CompareTag("Seed"))
+            collision.gameObject.CompareTag("Seed") || collision.gameObject.CompareTag("Thorn"))
         {
             return;
         }

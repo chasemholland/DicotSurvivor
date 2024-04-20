@@ -7,7 +7,7 @@ public class BossAttackState : StateMachineBehaviour
     int projectilesShot;
     Timer multiAttack;
     float shootDelay = 0.05f;
-    Boss boss;
+    BossEnemy boss;
     int numProjectiles = 12;
     int currentProjectile;
     float radius = 0.5f;
@@ -21,7 +21,7 @@ public class BossAttackState : StateMachineBehaviour
         animator.GetComponentInChildren<ParticleSystem>().Play();
 
         // Get reference to boss script to handle attacking
-        boss = animator.GetComponent<Boss>();
+        boss = animator.GetComponent<BossEnemy>();
 
         // Run multi attack timer to shoot more projectiles
         multiAttack = animator.gameObject.AddComponent<Timer>();

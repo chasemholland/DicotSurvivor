@@ -26,6 +26,17 @@ public class Player : EventInvoker
     [SerializeField]
     GameObject seedling;
 
+    // Thorn variables
+    [SerializeField]
+    GameObject thorn;
+    float thornNum = 0;
+    float thornForce = 8;
+    float radius = 0.5f;
+    float angleStep;
+    Timer thornTimer;
+    float thornShootDelay;
+
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
@@ -42,6 +53,13 @@ public class Player : EventInvoker
         spawnTimer = gameObject.AddComponent<Timer>();
         spawnTimer.Duration = trySpawn;
         spawnTimer.AddTimerFinishedListener(ChanceToSpawnSeedling);
+
+        // Get thorn shoot delay
+        thornShootDelay = ConfigUtils.ThornROF - Mod.ActiveModifiers["ThornROFMod"];
+
+        // Set up thorn shoot timer
+        thornTimer = gameObject.AddComponent<Timer>();
+        thornTimer.AddTimerFinishedListener(ShootThorns);
 
         // Add as listener for max health mod changed
         EventManager.AddListener(EventName.MaxHealthMod, HandleMaxHealthModChanged);
@@ -88,7 +106,7 @@ public class Player : EventInvoker
         {
             if (coll.gameObject.CompareTag("Enemy") || coll.gameObject.CompareTag("RedBoss"))
             {
-                //HandleDamage(coll.gameObject);
+                HandleDamage(coll.gameObject);
                 return;
             }
         } 
@@ -101,14 +119,14 @@ public class Player : EventInvoker
 
         // Ignor triggers
         if (collision.gameObject.CompareTag("CollectionField") || collision.gameObject.CompareTag("DetectionField") ||
-            collision.gameObject.CompareTag("Seed") || collision.gameObject.CompareTag("SeedlingSeed"))
+            collision.gameObject.CompareTag("Seed") || collision.gameObject.CompareTag("SeedlingSeed") || collision.gameObject.CompareTag("Thorn"))
         {
             return;
         }
 
         if (collision.gameObject.CompareTag("Projectile"))
         {
-            //HandleDamage(collision.gameObject);
+            HandleDamage(collision.gameObject);
             return;
         }
 
@@ -231,6 +249,9 @@ public class Player : EventInvoker
 
     }
 
+    /// <summary>
+    /// Handles spawning seedlings
+    /// </summary>
     private void ChanceToSpawnSeedling()
     {
         // Check how many seedling are active
@@ -243,6 +264,39 @@ public class Player : EventInvoker
 
         spawnTimer.Duration = trySpawn;
         spawnTimer.Run();
+    }
+
+    /// <summary>
+    /// Hanldes shooting thorns
+    /// </summary>
+    private void ShootThorns()
+    {
+        for (int i = 0; i < thornNum; i++)
+        {
+            // Calculate position based on angle
+            float angle = i * angleStep;
+
+            // Spawn position, offset on the y to account for rotation point being at the bottom of the player
+            Vector3 offSetPosition = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 1f, 0);
+            Vector3 spawnPosition = offSetPosition + Quaternion.Euler(0, 0, angle) * Vector3.right * radius;
+
+            // Instantiate the projectile
+            GameObject proj = Instantiate(thorn, spawnPosition, Quaternion.identity);
+
+            // Calculate direction to shoot
+            Vector3 shootDirection = (proj.transform.position - offSetPosition).normalized;
+            Vector2 direction = new Vector2(shootDirection.x, shootDirection.y);
+
+            // Rotate the seed in direction of travel
+            Vector3 rotation = offSetPosition - proj.transform.position;
+            float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+            proj.transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+
+            proj.GetComponent<Rigidbody2D>().velocity = direction * thornForce;
+        }
+        
+        thornTimer.Duration = thornShootDelay;
+        thornTimer.Run();
     }
 
     /// <summary>
@@ -282,6 +336,17 @@ public class Player : EventInvoker
     /// </summary>
     private void HandleThornsUnlocked()
     {
+        // 1, 2, 3 Multiply by 2 to get 2, 4, 6 thorns
+        thornNum = Mod.ActiveMutations["Thorns"] * 2;
+
+        angleStep = 360f / thornNum;
         
+        if (thornTimer.Running)
+        {
+            thornTimer.Stop();
+        }
+
+        thornTimer.Duration = thornShootDelay;
+        thornTimer.Run();
     }
 }

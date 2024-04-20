@@ -5235,13 +5235,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa4af9cbc1ab0e419040dcea36937ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expOrbs: []
+  heart: {fileID: 0}
+  projectile: {fileID: 252927393714288482, guid: dbe8e5b1963033c47b0e35a919918c9f, type: 3}
+  projectileTransform: {fileID: 5913400987313306624}
   chests:
   - {fileID: 5744061384162484003, guid: 976839e4d1d73924a846334dd63820cb, type: 3}
   - {fileID: 3754963158008169855, guid: 0dfef17c92733af4cbff8686853a425f, type: 3}
   - {fileID: 7688231437517911558, guid: 36b9b30cbadd77541800df888bdc9837, type: 3}
   - {fileID: 6065457301996017056, guid: 3c1f1417e30a36949a283dd10e589319, type: 3}
-  projectile: {fileID: 252927393714288482, guid: dbe8e5b1963033c47b0e35a919918c9f, type: 3}
-  projectileTransform: {fileID: 5913400987313306624}
 --- !u!114 &-4155523857371738870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5254,4 +5256,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0edf6d7c2a87974293f56869d948fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0}

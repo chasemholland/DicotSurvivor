@@ -4,67 +4,91 @@ using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
-    /// Enemy attributes other than movement
+    /// Parent class for enemies 
     /// </summary>
-public class Enemy : MonoBehaviour
+public class Enemy : EventInvoker
 {
     // Enemy health
-    float health;
+    protected float health;
 
     // Player damage and crit chance
-    float seedDamageAmount;
-    float seedlingSeedDamageAmount;
-    float critChance;
+    protected float seedDamageAmount;
+    protected float seedlingSeedDamageAmount;
+    protected float critChance;
 
     // Death effect
-    Timer stepDeathEffect;
-    float stepDeathDuration;
-    Material mat;
-    float fade = 1f;
+    protected Timer stepDeathEffect;
+    protected float stepDeathDuration;
+    protected Material mat;
+    protected float fade = 1f;
 
     // Experience
     [SerializeField]
-    List<GameObject> expOrbs;
+    protected List<GameObject> expOrbs;
     [SerializeField]
-    GameObject heart;
+    protected GameObject heart;
 
     // Feilds used for enemies that attack (Only Cyan for now)
-    GameObject player;
+    protected GameObject player;
     [SerializeField]
-    GameObject projectile;
+    protected GameObject projectile;
     [SerializeField]
-    Transform projectileTransform;
-    float projForce = 8f;
+    protected Transform projectileTransform;
+    protected float projForce = 8f;
 
     // Orb impulse force
-    Vector2 force;
+    protected Vector2 force;
 
     // Camera coords
-    Vector3 bottomLeftCam;
-    Vector3 topRightCam;
+    protected Vector3 bottomLeftCam;
+    protected Vector3 topRightCam;
+
+    // Thorn damage
+    protected float thornDamageAmount;
 
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
-    void Start()
+    protected virtual void Start()
     {
+        //------------ Muatator Related --------------------------------------------------------------------
+
         // Set seedling damage amount
         seedlingSeedDamageAmount = ConfigUtils.SeedlingDamage + Mod.ActiveModifiers["SeedlingDamageMod"];
+
+        // Get thorn damage
+        thornDamageAmount = ConfigUtils.ThornDamage + Mod.ActiveModifiers["ThornDamageMod"];
 
         // Add as listener for seedling seed damage mod change
         EventManager.AddListener(EventName.SeedlingDamageMod, HandleSeedlingDamageModChanged);
 
-        // Get enemy health
-        health = ConfigUtils.EnemyHealth + Tracker.EnemyHealthMod;
+        // Add as lsitener for thorn damage mod changed
+        EventManager.AddListener(EventName.ThornDamageMod, HandleThornDamageModChanged);
+
+        //------------- Player Related -------------------------------------------------------------------------
 
         // Get player damage stats
         seedDamageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
-        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"];
+        critChance = ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"]; 
 
         // Add as listener for damage mod change and crit chance mod change
         EventManager.AddListener(EventName.DamageMod, HandleDamageModChanged);
         EventManager.AddListener(EventName.CritChanceMod, HandleCritChanceModChanged);
 
+        //-------------- Enemy Related ---------------------------------------------------------------------------
+
+        // Get enemy health
+        if (gameObject.CompareTag("Enemy"))
+        {
+            // Get regular enemy health
+            health = ConfigUtils.EnemyHealth + Tracker.EnemyHealthMod;
+        }
+        else if (gameObject.CompareTag("RedBoss"))
+        {
+            // Get boss health
+            health = ConfigUtils.BossHealth + (Tracker.EnemyHealthMod * 50);
+        }
+        
         // Set up death effect timer
         stepDeathDuration = 0.05f;
         stepDeathEffect = gameObject.AddComponent<Timer>();
@@ -74,6 +98,8 @@ public class Enemy : MonoBehaviour
         // Get refernce to shader effect
         mat = gameObject.GetComponent<SpriteRenderer>().material;
 
+        //-------------- Camera Related ---------------------------------------------------------------------------
+
         // Set camera points
         bottomLeftCam = new Vector3(0, 0, 0);
         topRightCam = new Vector3(1, 1, 0);
@@ -82,7 +108,7 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Update is called once per frame
     /// </summary>
-    void Update()
+    protected virtual void Update()
     {
         if (health <= 0)
         {
@@ -99,7 +125,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void HandleStep()
+    /// <summary>
+    /// Fade death effect
+    /// </summary>
+    protected virtual void HandleStep()
     {
         if (fade <= 0)
         {
@@ -117,36 +146,31 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Attacks player when called by animator
-    public void AttackPlayer()
+    /// <summary>
+    /// Attacks player when called by animator
+    /// </summary>
+    public virtual void AttackPlayer()
+    {    
+    }
+
+    /// <summary>
+    /// Boss attacks player called by boss animator
+    /// </summary>
+    /// <param name="num">projectile being fired</param>
+    /// <param name="angleStep">angle from start point</param>
+    /// <param name="radius">radius of spawn circle</param>
+    public virtual void AttackPlayer(int num, float angleStep, float radius)
     {
-        // Get camera bounds
-        Vector3 bottomLeft = Camera.main.ViewportToWorldPoint(bottomLeftCam);
-        Vector3 topRight = Camera.main.ViewportToWorldPoint(topRightCam);
-
-        // Check if enemy is in view before shooting
-        if (gameObject.transform.position.y > bottomLeft.y && gameObject.transform.position.y < topRight.y)
-        {
-            if (gameObject.transform.position.x > bottomLeft.x && gameObject.transform.position.x < topRight.x)
-            {
-                // Get direction to player
-                player = GameObject.FindGameObjectWithTag("Player");
-                Vector3 directionToPlayer = (player.transform.position - projectileTransform.position).normalized;
-                Vector2 direction = new Vector2(directionToPlayer.x, directionToPlayer.y);
-
-                GameObject proj = Instantiate(projectile, projectileTransform.position, Quaternion.identity);
-                proj.GetComponent<Rigidbody2D>().velocity = direction * projForce;
-            }
-        }     
     }
 
     /// <summary>
     /// Destroys enemy when they hit the boss wall
     /// </summary>
     /// <param name="coll"></param>
-    private void OnCollisionEnter2D(Collision2D coll)
+    protected virtual void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.CompareTag("BossWall"))
+        // This gets rid of any other enemies during boss fight
+        if (coll.gameObject.CompareTag("BossWall") || coll.gameObject.CompareTag("RedBoss"))
         {
             Destroy(gameObject);
         }
@@ -156,7 +180,7 @@ public class Enemy : MonoBehaviour
     /// Handles damage when seed collides
     /// </summary>
     /// <param name="collision"></param>
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Seed"))
         {
@@ -174,9 +198,17 @@ public class Enemy : MonoBehaviour
         {
             health -= seedlingSeedDamageAmount;
         }
+
+        if (collision.gameObject.CompareTag("Thorn"))
+        {
+            health -= thornDamageAmount;
+        }
     }
 
-    private void SpawnRandomPickup()
+    /// <summary>
+    /// Spawns random sizes and amounts of pickups
+    /// </summary>
+    protected virtual void SpawnRandomPickup()
     {
         // Chance to drop a heart
         if (Random.Range(0f, 1f) >= 0.95f)
@@ -266,7 +298,7 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Updates player crit chance
     /// </summary>
-    private void HandleCritChanceModChanged()
+    protected virtual void HandleCritChanceModChanged()
     {
         critChance = Mathf.Clamp(ConfigUtils.PlayerCritChance + Mod.ActiveModifiers["CritChanceMod"], 0, 1);
     }
@@ -274,7 +306,7 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Updates player damage
     /// </summary>
-    private void HandleDamageModChanged()
+    protected virtual void HandleDamageModChanged()
     {
         seedDamageAmount = ConfigUtils.PlayerDamage + Mod.ActiveModifiers["DamageMod"];
     }
@@ -282,8 +314,16 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Updates seedling damage
     /// </summary>
-    private void HandleSeedlingDamageModChanged()
+    protected virtual void HandleSeedlingDamageModChanged()
     {
         seedlingSeedDamageAmount = ConfigUtils.SeedlingDamage + Mod.ActiveModifiers["SeedlingDamageMod"];
+    }
+
+    /// <summary>
+    /// Updates thorn damage
+    /// </summary>
+    protected virtual void HandleThornDamageModChanged()
+    {
+        thornDamageAmount = ConfigUtils.ThornDamage + Mod.ActiveModifiers["ThornDamageMod"];
     }
 }

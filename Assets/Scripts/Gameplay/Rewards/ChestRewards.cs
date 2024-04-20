@@ -48,6 +48,9 @@ public class ChestRewards : MonoBehaviour
             GetOrbs(splitChestName[0]);
             anim.SetBool("isOpen", true);
             open = true;
+
+            // Disable collider
+            gameObject.GetComponent<Collider2D>().enabled = false;
         }
     }
 

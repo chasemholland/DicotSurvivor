@@ -178,9 +178,9 @@ GameObject:
   - component: {fileID: 6218687268423091220}
   - component: {fileID: 8160233364223762206}
   - component: {fileID: 5912951851895245705}
-  - component: {fileID: 497756813422210307}
-  - component: {fileID: 7499771680674888986}
   - component: {fileID: 7970740546438663470}
+  - component: {fileID: 273602014716870302}
+  - component: {fileID: 6395491371242927491}
   m_Layer: 0
   m_Name: PinkSlime
   m_TagString: Enemy
@@ -319,42 +319,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.3800168}
   serializedVersion: 2
   m_Radius: 0.3800168
---- !u!114 &497756813422210307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8710104061652259673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 366435fefd742f04291cb6a0bee5c3db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0}
---- !u!114 &7499771680674888986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8710104061652259673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43df10854c0777f4b8b453c9a8ef27a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  expOrbs:
-  - {fileID: 1713302319239857348, guid: 21e2f9c0b39bbc54f83cc6259cc0ea2e, type: 3}
-  - {fileID: 6033499062945825463, guid: 1db4c3837fa288e498498d48c21063fd, type: 3}
-  - {fileID: 5534169074881195743, guid: d0cbb97c323405148b715cefb98e0ae7, type: 3}
-  - {fileID: 5405116364446328779, guid: d7295e366a8b84448a6699b7967039be, type: 3}
-  - {fileID: 664013520627685705, guid: f6775edf222e48d4eaedc03516badfad, type: 3}
-  - {fileID: 1494953423929586092, guid: d5889bd0bd991f84a834262fa155fcc1, type: 3}
-  heart: {fileID: 1248200133298189014, guid: 6f55a95465a5993459da16268c8e8531, type: 3}
-  projectile: {fileID: 0}
-  projectileTransform: {fileID: 0}
-  seedling: {fileID: 8115925727613451623, guid: 53bf3c223e0e7354b8554cb6252fc93c, type: 3}
 --- !u!95 &7970740546438663470
 Animator:
   serializedVersion: 5
@@ -376,3 +340,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &273602014716870302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8710104061652259673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b80d02e063e82db41b73c30653336acd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  expOrbs:
+  - {fileID: 1713302319239857348, guid: 21e2f9c0b39bbc54f83cc6259cc0ea2e, type: 3}
+  - {fileID: 6033499062945825463, guid: 1db4c3837fa288e498498d48c21063fd, type: 3}
+  - {fileID: 5534169074881195743, guid: d0cbb97c323405148b715cefb98e0ae7, type: 3}
+  - {fileID: 5405116364446328779, guid: d7295e366a8b84448a6699b7967039be, type: 3}
+  - {fileID: 664013520627685705, guid: f6775edf222e48d4eaedc03516badfad, type: 3}
+  - {fileID: 1494953423929586092, guid: d5889bd0bd991f84a834262fa155fcc1, type: 3}
+  heart: {fileID: 1248200133298189014, guid: 6f55a95465a5993459da16268c8e8531, type: 3}
+  projectile: {fileID: 0}
+  projectileTransform: {fileID: 0}
+--- !u!114 &6395491371242927491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8710104061652259673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c2907041cab4d0409e395b4b732b9d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

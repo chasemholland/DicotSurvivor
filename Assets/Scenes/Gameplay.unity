@@ -273,8 +273,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0
   m_LocalBounds:
-    m_Center: {x: -24.4625, y: 6.2485, z: 0}
-    m_Extent: {x: 50.732597, y: 11.754399, z: 0}
+    m_Center: {x: -24.467152, y: 6.2499, z: 0}
+    m_Extent: {x: 50.73605, y: 11.7567, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 2
@@ -5406,8 +5406,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0
   m_LocalBounds:
-    m_Center: {x: -24.467701, y: 6.25165, z: 0}
-    m_Extent: {x: 50.7419, y: 11.75345, z: 0}
+    m_Center: {x: -24.459698, y: 6.2459497, z: 0}
+    m_Extent: {x: 50.742, y: 11.75545, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 2
@@ -7024,6 +7024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seedling: {fileID: 8115925727613451623, guid: 53bf3c223e0e7354b8554cb6252fc93c, type: 3}
+  thorn: {fileID: 7046571803770042915, guid: 391727fe44a0c0548975588ad59bd12d, type: 3}
 --- !u!114 &1586628261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7159,7 +7160,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 144a6bfb616199049886aa36733f092d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8370,8 +8371,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0
   m_LocalBounds:
-    m_Center: {x: -24.46635, y: 6.2480497, z: 0}
-    m_Extent: {x: 50.736248, y: 11.75715, z: 0}
+    m_Center: {x: -24.4636, y: 6.2500505, z: 0}
+    m_Extent: {x: 50.742203, y: 11.75735, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 2

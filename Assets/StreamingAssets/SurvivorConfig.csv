@@ -20,7 +20,7 @@ SeedlingHealth,1
 SeedlingROF,1
 SeedlingDamage,0.5
 ThornDamage,0.5
-ThornROF,0.5
+ThornROF,4
 ComMoveSpeedMod,0.25
 UncMoveSpeedMod,0.5
 RarMoveSpeedMod,1

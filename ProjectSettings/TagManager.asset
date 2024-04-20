@@ -38,6 +38,7 @@ TagManager:
   - DetectionField
   - Seedling
   - SeedlingSeed
+  - Thorn
   layers:
   - Default
   - TransparentFX

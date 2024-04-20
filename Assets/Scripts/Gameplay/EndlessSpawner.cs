@@ -74,8 +74,8 @@ public class EndlessSpawner : EventInvoker
 
     private void SpawnEnemies()
     {
-        // Spawn boss every 50 kills
-        if (Tracker.Kills >= 50 * currentBoss)
+        // Spawn boss every 100 kills
+        if (Tracker.Kills >= 100 * currentBoss)
         {
             // Set current boss
             currentBoss++;

@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class CyanAttackState : StateMachineBehaviour
 {
-    int projectilesShot;
     Timer attackTimer;
     float shootDelay = 0.5f;
-    Enemy enemy;
+    CyanEnemy cyanEnemy;
     bool hasShot;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -17,7 +16,7 @@ public class CyanAttackState : StateMachineBehaviour
         animator.GetComponentInChildren<ParticleSystem>().Play();
 
         // Get reference to boss script to handle attacking
-        enemy = animator.GetComponent<Enemy>();
+        cyanEnemy = animator.GetComponent<CyanEnemy>();
 
         // Run multi attack timer to shoot more projectiles
         attackTimer = animator.gameObject.AddComponent<Timer>();
@@ -33,7 +32,7 @@ public class CyanAttackState : StateMachineBehaviour
     {
         if (attackTimer.Finished && !hasShot)
         {
-            enemy.AttackPlayer();
+            cyanEnemy.AttackPlayer();
             hasShot = true;
             attackTimer.Duration = shootDelay;
             attackTimer.Run();

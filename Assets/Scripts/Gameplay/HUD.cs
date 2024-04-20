@@ -33,11 +33,16 @@ public class HUD : MonoBehaviour
     [SerializeField]
     GameObject pauseMenu;
 
+    Material playerOutline;
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
+        // Get player material
+        playerOutline = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>().material;
+
         // Set pannels innactive
         shop.SetActive(false);
         mutationShop.SetActive(false);
@@ -113,6 +118,10 @@ public class HUD : MonoBehaviour
     {
         xpValue += value;
         SetGUI();
+        // Iradiate player by increasing the outline glow
+        playerOutline.SetFloat("_Intensity", (xpValue / levelUpAmount) * 20);
+
+        // Check for level up
         if (xpValue >= levelUpAmount)
         {
             xpValue -= levelUpAmount;
@@ -123,6 +132,10 @@ public class HUD : MonoBehaviour
             // Get new level up amount
             levelUpAmount = Tracker.LevelUpAmount;
             SetGUI();
+
+            // Iradiate player by increasing the outline glow
+            playerOutline.SetFloat("_Intensity", (xpValue / levelUpAmount) * 20);
+
             Time.timeScale = 0;
             shop.SetActive(true);
         }

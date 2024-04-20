@@ -186,7 +186,7 @@ public static class ConfigUtils
     /// <summary>
     /// Thorn damage value
     /// </summary>
-    public static float ThronDamage
+    public static float ThornDamage
     {
         get { return configData.ThornDamage; }
     }
