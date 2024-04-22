@@ -66,13 +66,14 @@ public class BossEnemy : Enemy
     /// <param name="num">projectile being fired</param>
     /// <param name="angleStep">angle from start point</param>
     /// <param name="radius">radius of spawn circle</param>
-    public override void AttackPlayer(int num, float angleStep, float radius)
+    /// <param name="startPos">start position of circle</param>
+    public override void AttackPlayer(int num, float angleStep, float radius, Vector3 startPos)
     {
         // Calculate position based on angle
         float angle = num * angleStep;
 
         // Spawn position
-        Vector3 spawnPosition = projectileTransform.position + Quaternion.Euler(0, 0, angle) * Vector3.right * radius;
+        Vector3 spawnPosition = projectileTransform.position + Quaternion.Euler(0, 0, angle) * startPos * radius;
 
         // Instantiate the projectile
         GameObject proj = Instantiate(projectile, spawnPosition, Quaternion.identity);

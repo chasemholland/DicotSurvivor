@@ -44,6 +44,8 @@ public class ShopButton : EventInvoker, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        AudioManager.Play(AudioName.Select);
+
         // Updat the modifier value
         Mod.ActiveModifiers[Mod.MiddleMan[nam]] += Mod.Modifier[nam];
 

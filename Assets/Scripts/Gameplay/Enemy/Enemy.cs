@@ -16,6 +16,11 @@ public class Enemy : EventInvoker
     protected float seedlingSeedDamageAmount;
     protected float critChance;
 
+    // Damage effect
+    protected Timer damageFlash;
+    protected float flashDuration = 0.1f;
+    protected int flashes = 0;
+
     // Death effect
     protected Timer stepDeathEffect;
     protected float stepDeathDuration;
@@ -95,6 +100,11 @@ public class Enemy : EventInvoker
         stepDeathEffect.AddTimerFinishedListener(HandleStep);
         stepDeathEffect.Duration = stepDeathDuration;
 
+        // Set up damage effect timer
+        damageFlash = gameObject.AddComponent<Timer>();
+        damageFlash.Duration = flashDuration;
+        damageFlash.AddTimerFinishedListener(DamageEffect);
+
         // Get refernce to shader effect
         mat = gameObject.GetComponent<SpriteRenderer>().material;
 
@@ -146,6 +156,32 @@ public class Enemy : EventInvoker
         }
     }
 
+    protected virtual void DamageEffect()
+    {
+        if (mat.GetColor("_Color") == Color.white)
+        {
+            mat.SetColor("_Color", Color.red);
+        }
+        else
+        {
+            mat.SetColor("_Color", Color.white);
+        }
+
+        flashes++;
+
+        if (flashes > 4 && mat.GetColor("_Color") == Color.white)
+        {
+            flashes = 0;
+            damageFlash.Stop();
+        }
+        else
+        {
+            damageFlash.Duration = flashDuration;
+            damageFlash.Run();
+        }
+
+    }
+
     /// <summary>
     /// Attacks player when called by animator
     /// </summary>
@@ -159,7 +195,8 @@ public class Enemy : EventInvoker
     /// <param name="num">projectile being fired</param>
     /// <param name="angleStep">angle from start point</param>
     /// <param name="radius">radius of spawn circle</param>
-    public virtual void AttackPlayer(int num, float angleStep, float radius)
+    /// <param name="startPos">start position of circle</param>
+    public virtual void AttackPlayer(int num, float angleStep, float radius, Vector3 startPos)
     {
     }
 
@@ -202,6 +239,33 @@ public class Enemy : EventInvoker
         if (collision.gameObject.CompareTag("Thorn"))
         {
             health -= thornDamageAmount;
+        }
+
+        if (collision.gameObject.CompareTag("Seed") || collision.gameObject.CompareTag("SeedlingSeed") || collision.gameObject.CompareTag("Thorn"))
+        {
+            AudioManager.Play(AudioName.EnemyHurt);
+
+            if (health > 0)
+            {
+                if (damageFlash.Running)
+                {
+                    DamageEffect();
+                    damageFlash.Stop();
+                    damageFlash.Duration = flashDuration;
+                    damageFlash.Run();
+                }
+                else
+                {
+                    DamageEffect();
+                    damageFlash.Duration = flashDuration;
+                    damageFlash.Run();
+                }
+            }
+            else
+            {
+                damageFlash.Stop();
+                mat.SetColor("_Color", Color.white);
+            }
         }
     }
 

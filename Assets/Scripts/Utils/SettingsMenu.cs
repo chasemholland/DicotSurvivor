@@ -23,6 +23,7 @@ public class SettingsMenu : MonoBehaviour
     public void SetVolume(float volume)
     {
         // Change volume once set up
+        GameObject.Find("GameAudioSource").GetComponent<AudioSource>().volume = volume;
     }
 
     public void SetFullscreen(bool isFullscreen)
@@ -86,6 +87,8 @@ public class SettingsMenu : MonoBehaviour
     void Start()
     {
         SetupResolution();
+
+        GameObject.Find("VolumeSlider").GetComponent<Slider>().value = GameObject.Find("GameAudioSource").GetComponent<AudioSource>().volume;
 
     }
 

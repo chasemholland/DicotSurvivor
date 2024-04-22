@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 ///
 /// </summary>
-public class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -21,19 +21,10 @@ public class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         buttonText.color = Color.white;
     }
 
-    /// <summary>
-    /// Start is called before the first frame update
-    /// </summary>
-    void Start()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    void Update()
-    {
-        
+        AudioManager.Play(AudioName.Select);
+        TextMeshProUGUI buttonText = GetComponentInChildren<TextMeshProUGUI>();
+        buttonText.color = Color.white;
     }
 }

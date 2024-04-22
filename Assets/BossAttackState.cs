@@ -13,6 +13,7 @@ public class BossAttackState : StateMachineBehaviour
     float radius = 0.5f;
     float angleStep;
     int clockWise = -1;
+    Vector3 startPos;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -33,8 +34,29 @@ public class BossAttackState : StateMachineBehaviour
         projectilesShot = 0;
         currentProjectile = 1;
 
+        // Get start position of attack circle
+        int start = Random.Range(1, 5);
+        switch (start)
+        {
+            case 1:
+                startPos = Vector3.right;
+                break;
+            case 2:
+                startPos = Vector3.left;
+                break;
+            case 3:
+                startPos = Vector3.up;
+                break;
+            case 4:
+                startPos = Vector3.down;
+                break;
+            default:
+                startPos = Vector3.right;
+                break;
+        }
+
         // Fire one projectile
-        boss.AttackPlayer(currentProjectile, angleStep, radius);
+        boss.AttackPlayer(currentProjectile, angleStep, radius, startPos);
         currentProjectile++;
         projectilesShot++;
         clockWise *= -1;
@@ -45,7 +67,7 @@ public class BossAttackState : StateMachineBehaviour
     {
         if (multiAttack.Finished)
         {
-            boss.AttackPlayer(currentProjectile, angleStep, radius);
+            boss.AttackPlayer(currentProjectile, angleStep, radius, startPos);
             currentProjectile++;
             projectilesShot++;
             multiAttack.Duration = shootDelay;

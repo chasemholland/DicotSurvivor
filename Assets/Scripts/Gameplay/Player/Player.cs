@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
@@ -11,9 +12,6 @@ public class Player : EventInvoker
 
     float health;
     float maxHealth;
-    bool vulnerable = true;
-    Timer damageCooldown;
-    float cooldown = 1f;
     CinemachineVirtualCamera killCam;
 
     // Seedling variables
@@ -35,6 +33,14 @@ public class Player : EventInvoker
     float angleStep;
     Timer thornTimer;
     float thornShootDelay;
+
+    // Damage effect
+    bool vulnerable = true;
+    Timer damageFlash;
+    float flashDuration = 0.1f;
+    int flashes = 0;
+    Color transparent;
+    Color nonTransparent;
 
 
     /// <summary>
@@ -86,10 +92,12 @@ public class Player : EventInvoker
         unityEvents.Add(EventName.PlayerDeathEvent, new PlayerDeathEvent());
         EventManager.AddInvoker(EventName.PlayerDeathEvent, this);
 
-        // Set up damage cooldown timer
-        damageCooldown = gameObject.AddComponent<Timer>();
-        damageCooldown.AddTimerFinishedListener(UpdateVulnerability);
-        damageCooldown.Duration = cooldown;
+        // Set up damage flash
+        damageFlash = gameObject.AddComponent<Timer>();
+        damageFlash.Duration = flashDuration;
+        damageFlash.AddTimerFinishedListener(FlashEffect);
+        transparent = new Color(1, 1, 1, 0.5f);
+        nonTransparent = new Color(1, 1, 1, 1);
     }
 
     /// <summary>
@@ -106,6 +114,7 @@ public class Player : EventInvoker
         {
             if (coll.gameObject.CompareTag("Enemy") || coll.gameObject.CompareTag("RedBoss"))
             {
+                AudioManager.Play(AudioName.PlayerHurt);
                 HandleDamage(coll.gameObject);
                 return;
             }
@@ -126,7 +135,11 @@ public class Player : EventInvoker
 
         if (collision.gameObject.CompareTag("Projectile"))
         {
-            HandleDamage(collision.gameObject);
+            if (vulnerable)
+            {
+                AudioManager.Play(AudioName.PlayerHurt);
+                HandleDamage(collision.gameObject);
+            }
             return;
         }
 
@@ -136,6 +149,8 @@ public class Player : EventInvoker
             // Check if heart
             if (t == "Heart")
             {
+                AudioManager.Play(AudioName.OrbCollect);
+
                 // Get the value
                 float value = GetValue(t);
 
@@ -151,6 +166,8 @@ public class Player : EventInvoker
             }
             else
             {
+                AudioManager.Play(AudioName.OrbCollect);
+
                 // Get the value
                 float value = GetValue(t);
 
@@ -166,13 +183,24 @@ public class Player : EventInvoker
     // Handles taking damage
     private void HandleDamage(GameObject collision)
     {
+        // Go invulnerable
+        vulnerable = false;
+
+        // Run flash effect
+        if (!damageFlash.Running)
+        {
+            damageFlash.Run();
+        }
+        else
+        {
+            damageFlash.Stop();
+            damageFlash.Duration = flashDuration;
+            damageFlash.Run();
+        }
+
         // Reduce health and notify HUD
         health -= 1f;
         unityFloatEvents[FloatEventName.LooseHealthEvent].Invoke(1f);
-
-        // Go invulnerable for some time
-        vulnerable = false;
-        damageCooldown.Run();
 
         // Check if dead
         if (health <= 0)
@@ -218,6 +246,33 @@ public class Player : EventInvoker
             // Destroy the player
             Destroy(gameObject);
         }
+    }
+
+    private void FlashEffect()
+    {
+        if (gameObject.GetComponent<SpriteRenderer>().color == nonTransparent)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = transparent;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = nonTransparent;
+        }
+
+        flashes++;
+
+        if (flashes > 8 && gameObject.GetComponent<SpriteRenderer>().color == nonTransparent)
+        {
+            flashes = 0;
+            vulnerable = true;
+            damageFlash.Stop();
+        }
+        else
+        {
+            damageFlash.Duration = flashDuration;
+            damageFlash.Run();
+        }
+
     }
 
     /// <summary>
@@ -297,15 +352,6 @@ public class Player : EventInvoker
         
         thornTimer.Duration = thornShootDelay;
         thornTimer.Run();
-    }
-
-    /// <summary>
-    /// Makes player vulnerable after cooldown
-    /// </summary>
-    private void UpdateVulnerability()
-    {
-        vulnerable = true;
-        damageCooldown.Duration = cooldown;
     }
 
     /// <summary>

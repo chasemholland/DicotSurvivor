@@ -12,6 +12,9 @@ using UnityEngine.UI;
 public class HUD : MonoBehaviour
 {
     [SerializeField]
+    GameObject levelLoader;
+
+    [SerializeField]
     GameObject shopBar;
     float xpValue = 0;
     float levelUpAmount;
@@ -124,6 +127,8 @@ public class HUD : MonoBehaviour
         // Check for level up
         if (xpValue >= levelUpAmount)
         {
+            AudioManager.Play(AudioName.LevelUp);
+
             xpValue -= levelUpAmount;
             // Update level up amount with previous amount
             Tracker.LevelUpAmount = levelUpAmount;
@@ -183,6 +188,7 @@ public class HUD : MonoBehaviour
     public void OnQuitClick()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("MainMenu");
+        levelLoader.GetComponent<LevelLoader>().LoadNextScene("MainMenu");
+        //SceneManager.LoadScene("MainMenu");
     }
 }

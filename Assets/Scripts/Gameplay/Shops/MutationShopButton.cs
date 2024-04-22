@@ -48,6 +48,8 @@ public class MutationShopButton : EventInvoker, IPointerEnterHandler, IPointerEx
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        AudioManager.Play(AudioName.Select);
+
         // Update the modifier value
         Mod.ActiveMutations[key]++;
 
