@@ -70,7 +70,10 @@ public class SeedShooter : EventInvoker
 
             // Check for single click fires
             if (singleShot && Input.GetMouseButton(0))
-            {      
+            {
+                // Play shoot sound
+                AudioManager.Play(AudioName.Shoot);
+
                 switch (seedNum)
                 {
                     case 1:
@@ -101,6 +104,9 @@ public class SeedShooter : EventInvoker
         // Check for full auto fire
         if (Input.GetMouseButton(0))
         {
+            // Play shoot sound
+            AudioManager.Play(AudioName.Shoot);
+
             switch (seedNum)
             {
                 case 1:

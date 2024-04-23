@@ -7,6 +7,7 @@ using UnityEngine;
     /// </summary>
 public enum EventName
 {
+    FillPlayerHealth,
     TimerFinishedEvent,
     PlayerDeathEvent,
     BossDeathEvent,

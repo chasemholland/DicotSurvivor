@@ -84,6 +84,9 @@ public class Player : EventInvoker
         unityFloatEvents.Add(FloatEventName.AddHealthEvent, new AddHealthEvent());
         EventManager.AddFloatInvoker(FloatEventName.AddHealthEvent, this);
 
+        // Add as listener for fill player health event
+        EventManager.AddListener(EventName.FillPlayerHealth, HandleFillHealth);
+
         // Add as invoker for loose health event
         unityFloatEvents.Add(FloatEventName.LooseHealthEvent, new LooseHealthEvent());
         EventManager.AddFloatInvoker(FloatEventName.LooseHealthEvent, this);
@@ -338,6 +341,9 @@ public class Player : EventInvoker
             // Instantiate the projectile
             GameObject proj = Instantiate(thorn, spawnPosition, Quaternion.identity);
 
+            // Play shoot sound
+            AudioManager.Play(AudioName.Shoot);
+
             // Calculate direction to shoot
             Vector3 shootDirection = (proj.transform.position - offSetPosition).normalized;
             Vector2 direction = new Vector2(shootDirection.x, shootDirection.y);
@@ -360,6 +366,14 @@ public class Player : EventInvoker
     private void HandleMaxHealthModChanged()
     {
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
+    }
+
+    /// <summary>
+    /// Fills player health
+    /// </summary>
+    private void HandleFillHealth()
+    {
+        health = maxHealth;
     }
 
     /// <summary>

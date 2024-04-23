@@ -20,10 +20,16 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField]
     Toggle fullscreenToggle;
 
-    public void SetVolume(float volume)
+    public void SetFXVolume(float volume)
     {
         // Change volume once set up
         GameObject.Find("GameAudioSource").GetComponent<AudioSource>().volume = volume;
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        // Change volume once set up
+        GameObject.Find("LoopingAudio").GetComponent<AudioSource>().volume = volume;
     }
 
     public void SetFullscreen(bool isFullscreen)
@@ -88,7 +94,8 @@ public class SettingsMenu : MonoBehaviour
     {
         SetupResolution();
 
-        GameObject.Find("VolumeSlider").GetComponent<Slider>().value = GameObject.Find("GameAudioSource").GetComponent<AudioSource>().volume;
+        GameObject.Find("FXVolumeSlider").GetComponent<Slider>().value = GameObject.Find("GameAudioSource").GetComponent<AudioSource>().volume;
+        GameObject.Find("MusicVolumeSlider").GetComponent<Slider>().value = GameObject.Find("LoopingAudio").GetComponent<AudioSource>().volume;
 
     }
 

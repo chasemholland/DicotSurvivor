@@ -9,6 +9,9 @@ public class Shop : MonoBehaviour
     [SerializeField]
     GameObject shop;
 
+    [SerializeField]
+    Material UIOrb;
+
     // Loot pool for increased uptake
     [SerializeField]
     List<GameObject> prefabCommonButtons;
@@ -133,5 +136,10 @@ public class Shop : MonoBehaviour
 
             reproductionModsAdded = true;
         }
+    }
+
+    private void Update()
+    {
+        UIOrb.SetFloat("_UnscaledTime", Time.unscaledTime);
     }
 }

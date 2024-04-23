@@ -11,6 +11,9 @@ public class MutationShop : MonoBehaviour
     [SerializeField]
     GameObject mutationShop;
 
+    [SerializeField]
+    Material UIOrb;
+
     // Loot pool for mutations
     [SerializeField]
     List<GameObject> prefabMutationButtons;
@@ -69,5 +72,10 @@ public class MutationShop : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void Update()
+    {
+        UIOrb.SetFloat("_UnscaledTime", Time.unscaledTime);
     }
 }

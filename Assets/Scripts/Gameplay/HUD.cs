@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// <summary>
 /// HUD behavior
 /// </summary>
-public class HUD : MonoBehaviour
+public class HUD : EventInvoker
 {
     [SerializeField]
     GameObject levelLoader;
@@ -78,6 +78,10 @@ public class HUD : MonoBehaviour
         // Add as listener for boss death event
         EventManager.AddListener(EventName.BossDeathEvent, HandleBossDeath);
 
+        // Add as invoker for fill player health
+        unityEvents.Add(EventName.FillPlayerHealth, new FillPlayerHealthEvent());
+        EventManager.AddInvoker(EventName.FillPlayerHealth, this);
+
     }
 
     /// <summary>
@@ -127,7 +131,12 @@ public class HUD : MonoBehaviour
         // Check for level up
         if (xpValue >= levelUpAmount)
         {
+            // Play level up sound
             AudioManager.Play(AudioName.LevelUp);
+
+            // Fill the players health
+            unityEvents[EventName.FillPlayerHealth].Invoke();
+            healthValue = maxHealth;
 
             xpValue -= levelUpAmount;
             // Update level up amount with previous amount
@@ -151,6 +160,10 @@ public class HUD : MonoBehaviour
     /// </summary>
     private void HandleBossDeath()
     {
+        // Fill player health
+        unityEvents[EventName.FillPlayerHealth].Invoke();
+        healthValue = maxHealth;
+
         // Check that there are still mutations to be unlocked
         foreach (float value in Mod.ActiveMutations.Values)
         {

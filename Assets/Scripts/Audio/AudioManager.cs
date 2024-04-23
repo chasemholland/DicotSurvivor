@@ -38,7 +38,9 @@ public static class AudioManager
     {
         initialized = true;
         audioSource = source;
+        audioSource.volume = 0.5f;
         audioClips.Add(AudioName.Select, Resources.Load<AudioClip>("Select"));
+        audioClips.Add(AudioName.Shoot, Resources.Load<AudioClip>("Shoot"));
         audioClips.Add(AudioName.PlayerHurt, Resources.Load<AudioClip>("Player_Hurt"));
         audioClips.Add(AudioName.EnemyHurt, Resources.Load<AudioClip>("Enemy_Hurt"));
         audioClips.Add(AudioName.OrbCollect, Resources.Load<AudioClip>("Orb_Collect"));
@@ -51,16 +53,14 @@ public static class AudioManager
     /// <param name="clipName"></param>
     public static void Play(AudioName clipName)
     {
-        //if (clipName.Equals(AudioName.ShipLaser) || clipName.Equals(AudioName.Pickup))
-        //{
-            //audioSource.PlayOneShot(audioClips[clipName]); //, 0.5f);
-        //}
-        //else
-        //{
-
-        audioSource.PlayOneShot(audioClips[clipName]);
-
-        //}
+        if (clipName.Equals(AudioName.EnemyHurt) || clipName.Equals(AudioName.Shoot))
+        {
+            audioSource.PlayOneShot(audioClips[clipName], audioSource.volume / 2);
+        }
+        else
+        {
+            audioSource.PlayOneShot(audioClips[clipName]);
+        }
 
     }
 

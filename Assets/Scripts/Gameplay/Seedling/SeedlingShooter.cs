@@ -133,6 +133,9 @@ public class SeedlingShooter : MonoBehaviour
                 float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
                 seedObject.transform.rotation = Quaternion.Euler(0, 0, rot + 90);
                 seedObject.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x, direction.y).normalized * seedForce;
+
+                // Play shoot sound after succesfully shooting
+                AudioManager.Play(AudioName.Shoot);
             }
             catch (System.Exception)
             {

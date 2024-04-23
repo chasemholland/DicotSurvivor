@@ -8,8 +8,10 @@ using UnityEngine;
 public enum AudioName
 {
     Select,
+    Shoot,
     PlayerHurt,
     EnemyHurt,
     OrbCollect,
-    LevelUp
+    LevelUp,
+    Main,
 }
