@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,6 +14,19 @@ public class HUD : EventInvoker
 {
     [SerializeField]
     GameObject levelLoader;
+
+    [SerializeField]
+    TextMeshProUGUI gameTime;
+    float elapsedTime = 0;
+    bool updateTime = true;
+
+    [SerializeField]
+    TextMeshProUGUI level;
+    string levelPrefix = "Level: ";
+
+    [SerializeField]
+    TextMeshProUGUI kills;
+    string killsPrefix = "Kills: ";
 
     [SerializeField]
     GameObject shopBar;
@@ -78,6 +92,12 @@ public class HUD : EventInvoker
         // Add as listener for boss death event
         EventManager.AddListener(EventName.BossDeathEvent, HandleBossDeath);
 
+        // Add as listener for enemy death event
+        EventManager.AddListener(EventName.EnemyDeath, HandleEnemyDeath);
+
+        // Add as lsitener for player death event
+        EventManager.AddListener(EventName.PlayerDeathEvent, HandlePlayerDeath);
+
         // Add as invoker for fill player health
         unityEvents.Add(EventName.FillPlayerHealth, new FillPlayerHealthEvent());
         EventManager.AddInvoker(EventName.FillPlayerHealth, this);
@@ -89,7 +109,32 @@ public class HUD : EventInvoker
     /// </summary>
     void Update()
     {
-        
+        if (updateTime)
+        {
+            // Update elapsed game time
+            elapsedTime += Time.deltaTime;
+            gameTime.text = GetTimeFormat(elapsedTime);
+        } 
+    }
+
+    private string GetTimeFormat(float time)
+    {
+        string hr, min, sec;
+        sec = Math.Floor(time).ToString();
+        if (time >= 60)
+        {
+            sec = Math.Floor(time % 60).ToString();
+        }
+        min = Math.Floor(time / 60).ToString();
+        if (time >= 3600)
+        {
+            min = Math.Floor(time % 3600).ToString();
+        }
+        hr = Math.Floor(time / 3600).ToString();
+        if (hr.Length < 2) hr = "0" + hr;
+        if (min.Length < 2) min = "0" + min;
+        if (sec.Length < 2) sec = "0" + sec;
+        return hr + ":" + min + ":" + sec;
     }
 
     private void SetGUI()
@@ -97,6 +142,8 @@ public class HUD : EventInvoker
         healthBar.GetComponent<Slider>().value = healthValue / maxHealth;
         shopBar.GetComponent<Slider>().value = xpValue / levelUpAmount;
         xpText.text = xpValue.ToString() + " / " + levelUpAmount.ToString();
+        level.text = levelPrefix + Tracker.Level.ToString();
+        kills.text = killsPrefix + Tracker.Kills.ToString();
     }
 
     /// <summary>
@@ -174,6 +221,22 @@ public class HUD : EventInvoker
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// Updates kill count when invoked
+    /// </summary>
+    private void HandleEnemyDeath()
+    {
+        kills.text = killsPrefix + Tracker.Kills.ToString();
+    }
+
+    /// <summary>
+    /// Stops updating game time on player death
+    /// </summary>
+    private void HandlePlayerDeath()
+    {
+        updateTime = false;
     }
 
     /// <summary>

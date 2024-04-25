@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
@@ -108,6 +107,10 @@ public class Enemy : EventInvoker
         // Get refernce to shader effect
         mat = gameObject.GetComponent<SpriteRenderer>().material;
 
+        // Add as invoker for enemy death event
+        unityEvents.Add(EventName.EnemyDeath, new EnemyDeathEvent());
+        EventManager.AddInvoker(EventName.EnemyDeath, this);
+
         //-------------- Camera Related ---------------------------------------------------------------------------
 
         // Set camera points
@@ -144,6 +147,8 @@ public class Enemy : EventInvoker
         {
             // Update kills
             Tracker.Kills += 1;
+            unityEvents[EventName.EnemyDeath].Invoke();
+            EventManager.RemoveInvoker(EventName.EnemyDeath, this);
             SpawnRandomPickup();
             Destroy(gameObject);
         }
@@ -277,7 +282,9 @@ public class Enemy : EventInvoker
         // Chance to drop a heart
         if (Random.Range(0f, 1f) >= 0.95f)
         {
-            Instantiate(heart, transform.position, Quaternion.identity);
+            force = new Vector2(Random.Range(-2f, 4f), Random.Range(-2f, 2f));
+            GameObject heartObj = Instantiate(heart, transform.position, Quaternion.identity);
+            heartObj.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
         }
 
 

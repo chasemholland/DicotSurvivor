@@ -9,8 +9,10 @@ using UnityEngine;
 public class BossEnemy : Enemy
 {
     // Loot
+    //[SerializeField]
+    //List<GameObject> chests;
     [SerializeField]
-    List<GameObject> chests;
+    GameObject orbSpawner;
 
     /// <summary>
     /// Start is called before the first frame update
@@ -48,6 +50,9 @@ public class BossEnemy : Enemy
             Tracker.Kills += 1;
             SpawnRandomPickup();
             unityEvents[EventName.BossDeathEvent].Invoke();
+            unityEvents[EventName.EnemyDeath].Invoke();
+            EventManager.RemoveInvoker(EventName.BossDeathEvent, this);
+            EventManager.RemoveInvoker(EventName.EnemyDeath, this);
             Destroy(gameObject);
         }
         else
@@ -108,6 +113,10 @@ public class BossEnemy : Enemy
     /// </summary>
     protected override void SpawnRandomPickup()
     {
+        // Instantiate orb spawner
+        Instantiate(orbSpawner, transform.position, Quaternion.identity);
+
+        /*
         // Get loot pool
         float chance = Random.Range(0f, 1.0f);
 
@@ -127,6 +136,95 @@ public class BossEnemy : Enemy
         {
             Instantiate(chests[3], transform.position, Quaternion.identity);
         }
+        
+
+        // Chance to drop a heart
+        if (Random.Range(0f, 1f) >= 0.95f)
+        {
+            force = new Vector2(Random.Range(-2f, 4f), Random.Range(-2f, 2f));
+            GameObject heartObj = Instantiate(heart, transform.position, Quaternion.identity);
+            heartObj.GetComponent<Rigidbody2D>().AddForce(force, ForceMode2D.Impulse);
+        }
+
+
+        // Get number or experience orbs
+        int num = 0;
+        // Get loot pool
+        float numChance = Random.Range(0f, 1f);
+        // 50% chance for one orb
+        if (numChance <= 0.50)
+        {
+            num = 14;
+        }
+        // 26% chance for two orbs
+        else if (numChance <= 0.76)
+        {
+            num = 18;
+        }
+        // 16% chance for three orbs
+        else if (numChance <= 0.92)
+        {
+            num = 22;
+        }
+        // 6% chance for four orbs
+        else if (numChance <= 0.98)
+        {
+            num = 26;
+        }
+        // 2% chance for 5 orbs
+        else if (numChance <= 1.0)
+        {
+            num = 30;
+        }
+
+        // Spawn num amount of orbs with chance for different sizes
+        for (int i = 1; i <= num; i++)
+        {
+            // Get random force for movement
+            force = new Vector2(Random.Range(-2f, 4f), Random.Range(-2f, 2f));
+
+            float sizeChance = Random.Range(0f, 1f);
+            {
+                // 30% chance for small orb
+                if (sizeChance <= 0.30)
+                {
+                    GameObject orb = Instantiate(expOrbs[0], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force * 2, ForceMode2D.Impulse);
+                }
+                // 26% chance for medium orb
+                else if (sizeChance <= 0.56)
+                {
+                    GameObject orb = Instantiate(expOrbs[1], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force * 2, ForceMode2D.Impulse);
+                }
+                // 18% chance for large orb
+                else if (sizeChance <= 0.74)
+                {
+                    GameObject orb = Instantiate(expOrbs[2], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force * 2, ForceMode2D.Impulse);
+                }
+                // 12% chance for xlarge orb
+                else if (sizeChance <= 0.86)
+                {
+                    GameObject orb = Instantiate(expOrbs[3], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force * 2, ForceMode2D.Impulse);
+                }
+                // 8% chance for xxlarge orb
+                else if (sizeChance <= 0.94)
+                {
+                    GameObject orb = Instantiate(expOrbs[4], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force * 2, ForceMode2D.Impulse);
+                }
+                // 6% chance for xxxlargeorb
+                else if (sizeChance <= 1.0)
+                {
+                    GameObject orb = Instantiate(expOrbs[5], transform.position, Quaternion.identity);
+                    orb.GetComponent<Rigidbody2D>().AddForce(force * 2, ForceMode2D.Impulse);
+                }
+            }
+        }
+        */
+
     }
 
     /// <summary>

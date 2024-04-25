@@ -47,7 +47,7 @@ public static class LoopingAudioManager
     {
         initialized = true;
         audioSource = source;
-        audioSource.volume = 0.5f;
+        audioSource.volume = 0.3f;
         audioClips.Add(AudioName.Main, Resources.Load<AudioClip>("Main"));
     }
 
