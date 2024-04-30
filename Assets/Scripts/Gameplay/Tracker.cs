@@ -20,6 +20,7 @@ public static class Tracker
     static float level = 1;
     static float levelUpAmount = 50;
     static float levelUpAmountDifference = 50;
+    static int xpMulti = 1;
 
 
     #endregion
@@ -40,12 +41,12 @@ public static class Tracker
 
     public static float EnemyHealthMod
     {
-        get { return enemyHealthMod + (Kills / 100); }
+        get { return enemyHealthMod + (Kills / 50); }
     }
 
     public static float EnemySpawnRateMod
     {
-        get { return (enemySpawnRateMod + (Kills / 30)) / 100; }
+        get { return (enemySpawnRateMod + (Kills / 15)) / 100; }
     }
 
     public static float Level
@@ -65,6 +66,12 @@ public static class Tracker
         get { return Mathf.Floor(levelUpAmountDifference * Mathf.Sqrt(Level)); }
     }
 
+    public static int XPMulti
+    { 
+        get { return xpMulti; }
+        set { xpMulti = value; }
+    }
+
 
     #endregion
 
@@ -80,6 +87,7 @@ public static class Tracker
         level = 1;
         levelUpAmount = 50;
         levelUpAmountDifference = 50;
+        xpMulti = 1;
     }
 
     #endregion

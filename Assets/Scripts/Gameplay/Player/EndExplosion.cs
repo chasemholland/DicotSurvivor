@@ -7,8 +7,21 @@ using UnityEngine;
     /// </summary>
 public class EndExplosion : MonoBehaviour
 {
+    // End of animation sprite
     [SerializeField]
     Sprite end;
+
+    // Start of animation sprite
+    [SerializeField]
+    Sprite start;
+
+    // Object pool for explosion
+    ObjectPool pool;
+
+    private void Start()
+    {
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+    }
 
     /// <summary>
     /// Update is called once per frame
@@ -17,7 +30,15 @@ public class EndExplosion : MonoBehaviour
     {
         if (gameObject.GetComponent<SpriteRenderer>().sprite == end)
         {
-            Destroy(gameObject);
+            if (gameObject.CompareTag("SeedExplosion"))
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = start;
+                pool.ReturnExplosion(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

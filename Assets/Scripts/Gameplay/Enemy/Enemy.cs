@@ -90,7 +90,7 @@ public class Enemy : EventInvoker
         else if (gameObject.CompareTag("RedBoss"))
         {
             // Get boss health
-            health = ConfigUtils.BossHealth + (Tracker.EnemyHealthMod * 50);
+            health = ConfigUtils.BossHealth + (Tracker.EnemyHealthMod * 10);
         }
         
         // Set up death effect timer
@@ -192,6 +192,14 @@ public class Enemy : EventInvoker
     /// </summary>
     public virtual void AttackPlayer()
     {    
+    }
+
+    /// <summary>
+    /// Attacks player when called by animator
+    /// </summary>
+    public virtual bool Attack()
+    {
+        return true;
     }
 
     /// <summary>

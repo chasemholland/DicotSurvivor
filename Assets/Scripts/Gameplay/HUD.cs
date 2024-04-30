@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,6 +28,11 @@ public class HUD : EventInvoker
     [SerializeField]
     TextMeshProUGUI kills;
     string killsPrefix = "Kills: ";
+
+    [SerializeField]
+    TextMeshProUGUI xpMultiplier;
+    string multiplierPrefix = "XP Multiplier: ";
+    float lastDamageTaken = 0;
 
     [SerializeField]
     GameObject shopBar;
@@ -102,6 +108,9 @@ public class HUD : EventInvoker
         unityEvents.Add(EventName.FillPlayerHealth, new FillPlayerHealthEvent());
         EventManager.AddInvoker(EventName.FillPlayerHealth, this);
 
+        // Add as listener for xp multiplier changed event
+        EventManager.AddListener(EventName.MultiplierChangedEvent, HandleMultiplierChanged);
+
     }
 
     /// <summary>
@@ -114,7 +123,10 @@ public class HUD : EventInvoker
             // Update elapsed game time
             elapsedTime += Time.deltaTime;
             gameTime.text = GetTimeFormat(elapsedTime);
-        } 
+        }
+
+        GetMultiplier();
+        xpMultiplier.text = multiplierPrefix + Tracker.XPMulti.ToString();
     }
 
     private string GetTimeFormat(float time)
@@ -137,6 +149,33 @@ public class HUD : EventInvoker
         return hr + ":" + min + ":" + sec;
     }
 
+    /// <summary>
+    /// Gets xp multiplier based on time since damage taken
+    /// </summary>
+    private void GetMultiplier()
+    {
+        if (elapsedTime - lastDamageTaken < 30f)
+        {
+            Tracker.XPMulti = 1;
+        }
+        else if (elapsedTime - lastDamageTaken < 60f)
+        {
+            Tracker.XPMulti = 2;
+        }
+        else if (elapsedTime - lastDamageTaken < 90f)
+        {
+            Tracker.XPMulti = 3;
+        }
+        else if (elapsedTime - lastDamageTaken < 120f)
+        {
+            Tracker.XPMulti = 4;
+        }
+        else
+        {
+            Tracker.XPMulti = 5;
+        }
+    }
+
     private void SetGUI()
     {
         healthBar.GetComponent<Slider>().value = healthValue / maxHealth;
@@ -144,6 +183,7 @@ public class HUD : EventInvoker
         xpText.text = xpValue.ToString() + " / " + levelUpAmount.ToString();
         level.text = levelPrefix + Tracker.Level.ToString();
         kills.text = killsPrefix + Tracker.Kills.ToString();
+        xpMultiplier.text = multiplierPrefix + Tracker.XPMulti.ToString();
     }
 
     /// <summary>
@@ -166,6 +206,15 @@ public class HUD : EventInvoker
         healthValue -= value;
         healthValue = Mathf.Clamp(healthValue, 0, maxHealth);
         SetGUI();
+    }
+
+    /// <summary>
+    /// Resets multipier text
+    /// </summary>
+    private void HandleMultiplierChanged()
+    {
+        lastDamageTaken = elapsedTime;
+        xpMultiplier.text = multiplierPrefix + Tracker.XPMulti.ToString();
     }
     
     private void HandleAddExperience(float value)
@@ -263,6 +312,8 @@ public class HUD : EventInvoker
 
     public void OnQuitClick()
     {
+        // Disable player
+        GameObject.FindWithTag("Player").SetActive(false);
         Time.timeScale = 1;
         levelLoader.GetComponent<LevelLoader>().LoadNextScene("MainMenu");
         //SceneManager.LoadScene("MainMenu");

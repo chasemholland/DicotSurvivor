@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 1187610711524586160}
   - component: {fileID: 375115413922188527}
   m_Layer: 0
-  m_Name: New_Seed_Explosion
-  m_TagString: Untagged
+  m_Name: SeedExplosion
+  m_TagString: SeedExplosion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,3 +120,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   end: {fileID: 334430015, guid: d74f67c114ba20c4ca9916f33d33ec22, type: 3}
+  start: {fileID: -1100394117, guid: d74f67c114ba20c4ca9916f33d33ec22, type: 3}

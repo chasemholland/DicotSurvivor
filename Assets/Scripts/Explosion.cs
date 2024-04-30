@@ -9,6 +9,12 @@ public class Explosion : MonoBehaviour
 {
     [SerializeField]
     ParticleSystem pSystem;
+    ObjectPool pool;
+
+    private void Start()
+    {
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+    }
 
     /// <summary>
     /// Update is called once per frame
@@ -17,7 +23,14 @@ public class Explosion : MonoBehaviour
     {
         if (!pSystem.isPlaying)
         {
-            Destroy(gameObject);
+            if (gameObject.name.StartsWith("Cyan"))
+            {
+                pool.ReturnCyanProjectilExplosion(gameObject);
+            }
+            else
+            {
+                pool.ReturnRedBossProjectileExplosion(gameObject);
+            }
         }
     }
 }

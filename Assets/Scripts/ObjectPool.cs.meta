@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6df34d93398dd2a49938147989b720c6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - prefabSeed: {fileID: 817219742232727799, guid: d10fb8b8f3f884f47a72677d5098f22d, type: 3}
+  - prefabSmallSeed: {fileID: 817219742232727799, guid: e6471ac0606351f45912ea17e37ab061, type: 3}
+  - prefabSeedlingSeed: {fileID: 3888573453244232690, guid: 4ab8012fe70ac4342af790dd9e3800f0, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

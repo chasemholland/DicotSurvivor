@@ -7,12 +7,18 @@ using UnityEngine;
     /// </summary>
 public class CyanEnemy : Enemy
 {
+    // Object Pool
+    ObjectPool pool;
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     protected override void Start()
     {
         base.Start();
+
+        // Get reference to pool
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
     }
 
     /// <summary>
@@ -53,7 +59,9 @@ public class CyanEnemy : Enemy
                     Vector3 directionToPlayer = (player.transform.position - projectileTransform.position).normalized;
                     Vector2 direction = new Vector2(directionToPlayer.x, directionToPlayer.y);
 
-                    GameObject proj = Instantiate(projectile, projectileTransform.position, Quaternion.identity);
+                    GameObject proj = pool.GetCyanProjectile();  //Instantiate(projectile, projectileTransform.position, Quaternion.identity);
+                    proj.transform.position = projectileTransform.position;
+                    proj.SetActive(true);
                     proj.GetComponent<Rigidbody2D>().velocity = direction * projForce;
                 }
                 catch (System.Exception)

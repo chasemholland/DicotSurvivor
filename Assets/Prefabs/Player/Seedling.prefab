@@ -131,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: {fileID: 3888573453244232690, guid: 4ab8012fe70ac4342af790dd9e3800f0, type: 3}
   seedTransform: {fileID: 7733002298497678049}
+  pool: {fileID: 0}
 --- !u!50 &3495929316382383578
 Rigidbody2D:
   serializedVersion: 4

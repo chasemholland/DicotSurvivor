@@ -23,10 +23,14 @@ public class LevelLoader : MonoBehaviour
         // start fade
         transition.SetTrigger("Start");
 
+        var newScene = SceneManager.LoadSceneAsync(scene);
+        newScene.allowSceneActivation = false;
+
         // wait for fade to complete
         yield return new WaitForSeconds(transitionTime);
 
+        newScene.allowSceneActivation = true;
         // load scene
-        SceneManager.LoadScene(scene);
+        //SceneManager.LoadScene(scene);
     }
 }

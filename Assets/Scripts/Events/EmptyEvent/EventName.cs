@@ -10,6 +10,7 @@ public enum EventName
     FillPlayerHealth,
     TimerFinishedEvent,
     PlayerDeathEvent,
+    MultiplierChangedEvent,
     EnemyDeath,
     BossDeathEvent,
     BossSpawnedEvent,

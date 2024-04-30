@@ -11,8 +11,11 @@ public class Seedling : MonoBehaviour
 {
     float health;
     bool vulnerable = true;
-    Timer damageCooldown;
-    float cooldown = 1;
+    Timer damageFlash;
+    float flashDuration = 0.1f;
+    int flashes = 0;
+    Color transparent;
+    Color nonTransparent;
 
     /// <summary>
     /// Start is called before the first frame update
@@ -23,9 +26,12 @@ public class Seedling : MonoBehaviour
         health = ConfigUtils.SeedlingHealth + Mod.ActiveModifiers["SeedlingHealthMod"];
 
         // Set up damage cooldown timer
-        damageCooldown = gameObject.AddComponent<Timer>();
-        damageCooldown.AddTimerFinishedListener(UpdateVulnerability);
-        damageCooldown.Duration = cooldown;
+        damageFlash = gameObject.AddComponent<Timer>();
+        damageFlash.AddTimerFinishedListener(FlashEffect);
+        damageFlash.Duration = flashDuration;
+
+        transparent = new Color(1, 1, 1, 0.5f);
+        nonTransparent = new Color(1, 1, 1, 1);
     }
 
     private void OnCollisionStay2D(Collision2D coll)
@@ -52,10 +58,13 @@ public class Seedling : MonoBehaviour
             return;
         }
 
-        if (collision.gameObject.CompareTag("Projectile"))
+        if (vulnerable)
         {
-            HandleDamage(collision.gameObject);
-            return;
+            if (collision.gameObject.CompareTag("Projectile"))
+            {
+                HandleDamage(collision.gameObject);
+                return;
+            }
         }
     }
 
@@ -67,7 +76,7 @@ public class Seedling : MonoBehaviour
 
         // Go invulnerable for some time
         vulnerable = false;
-        damageCooldown.Run();
+        damageFlash.Run();
 
         // Check if dead
         if (health <= 0)
@@ -77,12 +86,30 @@ public class Seedling : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Makes player vulnerable after cooldown
-    /// </summary>
-    private void UpdateVulnerability()
+    private void FlashEffect()
     {
-        vulnerable = true;
-        damageCooldown.Duration = cooldown;
+        if (gameObject.GetComponent<SpriteRenderer>().color == nonTransparent)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = transparent;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = nonTransparent;
+        }
+
+        flashes++;
+
+        if (flashes > 8 && gameObject.GetComponent<SpriteRenderer>().color == nonTransparent)
+        {
+            flashes = 0;
+            vulnerable = true;
+            damageFlash.Stop();
+        }
+        else
+        {
+            damageFlash.Duration = flashDuration;
+            damageFlash.Run();
+        }
+
     }
 }

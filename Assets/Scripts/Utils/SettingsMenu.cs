@@ -23,7 +23,12 @@ public class SettingsMenu : MonoBehaviour
     public void SetFXVolume(float volume)
     {
         // Change volume once set up
-        GameObject.Find("GameAudioSource").GetComponent<AudioSource>().volume = volume;
+        //AudioSource[] sources = GameObject.Find("GameAudioSources").GetComponentsInChildren<AudioSource>();
+        //foreach (AudioSource source in sources)
+        //{
+            //source.volume = volume;
+        //}
+        AudioManager.Volume = volume;
     }
 
     public void SetMusicVolume(float volume)
@@ -94,7 +99,8 @@ public class SettingsMenu : MonoBehaviour
     {
         SetupResolution();
 
-        GameObject.Find("FXVolumeSlider").GetComponent<Slider>().value = GameObject.Find("GameAudioSource").GetComponent<AudioSource>().volume;
+        //GameObject.Find("FXVolumeSlider").GetComponent<Slider>().value = GameObject.Find("GameAudioSources").GetComponentInChildren<AudioSource>().volume;
+        GameObject.Find("FXVolumeSlider").GetComponent<Slider>().value = AudioManager.Volume;
         GameObject.Find("MusicVolumeSlider").GetComponent<Slider>().value = GameObject.Find("LoopingAudio").GetComponent<AudioSource>().volume;
 
     }

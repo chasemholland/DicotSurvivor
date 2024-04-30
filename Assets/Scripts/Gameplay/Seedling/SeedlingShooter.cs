@@ -18,6 +18,8 @@ public class SeedlingShooter : MonoBehaviour
     Timer shootTimer;
     float cooldown;
     bool flowerVisible = false;
+
+    ObjectPool pool;
     
 
     /// <summary>
@@ -25,6 +27,8 @@ public class SeedlingShooter : MonoBehaviour
     /// </summary>
     void Start()
     {
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+
         // Get refrence to seedling animator
         animator = gameObject.GetComponentInParent<Animator>();
 
@@ -120,7 +124,10 @@ public class SeedlingShooter : MonoBehaviour
         if (targetEnemy != null)
         {
             // Shoot enemy
-            GameObject seedObject = Instantiate(seed, seedTransform.position, Quaternion.identity);
+            //GameObject seedObject = Instantiate(seed, seedTransform.position, Quaternion.identity);
+            GameObject seedObject = pool.GetSeedlingSeed();
+            seedObject.transform.position = seedTransform.position;
+            seedObject.SetActive(true);
 
             // Using a try block just in case player kills enemy during targeting
             try
@@ -142,7 +149,8 @@ public class SeedlingShooter : MonoBehaviour
                 // If seed hasn't been detroyed by enemy then destroy the seed
                 if (seedObject != null)
                 {
-                    Destroy(seedObject);
+                    //Destroy(seedObject);
+                    pool.ReturnSeedlingSeed(seedObject);
                 }
             }
         }

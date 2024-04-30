@@ -1,7 +1,6 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
@@ -13,6 +12,7 @@ public class Player : EventInvoker
     float health;
     float maxHealth;
     CinemachineVirtualCamera killCam;
+    ObjectPool pool;
 
     // Seedling variables
     bool reproductionUnlocked = false;
@@ -48,6 +48,9 @@ public class Player : EventInvoker
     /// </summary>
     void Start()
     {
+        // Get reference to object pool
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+
         // Set health
         health = ConfigUtils.PlayerHealth;
         maxHealth = ConfigUtils.PlayerMaxHealth + Mod.ActiveModifiers["MaxHealthMod"];
@@ -95,6 +98,10 @@ public class Player : EventInvoker
         unityEvents.Add(EventName.PlayerDeathEvent, new PlayerDeathEvent());
         EventManager.AddInvoker(EventName.PlayerDeathEvent, this);
 
+        // Add as invoker for xp multiplier changed event
+        unityEvents.Add(EventName.MultiplierChangedEvent, new MultiplierChangedEvent());
+        EventManager.AddInvoker(EventName.MultiplierChangedEvent, this);
+
         // Set up damage flash
         damageFlash = gameObject.AddComponent<Timer>();
         damageFlash.Duration = flashDuration;
@@ -119,6 +126,9 @@ public class Player : EventInvoker
             {
                 AudioManager.Play(AudioName.PlayerHurt);
                 HandleDamage(coll.gameObject);
+                // Reset xp multiplier
+                Tracker.XPMulti = 1;
+                unityEvents[EventName.MultiplierChangedEvent].Invoke();
                 return;
             }
         } 
@@ -142,6 +152,9 @@ public class Player : EventInvoker
             {
                 AudioManager.Play(AudioName.PlayerHurt);
                 HandleDamage(collision.gameObject);
+                // Reset xp multiplier
+                Tracker.XPMulti = 1;
+                unityEvents[EventName.MultiplierChangedEvent].Invoke();
             }
             return;
         }
@@ -174,8 +187,8 @@ public class Player : EventInvoker
                 // Get the value
                 float value = GetValue(t);
 
-                // Trigger add money event
-                unityFloatEvents[FloatEventName.AddExperienceEvent].Invoke(value);
+                // Trigger add experience event
+                unityFloatEvents[FloatEventName.AddExperienceEvent].Invoke(value * Tracker.XPMulti);
 
                 // Destroy game object
                 Destroy(collision.gameObject);
@@ -339,7 +352,9 @@ public class Player : EventInvoker
             Vector3 spawnPosition = offSetPosition + Quaternion.Euler(0, 0, angle) * Vector3.right * radius;
 
             // Instantiate the projectile
-            GameObject proj = Instantiate(thorn, spawnPosition, Quaternion.identity);
+            GameObject proj = pool.GetThorn(); // Instantiate(thorn, spawnPosition, Quaternion.identity);
+            proj.transform.position = spawnPosition;
+            proj.SetActive(true);
 
             // Play shoot sound
             AudioManager.Play(AudioName.Shoot);

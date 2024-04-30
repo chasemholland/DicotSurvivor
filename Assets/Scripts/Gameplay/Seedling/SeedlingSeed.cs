@@ -7,8 +7,41 @@ using UnityEngine;
     /// </summary>
 public class SeedlingSeed : MonoBehaviour
 {
-    [SerializeField]
-    GameObject explosion;
+    // Object pool for seeds and explosions
+    ObjectPool pool;
+
+    // Refernce to cinemachine
+    GameObject cam;
+    float elapsedSeconds = 0;
+
+    private void Start()
+    {
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+
+        // Get reference to cinemachine
+        cam = GameObject.FindGameObjectWithTag("Follower");
+
+    }
+
+    private void Update()
+    {
+        elapsedSeconds += Time.deltaTime;
+        if (elapsedSeconds >= 2)
+        {
+            CheckForReturn();
+            elapsedSeconds = 0;
+        }
+    }
+
+    private void CheckForReturn()
+    {
+        if (Vector2.Distance(cam.transform.position, gameObject.transform.position) > 25)
+        {
+            // Return seed to pool
+            elapsedSeconds = 0;
+            pool.ReturnSeedlingSeed(gameObject);
+        }
+    }
 
     /// <summary>
     /// Handles collision with any enemys
@@ -17,13 +50,21 @@ public class SeedlingSeed : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GameObject coll = collision.gameObject;
-        if (coll.CompareTag("Enemy") || coll.CompareTag("RedBoss") || coll.CompareTag("Wall") || coll.CompareTag("BossWall") || coll.CompareTag("Player"))
+        if (coll.CompareTag("Enemy") || coll.CompareTag("RedBoss"))
         {
-            // Spawn seed explosion animation
-            Instantiate(explosion, transform.position, Quaternion.identity);
+            // Get seed explosion from pool
+            GameObject explosion = pool.GetExplosion();
+            explosion.transform.position = gameObject.transform.position;
+            explosion.SetActive(true);
 
-            // Destroy the game object
-            Destroy(gameObject);
+            // Return seed to pool
+            pool.ReturnSeedlingSeed(gameObject);
+        }
+
+        if (coll.CompareTag("Wall") || coll.CompareTag("BossWall") || coll.CompareTag("Player"))
+        {
+            // Return seed to pool
+            pool.ReturnSeedlingSeed(gameObject);
         }
     }
 }

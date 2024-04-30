@@ -9,10 +9,11 @@ using UnityEngine;
 public class BossEnemy : Enemy
 {
     // Loot
-    //[SerializeField]
-    //List<GameObject> chests;
     [SerializeField]
     GameObject orbSpawner;
+
+    // Object Pool
+    ObjectPool pool;
 
     /// <summary>
     /// Start is called before the first frame update
@@ -22,6 +23,9 @@ public class BossEnemy : Enemy
         base.Start();
         
         //-------- Boss Related ----------------------------------------------------
+
+        // Get reference to object pool
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
 
         // Get boss projectile force
         projForce = 12f;
@@ -81,7 +85,9 @@ public class BossEnemy : Enemy
         Vector3 spawnPosition = projectileTransform.position + Quaternion.Euler(0, 0, angle) * startPos * radius;
 
         // Instantiate the projectile
-        GameObject proj = Instantiate(projectile, spawnPosition, Quaternion.identity);
+        GameObject proj = pool.GetRedBossProjectile(); //Instantiate(projectile, spawnPosition, Quaternion.identity);
+        proj.transform.position = spawnPosition;
+        proj.SetActive(true);
 
         // Calculate direction to shoot
         Vector3 shootDirection = (proj.transform.position - projectileTransform.position).normalized;

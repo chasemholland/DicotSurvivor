@@ -9,6 +9,12 @@ public class Thorn : MonoBehaviour
 {
     [SerializeField]
     GameObject explosion;
+    ObjectPool pool;
+
+    private void Start()
+    {
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+    }
 
     /// <summary>
     /// Handles collision with any enemys
@@ -21,11 +27,13 @@ public class Thorn : MonoBehaviour
         // Try and spawn seedling if mutation active
         if (coll.CompareTag("Enemy") || coll.CompareTag("RedBoss") || coll.CompareTag("Wall") || coll.CompareTag("BossWall"))
         {
-            // Spawn seed explosion animation
-            Instantiate(explosion, transform.position, Quaternion.identity);
+            // Get thorn explosion from pool
+            GameObject exp = pool.GetThornExplosion();
+            exp.transform.position = transform.position;
+            exp.SetActive(true);
 
-            // Destroy the game object
-            Destroy(gameObject);
+            // Return thorn to pool
+            pool.ReturnThorn(gameObject);
         }
     }
 }

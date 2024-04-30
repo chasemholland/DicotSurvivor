@@ -1,7 +1,6 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
@@ -74,8 +73,8 @@ public class EndlessSpawner : EventInvoker
 
     private void SpawnEnemies()
     {
-        // Spawn boss every 100 kills
-        if (Tracker.Kills >= 100 * currentBoss)
+        // Spawn boss every 150 kills
+        if (Tracker.Kills >= 20 * currentBoss)
         {
             // Set current boss
             currentBoss++;
@@ -145,7 +144,64 @@ public class EndlessSpawner : EventInvoker
             if (yCoord >= yRangeMin + 2f && yCoord <= yRangeMax - 2f)
             {
                 // Spawn random enemy
-                int type = Random.Range(0, enemies.Count);
+                int type = 0;
+                if (Tracker.Kills < 10)
+                {
+                    // Blue enemy
+                    type = 0;
+                }
+                else if (Tracker.Kills < 20)
+                {
+                    // 0 or 1 -- Blue or Purple
+                    float typeChance = Random.Range(0f, 1f);
+                    if (typeChance <= 0.75)
+                    {
+                        type = 0;
+                    }
+                    else
+                    {
+                        type = 1;
+                    }
+                }
+                else if (Tracker.Kills < 30)
+                {
+                    // 0, 1, or 2 -- Blue, Purple, or Pink
+                    float typeChance = Random.Range(0f, 1f);
+                    if (typeChance <= 0.5)
+                    {
+                        type = 0;
+                    }
+                    else if (typeChance <= 0.75)
+                    {
+                        type = 1;
+                    }
+                    else
+                    {
+                        type = 2;
+                    }
+                }
+                else
+                {
+                    // 0, 1, 2, or 3 -- Blue, Purple, Pink, or Cyan
+                    float typeChance = Random.Range(0f, 1f);
+                    if (typeChance <= 0.4)
+                    {
+                        type = 0;
+                    }
+                    else if (typeChance <= 0.6)
+                    {
+                        type = 1;
+                    }
+                    else if (typeChance <= 0.8)
+                    {
+                        type = 2;
+                    }
+                    else
+                    {
+                        type = 3;
+                    }
+                }
+                
                 Instantiate(enemies[type], new Vector3(xCoord, yCoord, 0), Quaternion.identity);
 
                 // Reset timer             
@@ -167,7 +223,7 @@ public class EndlessSpawner : EventInvoker
         }
 
 
-        /*
+        /* Spanws enemies all throughout the game world
         // Check if spawn point is out of the viewport
         if (xCoord <= xMin || xCoord >= xMax)
         {

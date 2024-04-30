@@ -39,6 +39,8 @@ TagManager:
   - Seedling
   - SeedlingSeed
   - Thorn
+  - SeedBank
+  - SeedExplosion
   layers:
   - Default
   - TransparentFX

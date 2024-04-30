@@ -23,11 +23,15 @@ public class SeedShooter : EventInvoker
     float cooldown;
     float seedNum = 1;
 
+    ObjectPool pool;
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+
         // Set defaults
         cooldown = ConfigUtils.PlayerShootCooldown;
         seedForce = ConfigUtils.PlayerSeedSpeed + Mod.ActiveModifiers["SeedSpeedMod"];
@@ -143,7 +147,10 @@ public class SeedShooter : EventInvoker
         Vector2 velocityTowardsMouse = new Vector2(directionToMouse.x, directionToMouse.y).normalized * seedForce;
 
         // Instantiate objects and set velocities
-        GameObject objTowardsMouse = Instantiate(seed, seedTransform.position, Quaternion.identity);
+        //GameObject objTowardsMouse = Instantiate(seed, seedTransform.position, Quaternion.identity);
+        GameObject objTowardsMouse = pool.GetSeed();
+        objTowardsMouse.transform.position = seedTransform.position;
+        objTowardsMouse.SetActive(true);
         Rigidbody2D rbTowardsMouse = objTowardsMouse.GetComponent<Rigidbody2D>();
         if (rbTowardsMouse != null)
         {
@@ -170,7 +177,10 @@ public class SeedShooter : EventInvoker
         Vector2 velocityNegativeAngle = negativeOffsetDirection * seedForce;
 
         // Instantiate objects and set velocities
-        GameObject objPositiveAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objPositiveAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objPositiveAngle = pool.GetSmallSeed();
+        objPositiveAngle.transform.position = seedTransform.position;
+        objPositiveAngle.SetActive(true);
         Rigidbody2D rbPositiveAngle = objPositiveAngle.GetComponent<Rigidbody2D>();
         if (rbPositiveAngle != null)
         {
@@ -182,7 +192,10 @@ public class SeedShooter : EventInvoker
             rbPositiveAngle.velocity = velocityPositiveAngle;
         }
 
-        GameObject objNegativeAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objNegativeAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objNegativeAngle = pool.GetSmallSeed();
+        objNegativeAngle.transform.position = seedTransform.position;
+        objNegativeAngle.SetActive(true);
         Rigidbody2D rbNegativeAngle = objNegativeAngle.GetComponent<Rigidbody2D>();
         if (rbNegativeAngle != null)
         {
@@ -212,7 +225,10 @@ public class SeedShooter : EventInvoker
         Vector2 velocityNegativeAngle = negativeOffsetDirection * seedForce;
 
         // Instantiate objects and set velocities
-        GameObject objTowardsMouse = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objTowardsMouse = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objTowardsMouse = pool.GetSmallSeed();
+        objTowardsMouse.transform.position = seedTransform.position;
+        objTowardsMouse.SetActive(true);
         Rigidbody2D rbTowardsMouse = objTowardsMouse.GetComponent<Rigidbody2D>();
         if (rbTowardsMouse != null)
         {
@@ -224,7 +240,10 @@ public class SeedShooter : EventInvoker
             rbTowardsMouse.velocity = velocityTowardsMouse;
         }
 
-        GameObject objPositiveAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objPositiveAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objPositiveAngle = pool.GetSmallSeed();
+        objPositiveAngle.transform.position = seedTransform.position;
+        objPositiveAngle.SetActive(true);
         Rigidbody2D rbPositiveAngle = objPositiveAngle.GetComponent<Rigidbody2D>();
         if (rbPositiveAngle != null)
         {
@@ -236,7 +255,10 @@ public class SeedShooter : EventInvoker
             rbPositiveAngle.velocity = velocityPositiveAngle;
         }
 
-        GameObject objNegativeAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objNegativeAngle = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objNegativeAngle = pool.GetSmallSeed();
+        objNegativeAngle.transform.position = seedTransform.position;
+        objNegativeAngle.SetActive(true);
         Rigidbody2D rbNegativeAngle = objNegativeAngle.GetComponent<Rigidbody2D>();
         if (rbNegativeAngle != null)
         {
@@ -268,7 +290,10 @@ public class SeedShooter : EventInvoker
 
 
         // Instantiate objects and set velocities
-        GameObject objPositiveAngleOne = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objPositiveAngleOne = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objPositiveAngleOne = pool.GetSmallSeed();
+        objPositiveAngleOne.transform.position = seedTransform.position;
+        objPositiveAngleOne.SetActive(true);
         Rigidbody2D rbPositiveAngleOne = objPositiveAngleOne.GetComponent<Rigidbody2D>();
         if (rbPositiveAngleOne != null)
         {
@@ -280,7 +305,10 @@ public class SeedShooter : EventInvoker
             rbPositiveAngleOne.velocity = velocityPositiveAngleOne;
         }
 
-        GameObject objPositiveAngleTwo = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objPositiveAngleTwo = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objPositiveAngleTwo = pool.GetSmallSeed();
+        objPositiveAngleTwo.transform.position = seedTransform.position;
+        objPositiveAngleTwo.SetActive(true);
         Rigidbody2D rbPositiveAngleTwo = objPositiveAngleTwo.GetComponent<Rigidbody2D>();
         if (rbPositiveAngleTwo != null)
         {
@@ -292,7 +320,10 @@ public class SeedShooter : EventInvoker
             rbPositiveAngleTwo.velocity = velocityPositiveAngleTwo;
         }
 
-        GameObject objNegativeAngleOne = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objNegativeAngleOne = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objNegativeAngleOne = pool.GetSmallSeed();
+        objNegativeAngleOne.transform.position = seedTransform.position;
+        objNegativeAngleOne.SetActive(true);
         Rigidbody2D rbNegativeAngleOne = objNegativeAngleOne.GetComponent<Rigidbody2D>();
         if (rbNegativeAngleOne != null)
         {
@@ -304,7 +335,10 @@ public class SeedShooter : EventInvoker
             rbNegativeAngleOne.velocity = velocityNegativeAngleOne;
         }
 
-        GameObject objNegativeAngleTwo = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        //GameObject objNegativeAngleTwo = Instantiate(smallSeed, seedTransform.position, Quaternion.identity);
+        GameObject objNegativeAngleTwo = pool.GetSmallSeed();
+        objNegativeAngleTwo.transform.position = seedTransform.position;
+        objNegativeAngleTwo.SetActive(true);
         Rigidbody2D rbNegativeAngleTwo = objNegativeAngleTwo.GetComponent<Rigidbody2D>();
         if (rbNegativeAngleTwo != null)
         {

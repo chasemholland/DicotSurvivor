@@ -25,6 +25,7 @@ public class EnemyMove : MonoBehaviour
     protected bool bossActive = false;
     // Random movement timer when player dies
     protected Timer randMove;
+    protected float killTime;
 
 
     protected virtual void Awake()
@@ -74,7 +75,16 @@ public class EnemyMove : MonoBehaviour
  
         if (bossActive)
         {
-            MoveAwayFromPlayer();
+            killTime += Time.deltaTime;
+            if (killTime >= 4)
+            {
+                // Destroy enemy to avoid enemy stacking from boss encounters
+                Destroy(gameObject);
+            }
+            else
+            {
+                MoveAwayFromPlayer();
+            }   
         }
     }
 

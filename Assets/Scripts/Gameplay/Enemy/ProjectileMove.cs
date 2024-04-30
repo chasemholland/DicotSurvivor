@@ -11,12 +11,16 @@ public class ProjectileMove : MonoBehaviour
     public float force;
     [SerializeField]
     GameObject explosion;
+    ObjectPool pool;
 
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
+        // Get reference to object pool
+        pool = GameObject.FindGameObjectWithTag("SeedBank").GetComponent<ObjectPool>();
+
         // Set defaults
         force = ConfigUtils.PlayerSeedSpeed;
 
@@ -24,7 +28,14 @@ public class ProjectileMove : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
-            Destroy(gameObject);
+            if (gameObject.name.StartsWith("Cyan"))
+            {
+                pool.ReturnCyanProjectile(gameObject);
+            }
+            else
+            {
+                pool.ReturnRedBossProjectile(gameObject);
+            }
         }
     }
 
@@ -33,11 +44,26 @@ public class ProjectileMove : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Wall") || 
             collision.gameObject.CompareTag("BossWall") || collision.gameObject.CompareTag("Seedling"))
         {
-            // Spawn projectile explosion animation
-            Instantiate(explosion, transform.position, Quaternion.identity);
+            if (gameObject.name.StartsWith("Cyan"))
+            {
+                // Get projectile explosion
+                GameObject exp = pool.GetCyanProjectileExplosion();
+                exp.transform.position = transform.position;
+                exp.SetActive(true);
 
-            // Destroy the game object
-            Destroy(gameObject);
+                // Return projectile to pool
+                pool.ReturnCyanProjectile(gameObject);
+            }
+            else
+            {
+                // Get projectile explosion
+                GameObject exp = pool.GetRedBossProjectileExplosion();
+                exp.transform.position = transform.position;
+                exp.SetActive(true);
+
+                // Return projectile to pool
+                pool.ReturnRedBossProjectile(gameObject);
+            }
         }
     }
 
