@@ -313,7 +313,14 @@ public class HUD : EventInvoker
     public void OnQuitClick()
     {
         // Disable player
-        GameObject.FindWithTag("Player").SetActive(false);
+        try
+        {
+            GameObject.FindWithTag("Player").SetActive(false);
+        }
+        catch (System.Exception)
+        {
+        }
+
         Time.timeScale = 1;
         levelLoader.GetComponent<LevelLoader>().LoadNextScene("MainMenu");
         //SceneManager.LoadScene("MainMenu");
